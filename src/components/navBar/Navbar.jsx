@@ -8,16 +8,16 @@ export default function Navbar() {
     return (
         <>
             <nav className='nav'>
-                <div className="sections">
+                <div className="sections-pages">
                     <button className="pages">home</button>
                     <button className="pages">services</button>
                     <button className="pages">community</button>
                     <button className="pages">Ai</button>
                 </div>
-                <div className="sections">
+                <div className="sections-logo">
                     <p>shatably</p>
                 </div>
-                <div className="sections">
+                <div className="sections-icons">
                     <div class="search-container">
                         <input type="search" className="search-bar" />
                         <img src={searchicon} className='search-icon' />
