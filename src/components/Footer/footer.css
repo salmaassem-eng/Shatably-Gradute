@@ -1,9 +1,10 @@
 .footer {
   background-color: #fff;
-  position: relative;
+  position: absolute;
   font-family: 'lato';
   width:100%;
   padding: 1rem 0;
+  bottom: 0;
 }
 
 
