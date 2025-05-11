@@ -10,9 +10,9 @@ function Footer() {
   return (
     <>
       {/* <div className="wave-container">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="100 -235 1340 300">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="100 -160 1340 320">
           <path
-            fill="#f0ff"
+            fill="#fff"
             className="wave-svg"
             fill-opacity="1"
             d="M0,92L60,65.3C120,39,240,-15,360,-20C480,-25,600,17,720,38.7C840,60,960,60,1080,44C1200,28,1320,-4,1380,-20L1440,-36L1440,220L1380,220C1320,220,1200,220,1080,220C960,220,840,220,720,220C600,220,480,220,360,220C240,220,120,220,60,220L0,220Z"
