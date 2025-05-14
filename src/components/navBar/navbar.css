@@ -25,12 +25,12 @@
     border: none;
     padding: 5px 10px;
     background-color: transparent;
-    transition: 0.5s;
+    transition: 1s;
     color: #16404d;
 }
 
 .pages:hover {
-    color: #b1b1b1;
+    color: #7b7b7b;
 }
 
 .section-logo {
