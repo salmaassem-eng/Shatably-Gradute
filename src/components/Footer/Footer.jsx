@@ -3,10 +3,38 @@ import "./footer.css";
 import FooterColumn from "./Column";
 import logo from "../../assets/react.svg";
 import facebook from "../../assets/Facebook.svg";
-import pintrest from "../../assets/pinterest.svg";
+import pinterest from "../../assets/pinterest.svg";
 import linkedin from "../../assets/linkedin.svg";
 
-function Footer() {
+const Footer = () => {
+  const socialLinks = [
+    { icon: facebook, name: "Facebook", label: "Visit our Facebook page" },
+    { icon: pinterest, name: "Pinterest", label: "Visit our Pinterest page" },
+    { icon: linkedin, name: "LinkedIn", label: "Visit our LinkedIn page" }
+  ];
+
+  const footerColumns = [
+    {
+      title: "Services",
+      items: ["Carpenter", "Electrician", "Painter"],
+      extraItems: [
+        { text: "Plumber", link: "#" },
+        { text: "Maid", link: "#" }
+      ]
+    },
+    {
+      title: "About Us",
+      items: ["About Us", "Team", "Career"]
+    },
+    {
+      title: "Quick Links", 
+      items: ["Workers", "Reviews", "Reach Us"],
+      extraItems: [
+        { text: "Privacy Policy", link: "#" }
+      ]
+    }
+  ];
+
   return (
     <>
       {/* <div className="wave-container">
@@ -34,43 +62,31 @@ function Footer() {
 
           {/* Footer Columns  */}
           <div className="FooterCol-grid">
-            <FooterColumn
-              Title={"Services"}
-              item1={"Carpenter"}
-              item2={"Electrician"}
-              item3={"Painter"}
-            >
-              <li>
-                <a href="#">Plumber</a>
-              </li>
-              <li>
-                <a href="#">Maid</a>
-              </li>
-            </FooterColumn>
-            <FooterColumn
-              Title={"About Us"}
-              item1={"About Us"}
-              item2={"Team"}
-              item3={"Career"}
-            />
-            <FooterColumn
-              Title={"Quick Links"}
-              item1={"Workers"}
-              item2={"Reviews"}
-              item3={"Reach Us"}
-            >
-              <li>
-                <a href="#">Privacy Policy</a>
-              </li>
-            </FooterColumn>
+            {footerColumns.map((column, index) => (
+              <FooterColumn
+                key={index}
+                Title={column.title}
+                item1={column.items[0]}
+                item2={column.items[1]}
+                item3={column.items[2]}
+              >
+                {column.extraItems?.map((item, idx) => (
+                  <li key={idx}>
+                    <a href={item.link}>{item.text}</a>
+                  </li>
+                ))}
+              </FooterColumn>
+            ))}
           </div>
         </div>
-
+        
         <div className="footer-bottom">
           <div className="social-icons">
-            <img src={facebook} alt="facebook" />
-            <img src={pintrest} alt="pintrest" />
-            <img src={linkedin} alt="linkedin" />
+            {socialLinks.map((social, index) => (
+              <a key={index} href="#" aria-label={social.label}>
+                <img src={social.icon} alt={social.name} className="social-icon" />
+              </a>
+            ))}
           </div>
 
           <small className="Text-opacity">© Shatably Team</small>
@@ -79,6 +95,6 @@ function Footer() {
       </footer>
     </>
   );
-}
+};
 
 export default Footer;
