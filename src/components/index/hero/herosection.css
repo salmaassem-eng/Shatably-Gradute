@@ -1,7 +1,7 @@
 .hero-section {
-    /* background-image: url('../../assets/buildings.jpg');
+    background-image: url('../../../assets/buildings.jpg');
     background-size: cover;
-    background-position: center; */
+    background-position: center;
     min-height: 100vh;
     display: grid;
     place-items: center;
