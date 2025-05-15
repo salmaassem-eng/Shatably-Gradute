@@ -1,4 +1,4 @@
- .wave-container {
+.wave-container {
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -16,28 +16,27 @@
 
 .footer {
   background-color: #fff;
-  position: absolute;
-  font-family: 'lato';
-  width:100%;
+  font-family: 'Lato', sans-serif;
+  width: 100%;
   padding: 1rem 0;
+  margin-top: auto;
   bottom: 0;
 }
-
 
 .footer-container {
   display: grid;
   grid-template-columns: 400px 200px;
   gap: 8rem;
-  max-width: 1200px;
+  max-width: 1300px;
   margin: auto;
-  padding: 4rem 0rem ;
+  padding: 4rem 2rem;
 }
 
-.FooterCol-grid{
-    display: grid;
-    grid-template-columns: 150px 150px 150px;
-    justify-content: space-around;
-    gap: 9rem;
+.FooterCol-grid {
+  display: grid;
+  grid-template-columns: 150px 150px 150px;
+  justify-content: space-around;
+  gap: 9rem;
 }
 
 .footer-col {
@@ -46,10 +45,11 @@
 }
 
 .logo-section {
-    display: grid;
-    grid-template-columns: 50px 250px;
-    gap: 4rem;
-    max-width: 250px;
+  display: grid;
+  grid-template-columns: 50px 250px;
+  gap: 4rem;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .footer-logo {
@@ -81,14 +81,14 @@
   color: #000;
 }
 
-.Text-opacity{
-    opacity: 0.6;
+.Text-opacity {
+  opacity: 0.6;
 }
 
 .footer-bottom {
- display: flex;
- flex-direction: column;
- justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
   border-top: 1px solid #ccc;
   padding-top: 1rem;
@@ -96,11 +96,11 @@
 }
 
 .social-icons {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: center;
-    margin-bottom: 0.5rem;
-    font-size: 1.2rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
 }
 
 .social-icons svg {
@@ -111,4 +111,57 @@
 
 .social-icons svg:hover {
   color: #000;
+}
+
+@media screen and (max-width: 1200px) {
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    padding: 3rem 2rem;
+  }
+
+  .FooterCol-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .FooterCol-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .logo-section {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    justify-items: center;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .footer-container {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .FooterCol-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .footer-col {
+    min-width: auto;
+    
+  }
+
+  .social-icons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
