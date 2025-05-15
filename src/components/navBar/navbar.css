@@ -1,6 +1,6 @@
 .nav {
     display: grid;
-    grid-template-columns: 1fr minmax(100px, auto) 1fr;
+    grid-template-columns: auto minmax(100px, auto) auto;
     align-items: center;
     padding: 10px 20px;
     width: 100%;
@@ -26,21 +26,25 @@
     border: none;
     padding: 5px 10px;
     background-color: transparent;
-    transition: 0.5s;
+    transition: 1s;
     color: #16404d;
 }
 
 .pages:hover {
-    color: #b1b1b1;
+    color: #7b7b7b;
 }
 
-.section-logo {
+.sections-logo {
     text-align: center;
     align-items: center;
-
+    justify-self: center;
 }
 
-.sections-icons{
+.sections-logo p {
+    margin: 0;
+}
+
+.sections-icons {
     display: grid;
     grid-template-columns: auto auto;
     gap: 24px;
@@ -73,7 +77,8 @@
     display: grid;
     grid-template-columns: repeat(3, auto);
     align-items: center;
-    padding: 24px;
+    padding: 0;
+    margin-right: 2rem;
 }
 
 .icon {
@@ -81,4 +86,101 @@
     height: 20px;
     margin: 0 24px;
     cursor: pointer;
+}
+
+.side-nav {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: #16404d;
+    margin: 2px 0;
+    transition: 0.3s;
+}
+
+@media (max-width: 768px) {
+    .nav {
+        background-color: #fff;
+        grid-template-columns: auto 1fr auto;
+        grid-template-areas:
+            "menu logo icons"
+            "links links links";
+
+        padding: 10px; 
+        justify-items: center;
+    }
+
+    .side-nav {
+        display: flex;
+        grid-area: menu;
+        justify-self: start;
+    }
+
+    .sections-pages {
+        display: none;
+        grid-area: links;
+        flex-direction: column;
+        position: absolute;
+        top: 15px;
+        left: -5px;
+        width: 150px;
+        background-color: #fff;
+        border-radius: 20px;
+        padding: 10px 0;
+    }
+
+    .sections-pages.active {
+        display: flex;
+    }
+
+    .pages {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .sections-logo {
+        grid-area: logo;
+        text-align: center;
+        justify-self: center;
+        align-items: center; 
+        align-self: center;
+        margin: auto;
+        width: 100%;
+        margin-left: 45px;
+    }
+
+    .sections-icons {
+        grid-area: icons;
+        justify-content: end;
+        grid-template-columns: auto;
+    }
+
+    .search-container {
+        display: none;
+    }
+
+    .icon-section {
+        padding: 0;
+        gap: 1rem;
+    }
+
+    .icon {
+        margin: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .icon {
+        width: 18px;
+        height: 18px;
+        margin: 0 8px;
+    }
+
+    .nav {
+        padding: 8px;
+    }
 }
