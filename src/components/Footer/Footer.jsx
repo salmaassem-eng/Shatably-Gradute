@@ -52,7 +52,7 @@ const Footer = () => {
         <div className="footer-container">
           <div className="footer-col logo-section">
             <img src={logo} alt="Logo" className="footer-logo" />
-            <div>
+            <div className="footer-col-content">
               <h4>SHATABLY</h4>
               <p className="Text-opacity">
                 A team of skilled professionals offering high-quality finishing

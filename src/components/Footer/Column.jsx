@@ -1,6 +1,6 @@
 function FooterColumn  ( {Title , item1, item2, item3 , children})  {
     return ( 
-        <div className="footer-col">
+        <div className="footer-cols">
           <h4>{Title}</h4>
           <ul>
             <li>
@@ -14,7 +14,7 @@ function FooterColumn  ( {Title , item1, item2, item3 , children})  {
             </li>
             {children}
           </ul>
-        </div>
+        </div>  
      );
 }
  
