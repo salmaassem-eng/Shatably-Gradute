@@ -7,14 +7,15 @@ import Mobile from './components/index/mobile/mobile'
 import HeroSection from './components/index/hero/HeroSection'
 import Service from './components/index/service/Service'
 import './App.css'
-
+import CombinedSection from './components/index/CombinedSection'
 
 function App() {
   return (
     <div className="app-container">
       <Navbar />
-      <HeroSection/>
-      <Mobile />
+      {/* <HeroSection/>
+      <Mobile /> */}
+      <CombinedSection />
       <Service />
       <About />
       <Subscribe />

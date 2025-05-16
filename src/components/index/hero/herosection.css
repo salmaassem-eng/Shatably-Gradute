@@ -1,8 +1,8 @@
 .hero-section {
-    background-image: url('../../../assets/buildings.jpg');
-    background-size: cover;
-    background-position: center;
-    min-height: 100vh;
+    /* background-image: url('../../../assets/buildings.jpg'); */
+    /* background-size: cover; */
+    /* background-position: center; */
+    /* height: 120vh; */
     display: grid;
     place-items: center;
     padding: 3rem;

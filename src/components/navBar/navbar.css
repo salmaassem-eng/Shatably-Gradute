@@ -8,7 +8,8 @@
     top: 0;
     left: 0;
     z-index: 1000;
-    background-color: #FBF5DD;
+    background-color: #F0F0F0;
+    color: #16404d;
 }
 
 .sections-pages {
@@ -62,8 +63,15 @@
     padding: 5px 30px 5px 10px;
     border: none;
     border-radius: 25px;
-    background-color: #ffffff;
+    background-color: #DADADA;
     font-size: 16px;
+    color: #16404d;
+}
+
+.search-bar:focus {
+    outline: none;
+    border: 1px solid #16404d;
+    opacity: 0.8;
 }
 
 .search-icon {
