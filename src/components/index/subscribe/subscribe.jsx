@@ -30,21 +30,23 @@ function Subscribe() {
                         Subscribe now and never miss out on great opportunities!</p>
                 </div>
                 <div className='subscribe-form-container'>
-                <form className="subscribe-form" onSubmit={handleSubmit}>
-                    <input
-                        type="email"
-                        placeholder="Enter your email ..."
-                        className="email-input"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    <button type="submit" className="subscribe-button">
-                        SUBSCRIBE
-                    </button>
-                </form>
-                <img src={arrow} alt="" className="subscribe-arrow" aria-hidden="true" />
-            </div>
+                    <form className="subscribe-form" onSubmit={handleSubmit}>
+                        <input
+                            type="email"
+                            placeholder="Enter your email ..."
+                            className="email-input"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                        <button type="submit" className="subscribe-button">
+                            SUBSCRIBE
+                        </button>
+                    </form>
+                    <div >
+                        <img src={arrow} alt="" className="subscribe-arrow" aria-hidden="true" />
+                    </div>
+                </div>
             </div>
         </div>
     );
