@@ -1,6 +1,6 @@
 import "./herosection.css";
-import img3d from '../../assets/11088893.png';
-import displayimg from "../../assets/display-img.png";
+import img3d from '../../../assets/11088893.png';
+import displayimg from '../../../assets/display-img.png';
 
 export default function HeroSection() {
     return (
