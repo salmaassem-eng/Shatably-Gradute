@@ -13,13 +13,13 @@ function About() {
       description: "SHATABLY offers a range of professional finishing services including painting, carpentry, electricity, and plumbing ."
     },
     {
-      icon: professional, 
+      icon: professional,
       title: "Professionalism",
       description: "We deliver every service with respect, skill, and attention to detail—always on time, always courteous."
     },
     {
       icon: trust,
-      title: "Trust", 
+      title: "Trust",
       description: "We believe in building strong, long-term relationships with our clients by consistently delivering dependable and honest service."
     },
     {
@@ -34,11 +34,10 @@ function About() {
       <div className="about-container">
         <h2>Our Values</h2>
         <p className="subtitle">Our values shape the foundation of SHATABLY, guiding how we serve our clients and build trust.</p>
-        
         <div className="values-grid">
           {coreValues.map((value, index) => (
             <div key={index} className="value-card">
-              <img src={value.icon} alt={value.title} className="value-icon"/>
+              <img src={value.icon} alt={value.title} className="value-icon" />
               <h3>{value.title}</h3>
               <p>{value.description}</p>
             </div>

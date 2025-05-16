@@ -5,6 +5,7 @@ import logo from "../../assets/react.svg";
 import facebook from "../../assets/Facebook.svg";
 import pinterest from "../../assets/pinterest.svg";
 import linkedin from "../../assets/linkedin.svg";
+import phoneIcon from "../../assets/phone.svg";
 
 const Footer = () => {
   const socialLinks = [
@@ -57,6 +58,16 @@ const Footer = () => {
                 A team of skilled professionals offering high-quality finishing
                 services for apartments and homes.
               </p>
+              <div className="contact-info">
+                <p className="phone">
+                  <img src={phoneIcon} alt="Phone" className="phone-icon" />
+                  <span>+02 0123456789</span>
+                </p>
+                <div className="contact-buttons">
+                  <a href="#contact" className="contact-btn-footer">Contact us</a>
+                  <a href="#visit" className="visit-btn-footer">Visit us</a>
+                </div>
+              </div>
             </div>
           </div>
 
