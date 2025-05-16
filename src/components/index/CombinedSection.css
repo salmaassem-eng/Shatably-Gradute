@@ -1,0 +1,15 @@
+.combined-section {
+    background-image: url('../../assets/buildings.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 180vh;
+    padding-top: 4rem ;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 18rem;
+    /* align-items: center; */
+}
+
+
