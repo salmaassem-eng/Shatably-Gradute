@@ -3,7 +3,7 @@
     background-size: cover;
     background-position: center;
     height: 180vh;
-    padding-top: 4rem ;
+    padding-top: 4rem;
     font-family: 'Segoe UI', sans-serif;
     display: flex;
     flex-direction: column;
@@ -12,4 +12,23 @@
     /* align-items: center; */
 }
 
+@media (max-width: 992px) {
+    .combined-section {
+        padding-top: 8rem;
+        height: 117vh;
+    }
+}
 
+@media (max-width: 768px) {
+    .combined-section {
+        padding-top: 2.5rem;
+        height: 160vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .combined-section {
+        padding-top: 2.5rem;
+        height: 250vh;
+    }
+}
