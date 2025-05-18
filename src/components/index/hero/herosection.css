@@ -17,8 +17,9 @@
 }
 
 .hero-text {
-    display: grid;
-    grid-template-columns: repeat(2, auto);
+    display: flex;
+    justify-content: flex-end;
+    padding: 3rem;
     background: white;
     padding: 2rem 2rem 2rem 2rem;
     border-radius: 3.5rem;
@@ -38,6 +39,7 @@
 
 .hero-text p {
     color: #4f4f4f;
+    padding-top: 10px;
     font-size: 1.1rem;
 }
 
@@ -74,28 +76,41 @@
     height: 34rem;
     width: 44rem;
     z-index: 2;
-    transition: 0.5s;
 }
 
 .display {
-    position: relative;
-    width: 150px;
-    height: 200px;
+    display: grid;
+    grid-template-columns: 170px auto;
+    justify-content: end;
+    width: 240px;
+    height: 220px;
+    transition: all 0.5s ease;
+    column-gap: 0.3rem;
+    position: relative; 
 }
 
-.display img {
+.display video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 15px;
-    margin-left: 8rem;
+    margin-left: 1.5rem;
     border: #114b59d8 solid 4px;
+    transition: width 0.5s ease;
+}
+
+.display:hover video {
+    width: 200%;
+}
+
+.video-grid.expanded {
+    grid-template-columns:250px auto; 
 }
 
 .enter-button {
     position: absolute;
     top: 50%;
-    left: 85%;
+    left: 15%;
     transform: translate(-50%, -50%);
     width: 65px;
     height: 65px;
@@ -113,22 +128,48 @@
     border: #114b59d8 solid 3px;
 }
 
-@media (max-width: 768px) {
-    .card-wrapper {
-        width: 100%;
-        margin-bottom: 10rem;
-        margin-top: 10px;
-        max-width: 500px;
-    }
-
+@media (max-width: 992px) {
     .hero-text {
         padding: 2rem 2rem 2rem 2rem;
         border-radius: 3.5rem;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        text-align: start;
-        position: relative;
-        height: 300px;
-        z-index: 1;
+        height: 450px;
+    }
+
+    .hero-text h1 {
+        font-size: 2rem;
+    }
+
+    .hero-text p {
+        font-size: 1rem;
+    }
+
+    .hero-btn button {
+        width: 55px;
+        padding: 3px;
+    }
+
+    .hero-btn button:hover {
+        width: 60px;
+    }
+
+    .hero-image {
+        top: 180px;
+        height: 35rem;
+        width: 40rem;
+    }
+
+    .display {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .card-wrapper {
+        max-width: 490px;
+    }
+
+    .hero-text {
+        height: 350px;
     }
 
     .hero-text h1 {
@@ -136,7 +177,7 @@
     }
 
     .hero-text p {
-        font-size: 0.8rem;
+        font-size: 1rem;
     }
 
     .hero-btn {
@@ -154,36 +195,15 @@
 
     .hero-image {
         height: 27rem;
-        width: 30rem;
-    }
-
-    .display {
-        width: 120px;
-        height: 180px;
-    }
-
-    .display img {
-        margin-left: 6rem;
-    }
-
-    .enter-button {
-        left: 80%;
-        width: 60px;
-        height: 60px;
+        width: 32rem;
+        top: 160px;
     }
 }
 
 @media (max-width: 480px) {
-    .display {
-        width: 100px;
-        height: 150px;
-    }
-    .display img {
-        margin-left: 3.5rem;
-    }
-    .enter-button {
-        left: 55%;
-        width: 50px;
-        height: 50px;
+    .hero-image {
+        height: 25rem;
+        width: 26rem;
+        top: 160px;
     }
 }
