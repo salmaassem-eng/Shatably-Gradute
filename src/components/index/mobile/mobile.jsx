@@ -1,5 +1,8 @@
 import React from 'react';
 import mobile from '../../../assets/mobilePage.svg';
+import onDemand from '../../../assets/On-demand.svg';
+import serviceTracking from '../../../assets/orderTracking.svg';
+import taskScheduling from '../../../assets/TaskSchedualing.svg';
 import './mobile.css';
 
 const Mobile = () => {
@@ -27,7 +30,9 @@ const Mobile = () => {
         {/* Right Features */}
         <div className="features-list">
           <div className="feature-item">
-            <div className="feature-icon">📱</div>
+            <div className="feature-icon">
+              <img src={onDemand} alt="on-demand services" className="icon1" />
+            </div>
             <div className="feature-text">
               <h3>On-demand handyman services</h3>
               <p>Book skilled professionals at your convenience</p>
@@ -35,7 +40,9 @@ const Mobile = () => {
           </div>
 
           <div className="feature-item">
-            <div className="feature-icon">📋</div>
+              <div className="feature-icon">
+              <img src={serviceTracking} alt="service tracking" className="icon2" />
+            </div>
             <div className="feature-text">
               <h3>Service tracking and history</h3>
               <p>Monitor ongoing services and view past bookings</p>
@@ -43,7 +50,9 @@ const Mobile = () => {
           </div>
 
           <div className="feature-item">
-            <div className="feature-icon">⏰</div>
+            <div className="feature-icon">
+              <img src={taskScheduling} alt="task scheduling" className="icon3" />
+            </div>
             <div className="feature-text">
               <h3>Task scheduling and reminders</h3>
               <p>Set appointments and get timely notifications</p>

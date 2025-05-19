@@ -1,6 +1,6 @@
 import React from "react";
-import "./footer.css";
 import FooterColumn from "./Column";
+import "./Footer.css";
 import logo from "../../assets/react.svg";
 import facebook from "../../assets/Facebook.svg";
 import pinterest from "../../assets/pinterest.svg";
