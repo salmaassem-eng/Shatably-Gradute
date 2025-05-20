@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './subscribe.css';
 import arrow from '../../../assets/Arrow.svg';
+import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
 
 function Subscribe() {
     const [email, setEmail] = useState('');
@@ -14,8 +15,10 @@ function Subscribe() {
         }
     };
 
+    const sectionRef = useIntersectionObserver(); // for animation
+
     return (
-        <div className="subscribe-container">
+        <section ref={sectionRef} className="subscribe-container component-fadein">
             <div className="subscribe-content">
                 <div className="subscribe-text">
                     <div className="heading-with-lines">
@@ -48,7 +51,7 @@ function Subscribe() {
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     );
 }
 

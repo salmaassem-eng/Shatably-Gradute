@@ -1,6 +1,8 @@
 import './service.css';
 import smallService from '../../../assets/Electrician.svg';
 import work from '../../../assets/Group.svg';
+import React from "react";
+import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
 
 
 const services = [
@@ -22,8 +24,10 @@ const services = [
 ];
 
 export default function Service() {
+    const sectionRef = useIntersectionObserver(); // for animation
+
     return (
-        <section className="services">
+        <section ref={sectionRef} className="services component-fadein animate-delay-900">
             <h2>Services</h2>
             <p>
                 We provide the best in class services for our customers

@@ -4,10 +4,12 @@ import onDemand from '../../../assets/On-demand.svg';
 import serviceTracking from '../../../assets/orderTracking.svg';
 import taskScheduling from '../../../assets/TaskSchedualing.svg';
 import './mobile.css';
+import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
 
 const Mobile = () => {
+  const sectionRef = useIntersectionObserver();// for animation
   return (
-    <section className="mobile-section">
+    <section ref={sectionRef} className="mobile-section component-fadein">
       <div className="mobile-grid">
         {/* Left Content */}
         <div className="about-content">

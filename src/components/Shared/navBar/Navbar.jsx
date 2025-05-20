@@ -1,9 +1,9 @@
 import './navbar.css';
 import { useState } from 'react';
-import searchicon from '../../assets/search-normal.svg';
-import card from '../../assets/cart.svg';
-import user from '../../assets/user.svg';
-import vector from '../../assets/Vector.svg';
+import searchicon from '../../../assets/search-normal.svg';
+import card from '../../../assets/cart.svg';
+import user from '../../../assets/user.svg';
+import vector from '../../../assets/Vector.svg';
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
