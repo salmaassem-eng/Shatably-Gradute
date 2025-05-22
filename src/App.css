@@ -4,11 +4,14 @@
   box-sizing: border-box;
   font-family: 'Lato', sans-serif;
   color: #16404D;
+
 }
+
 
 #root {
   width: 100%;
   min-height: 100vh;
+  background-color: #F0F0F0 !important;
 }
 
 .app-container {
