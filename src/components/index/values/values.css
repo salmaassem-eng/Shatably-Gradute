@@ -1,0 +1,10 @@
+  @media (max-width: 768px) {
+    .values-grid {
+      grid-template-columns: 1fr;
+    }
+    
+
+  }
+  
+  
+  
