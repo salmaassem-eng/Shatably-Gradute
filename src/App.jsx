@@ -7,9 +7,10 @@ import './App.css'
 import ScrollToTop from './components/Shared/ScrollToTop'
 import IndexPage from './components/index/index'
 import ForgotPassword from './components/regestration/forgotPassword/ForgotPassword'
+import RegisterationPage from './components/regestration/RegisterationPage';
 function Layout() {
   const location = useLocation();
-  const hideNavAndFooter = location.pathname === '/login' || location.pathname === '/forgot-password';
+  const hideNavAndFooter = location.pathname === '/login' || location.pathname === '/forgot-password' || location.pathname === '/RegisterationPage';
 
   return (
     <div className="app-container">
@@ -18,6 +19,7 @@ function Layout() {
         <Routes>
           <Route path="/" element={<IndexPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/RegisterationPage" element={<RegisterationPage />} />
           <Route path="/services" element={<Services />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>

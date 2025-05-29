@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import UserInput from "../UserInput";
 // import "./RightSide.css";
 
 const RightSide = () => {
@@ -30,43 +31,25 @@ const RightSide = () => {
         
         <form className="mt-[2rem] flex flex-col gap-4 justify-center items-center">
           <div className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block font-medium ">
-                Email address
-              </label>
-              <div className="mt-[5px] relative">
-                <input
+            <UserInput labelName='Email address'
+                  htmlFor="email"
                   id="email"
                   name="email"
                   type="email"
                   autoComplete="email"
-                  required
                   value={formData.email}
                   onChange={handleChange}
-                  className="appearance-none block w-[350px] px-[10px] py-[20px]  bg-[#D9D9D9] border-none rounded-[25px] h-[30px] placeholder-gray-400  focus:outline-none focus:opacity-80 focus:text-[#16404D] transition duration-150 ease-in-out "
-                  placeholder="Enter your email"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block font-lg ">
-                Password
-              </label>
-              <div className="mt-[5px] relative">
-                <input
+                  placeholder="Enter your email"/>
+            
+            <UserInput labelName='Password'
+                  htmlFor="password"
                   id="password"
                   name="password"
                   type="password"
                   autoComplete="current-password"
-                  required
                   value={formData.password}
                   onChange={handleChange}
-                  className="appearance-none block w-[350px] px-[10px] py-[20px] bg-[#D9D9D9] border-none rounded-[25px] h-[30px] placeholder-gray-400  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:opacity-80 focus:text-[#16404D] focus:border-transparent transition duration-150 ease-in-out"
-                  placeholder="Enter your password"
-                />
-              </div>
-            </div>
+                  placeholder="Enter your password"/>
           </div>
 
           <div className="flex mt-[10px] items-center justify-between w-[350px]">
@@ -103,9 +86,9 @@ const RightSide = () => {
         <div className="text-center flex items-center gap-[10px] justify-center mt-[0.5rem]">
           <p className="text-sm ">
             Don't have an account?{" "}
-            <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
+            <Link to='/RegisterationPage' className="font-medium text-blue-600 hover:text-blue-500">
               Sign up
-            </a>
+            </Link>
           </p>
         </div>
       </div>
