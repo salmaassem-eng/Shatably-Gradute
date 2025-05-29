@@ -34,7 +34,7 @@
 }
 
 .pages.active {
-    color: #2563eb; /* blue-600 */
+    color: #16404D; /* blue-600 */
     font-weight: 600;
 }
 
@@ -46,7 +46,7 @@
     transform: translateX(-50%);
     width: 20px;
     height: 2px;
-    background-color: #2563eb;
+    background-color: #16404D;
     border-radius: 2px;
 }
 
@@ -103,7 +103,7 @@
 
 .icon-section {
     display: grid;
-    grid-template-columns: repeat(3, auto);
+    grid-template-columns: repeat(4, auto);
     align-items: center;
     padding: 0;
     margin-right: 2rem;
@@ -128,6 +128,11 @@
     background-color: #16404d;
     margin: 2px 0;
     transition: 0.3s;
+}
+
+.loginBtn{
+    color: 333 !important;
+    background-color: #DADADA;
 }
 
 @media (max-width: 992px) {

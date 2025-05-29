@@ -1,6 +1,6 @@
 import './navbar.css';
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import searchicon from '../../../assets/search-normal.svg';
 import card from '../../../assets/cart.svg';
 import user from '../../../assets/user.svg';
@@ -9,6 +9,7 @@ import vector from '../../../assets/Vector.svg';
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -46,6 +47,9 @@ export default function Navbar() {
                     <img src={user} className="icon" alt="user" />
                     <img src={card} className="icon" alt="cart" />
                     <img src={vector} className="icon" alt="notification" />
+                    <button className="bg-[#16404D] loginBtn " onClick={() => navigate('/login')}>
+                        <p>Login</p>
+                    </button>
                 </div>
             </div>
         </nav>
