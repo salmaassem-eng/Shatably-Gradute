@@ -28,29 +28,29 @@ const RightSide = () => {
             Please sign in to your account
           </p>
         </div>
-        
+
         <form className="mt-[2rem] flex flex-col gap-4 justify-center items-center">
           <div className="space-y-4">
             <UserInput labelName='Email address'
-                  htmlFor="email"
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter your email"/>
-            
+              htmlFor="email"
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter your email" />
+
             <UserInput labelName='Password'
-                  htmlFor="password"
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Enter your password"/>
-             </div>
+              htmlFor="password"
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Enter your password" />
+          </div>
           <div className="flex mt-[10px] items-center justify-between w-[350px]">
             <div className="flex gap-[3px] items-center">
               <input

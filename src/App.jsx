@@ -8,10 +8,11 @@ import ScrollToTop from './components/Shared/ScrollToTop'
 import IndexPage from './components/index/index'
 import ForgetPass from './components/regestration/forgotPassword/ForgetPass'
 import NewPass from './components/regestration/forgotPassword/NewPass'
+import RegisterationPage from './components/regestration/RegisterationPage';
 
 function Layout() {
   const location = useLocation();
-  const hideNavAndFooter = location.pathname === '/login' || location.pathname === '/forgetpass' || location.pathname === '/newpass';
+  const hideNavAndFooter = location.pathname === '/login' || location.pathname === '/forgetpass'|| location.pathname === "/RegisterationPage" || location.pathname === '/newpass';
 
   return (
     <div className="app-container">
