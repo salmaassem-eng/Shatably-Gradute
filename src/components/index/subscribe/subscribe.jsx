@@ -18,7 +18,7 @@ function Subscribe() {
     const sectionRef = useIntersectionObserver(); // for animation
 
     return (
-        <section ref={sectionRef} className="subscribe-container component-fadein">
+        <section ref={sectionRef} className="subscribe-container component-fadein mb-[6rem]">
             <div className="subscribe-content">
                 <div className="subscribe-text">
                     <div className="heading-with-lines">

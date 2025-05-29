@@ -23,7 +23,7 @@ const RightSide = () => {
           <h1 className="mt-6 font-bold">
             Welcome to our platform
           </h1>
-          <p className="mt-2 text-[20px]">
+          <p className="mt-2 text-[20px] opacity-70">
             Please sign in to your account
           </p>
         </div>
@@ -43,7 +43,7 @@ const RightSide = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="appearance-none block w-[350px] px-[10px] py-[20px]  bg-[#D9D9D9] border-none rounded-[25px] h-[30px] placeholder-gray-400  focus:outline-none focus:opacity-80 focus:text-[#16404D] transition duration-150 ease-in-out "
+                  className="appearance-none block w-[350px] px-[10px] py-[20px] mb-[15px] bg-[#D9D9D9] border-none rounded-[25px] h-[30px] placeholder-gray-400  focus:outline-none focus:opacity-80 focus:text-[#16404D] transition duration-150 ease-in-out "
                   placeholder="Enter your email"
                 />
               </div>
@@ -70,20 +70,20 @@ const RightSide = () => {
           </div>
 
           <div className="flex mt-[10px] items-center justify-between w-[350px]">
-            <div className="flex items-center">
+            <div className="flex gap-[3px] items-center">
               <input
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 bg-[#D9D9D9] focus:ring-blue-500 border-gray-300 rounded"
+                className="checkboxBtn"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+              <label htmlFor="remember-me" className="ml-2 block text-sm">
                 Remember me
               </label>
             </div>
 
             <div className="text-sm">
-              <Link to="/forgot-password" className="font-medium text-[#16404D] hover:text-blue-500">
+              <Link to="/forgetpass" className="font-medium text-[#16404D] opacity-70 hover:text-[#16404D] hover:opacity-100">
                 Forgot your password?
               </Link>
 
@@ -103,7 +103,7 @@ const RightSide = () => {
         <div className="text-center flex items-center gap-[10px] justify-center mt-[0.5rem]">
           <p className="text-sm ">
             Don't have an account?{" "}
-            <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
+            <a href="#" className="font-medium text-[#16404D] opacity-70 hover:text-[#16404D] hover:opacity-100">
               Sign up
             </a>
           </p>
