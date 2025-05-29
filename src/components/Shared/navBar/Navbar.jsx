@@ -40,7 +40,7 @@ export default function Navbar() {
             </div>
             <div className="sections-icons">
                 <div className="search-container">
-                    <input type="search" className="search-bar" />
+                    <input type="search" className="search-bar" placeholder='Search'/>
                     <img src={searchicon} className="search-icon" alt="search" />
                 </div>
                 <div className="icon-section">

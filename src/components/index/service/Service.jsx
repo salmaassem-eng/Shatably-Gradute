@@ -1,7 +1,7 @@
 import './service.css';
-import smallService from '../../../assets/Electrician.svg';
-import work from '../../../assets/Group.svg';
-import React from "react";
+import smallService from '../../../assets/smallservice.svg';
+import work from '../../../assets/maintainence work.svg';
+import project from '../../../assets/serviceProject.svg';
 import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
 
 
@@ -19,7 +19,7 @@ const services = [
     {
         title: 'Projects',
         description: 'From kitchen remodels to bathroom overhauls, get end‑to‑end project management with progress updates in one place.',
-        icon: work,
+        icon: project,
     },
 ];
 

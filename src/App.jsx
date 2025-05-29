@@ -20,6 +20,7 @@ function Layout() {
         <Routes>
           <Route path="/" element={<IndexPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/RegisterationPage" element={<RegisterationPage />} />
           <Route path="/services" element={<Services />} />
           <Route path="/forgetpass" element={<ForgetPass />} />
           <Route path="/newpass" element={<NewPass />} />
