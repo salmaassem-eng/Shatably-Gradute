@@ -34,7 +34,7 @@
 }
 
 .pages.active {
-    color: #16404D; /* blue-600 */
+    color: #16404D;
     font-weight: 600;
 }
 
@@ -46,7 +46,7 @@
     transform: translateX(-50%);
     width: 20px;
     height: 2px;
-    background-color: #16404D;
+    background-color: #DDA853;
     border-radius: 2px;
 }
 
