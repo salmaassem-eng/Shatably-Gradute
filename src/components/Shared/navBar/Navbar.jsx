@@ -5,11 +5,13 @@ import searchicon from '../../../assets/search-normal.svg';
 import card from '../../../assets/cart.svg';
 import user from '../../../assets/user.svg';
 import vector from '../../../assets/Vector.svg';
+import { useAuth } from '../../../context/AuthContext';
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
+    const { isLoggedIn, logout } = useAuth();
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -44,12 +46,33 @@ export default function Navbar() {
                     <img src={searchicon} className="search-icon" alt="search" />
                 </div>
                 <div className="icon-section">
-                    <img src={user} className="icon" alt="user" />
-                    <img src={card} className="icon" alt="cart" />
-                    <img src={vector} className="icon" alt="notification" />
-                    <button className="bg-[#16404D] loginBtn " onClick={() => navigate('/login')}>
-                        <p>Login</p>
-                    </button>
+                    {isLoggedIn ? (
+                        <div className="relative ml-3">
+                            <div className="flex items-center gap-4">
+                                <img src={card} className="icon" alt="cart" />
+                                <img src={vector} className="icon" alt="notification" />
+                                <img src={user} className="icon" alt="user" />
+                                <button
+                                    onClick={logout}
+                                    className="text-[#16404D] hover:opacity-80 text-sm font-medium"
+                                >
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex items-center gap-4">
+                            <button className="bg-[#16404D] loginBtn " onClick={() => navigate('/login')}>
+                                <p>Login</p>
+                            </button>
+                            <Link
+                                to="/RegisterationPage"
+                                className="text-[#16404D] hover:opacity-80 text-sm font-medium"
+                            >
+                                Sign up
+                            </Link>
+                        </div>
+                    )}
                 </div>
             </div>
         </nav>

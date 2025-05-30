@@ -9,6 +9,7 @@ import IndexPage from './components/index/index'
 import ForgetPass from './components/regestration/forgotPassword/ForgetPass'
 import NewPass from './components/regestration/forgotPassword/NewPass'
 import RegisterationPage from './components/regestration/RegisterationPage';
+import { AuthProvider } from './context/AuthContext';
 
 function Layout() {
   const location = useLocation();
@@ -34,10 +35,12 @@ function Layout() {
 
 function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <Layout />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <ScrollToTop />
+        <Layout />
+      </Router>
+    </AuthProvider>
   );
 }
 
