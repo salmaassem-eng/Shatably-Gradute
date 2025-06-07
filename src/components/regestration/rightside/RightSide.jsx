@@ -36,10 +36,13 @@ const RightSide = () => {
     }
 
     try {
+      console.log('Attempting login with:', { email: formData.email });
+      
       const response = await fetch('https://shatably.runasp.net/api/Auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify({
           email: formData.email,
@@ -47,7 +50,14 @@ const RightSide = () => {
         }),
       });
 
+      console.log('Login response status:', response.status);
       const resData = await response.json();
+      console.log('Login response data:', {
+        success: response.ok,
+        status: response.status,
+        hasToken: !!resData.token,
+        hasUser: !!resData.user
+      });
 
       if (!response.ok) {
         if (response.status === 404 || resData.message?.toLowerCase().includes('not found')) {
@@ -63,11 +73,13 @@ const RightSide = () => {
       }
       
       if (resData.token) {
+        console.log('Login successful, storing token and navigating...');
         login(resData.token, resData.user);
         navigate('/');
+      } else {
+        console.error('No token received in login response');
+        setError('Login failed: No authentication token received');
       }
-      
-      return resData.message;
 
     } catch (e) {
       console.error('Login error:', e);

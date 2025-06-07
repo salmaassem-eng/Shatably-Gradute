@@ -51,7 +51,13 @@ export default function Navbar() {
                             <div className="flex items-center gap-4">
                                 <img src={card} className="icon" alt="cart" />
                                 <img src={vector} className="icon" alt="notification" />
-                                <img src={user} className="icon" alt="user" />
+                                <Link to="/User">
+                                    <img 
+                                        src={user} 
+                                        className={`icon ${isActive('/User') ? 'active' : ''}`} 
+                                        alt="user" 
+                                    />
+                                </Link>
                                 <button
                                     onClick={logout}
                                     className="text-[#16404D] hover:opacity-80 text-sm font-medium"
