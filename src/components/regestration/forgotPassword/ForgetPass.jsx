@@ -1,20 +1,36 @@
 import React, { useState } from "react";
-import { useNavigate ,  Link} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 const ForgetPass = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
 
-  const handleEmailSubmit = (e) => {
+  const handleEmailSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    // For now, just navigate to the new password page with email in state
+    setSuccess("");
     if (!email) {
       setError("Email is required");
       return;
     }
-    navigate("/newpass", { state: { email } });
+    setLoading(true);
+    try {
+      // Call your backend API to send the reset email
+      await fetch('https://shatably.runasp.net/api/Auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      // You can check response status or just always show the message for security
+      setSuccess("If an account with this email exists, we've sent a password reset link. Please check your inbox.");
+      setEmail("");
+    } catch {
+      setError("Something went wrong. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -29,6 +45,11 @@ const ForgetPass = () => {
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
             <span className="block sm:inline">{error}</span>
+          </div>
+        )}
+        {success && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+            <span className="block sm:inline">{success}</span>
           </div>
         )}
         <div className="w-[400px] h-[250px] mt-[2rem] bg-[#fff] flex justify-center items-center m-auto rounded-[50px] ">
@@ -46,14 +67,16 @@ const ForgetPass = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   className="appearance-none block w-[324px] px-[10px] py-[25px] bg-[#D9D9D9] border-none rounded-[15px] h-[44px] placeholder-gray-400 focus:outline-none focus:opacity-80 focus:text-[#16404D] transition duration-150 ease-in-out"
                   placeholder="Enter your email"
+                  disabled={loading || !!success}
                 />
               </div>
             </div>
             <button
               type="submit"
-              className="w-[324px] h-[48px] flex justify-center items-center py-3 px-4 bg-[#16404D] text-[#fff] border border-transparent rounded-[15px] shadow-sm text-[16px] font-medium hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+              className="w-[324px] h-[48px] flex justify-center items-center py-3 px-4 bg-[#16404D] text-[#fff] border border-transparent rounded-[15px] shadow-sm text-[16px] font-medium hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out disabled:opacity-50"
+              disabled={loading || !!success}
             >
-              Send Verification Code
+              {loading ? 'Sending...' : 'Send Verification Code'}
             </button>
           </form>
         </div>

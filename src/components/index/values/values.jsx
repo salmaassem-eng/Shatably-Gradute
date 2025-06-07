@@ -39,7 +39,7 @@ function About() {
         <p className="opacity-70 mb-[3rem] max-w-[600px] mx-auto text-[1rem]">
           Our values shape the foundation of SHATABLY, guiding how we serve our clients and build trust.
         </p>
-        <div className="grid grid-cols-2 gap-[3rem] p-[20px] md:grid-cols-1 values-grid">
+        <div className="grid lg:grid-cols-2 gap-[3rem] p-[20px] md:grid-cols-1 ">
           {coreValues.map((value, index) => (
             <div 
               key={index} 
