@@ -116,6 +116,10 @@
     cursor: pointer;
 }
 
+.icon.active {
+    filter: invert(71%) sepia(75%) saturate(389%) hue-rotate(346deg) brightness(89%) contrast(91%);
+}
+
 .side-nav {
     display: none;
     flex-direction: column;
