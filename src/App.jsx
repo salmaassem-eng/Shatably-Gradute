@@ -12,6 +12,7 @@ import RegisterationPage from './components/regestration/register/RegisterationP
 import { AuthProvider } from './context/AuthContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import User from './components/icons/User';
 
 function Layout() {
   const location = useLocation();
@@ -28,6 +29,7 @@ function Layout() {
           <Route path="/services" element={<Services />} />
           <Route path="/forgetpass" element={<ForgetPass />} />
           <Route path="/newpass" element={<NewPass />} />
+          <Route path="/User" element={<User />} />
         </Routes>
       </main>
       {!hideNavAndFooter && <Footer />}

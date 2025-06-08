@@ -11,7 +11,14 @@ export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
-    const { isLoggedIn, logout } = useAuth();
+    const auth = useAuth();
+    
+    // Early return if auth context is not yet initialized
+    if (!auth) {
+        return null;
+    }
+    
+    const { isLoggedIn, logout } = auth;
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -19,6 +26,12 @@ export default function Navbar() {
 
     const isActive = (path) => {
         return location.pathname === path;
+    };
+
+    const handleLogout = () => {
+        if (logout) {
+            logout();
+        }
     };
 
     return (
@@ -51,9 +64,15 @@ export default function Navbar() {
                             <div className="flex items-center gap-4">
                                 <img src={card} className="icon" alt="cart" />
                                 <img src={vector} className="icon" alt="notification" />
-                                <img src={user} className="icon" alt="user" />
+                                <Link to="/User">
+                                    <img 
+                                        src={user} 
+                                        className={`icon ${isActive('/User') ? 'active' : ''}`} 
+                                        alt="user" 
+                                    />
+                                </Link>
                                 <button
-                                    onClick={logout}
+                                    onClick={handleLogout}
                                     className="text-[#16404D] hover:opacity-80 text-sm font-medium"
                                 >
                                     Logout
