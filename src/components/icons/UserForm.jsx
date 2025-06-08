@@ -30,13 +30,39 @@ export default function UserForm({ formData, onSubmit, onChange, onDiscard }) {
                 onChange={onChange}
             />
 
-            <UserInfo 
+            {/* <UserInfo 
                 className="mb-6"
-                label="Mobile Number" 
-                name="phoneNumber" 
-                value={formData.phoneNumber} 
+                label="address" 
+                name="address" 
+                value={formData.address} 
                 onChange={onChange}
-            />
+                placeholder='city , region , street'
+            /> */}
+            <div className="mb-6">
+                <div className="grid grid-cols-3 gap-4">
+                    <UserInfo 
+                        label="City" 
+                        name="city" 
+                        value={formData.city} 
+                        onChange={onChange}
+                        placeholder='city'
+                    />
+                    <UserInfo 
+                        label="Region" 
+                        name="region" 
+                        value={formData.region} 
+                        onChange={onChange}
+                        placeholder='region'
+                    />
+                    <UserInfo 
+                        label="Street" 
+                        name="street" 
+                        value={formData.street} 
+                        onChange={onChange}
+                        placeholder='street'
+                    />
+                </div>
+            </div>
             
             <div className="flex justify-end space-x-4 mt-10">
                 <button
