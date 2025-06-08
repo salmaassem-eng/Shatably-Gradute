@@ -17,7 +17,7 @@ import User from './components/icons/User';
 function Layout() {
   const location = useLocation();
   const hideNavAndFooter = location.pathname === '/login' || location.pathname === '/forgetpass'|| location.pathname === "/RegisterationPage" || location.pathname === '/newpass';
-
+  const hideFooter = location.pathname === '/User';
   return (
     <div className="app-container">
       {!hideNavAndFooter && <Navbar />}
@@ -25,14 +25,14 @@ function Layout() {
         <Routes>
           <Route path="/" element={<IndexPage />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/Registeration" element={<RegisterationPage />} />
+          <Route path="/RegisterationPage" element={<RegisterationPage />} />
           <Route path="/services" element={<Services />} />
           <Route path="/forgetpass" element={<ForgetPass />} />
           <Route path="/newpass" element={<NewPass />} />
           <Route path="/User" element={<User />} />
         </Routes>
       </main>
-      {!hideNavAndFooter && <Footer />}
+      {!hideNavAndFooter && !hideFooter && <Footer />}
     </div>
   );
 }

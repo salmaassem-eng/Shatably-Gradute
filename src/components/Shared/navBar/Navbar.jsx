@@ -1,5 +1,5 @@
 import './navbar.css';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import searchicon from '../../../assets/search-normal.svg';
 import card from '../../../assets/cart.svg';
@@ -9,9 +9,24 @@ import { useAuth } from '../../../context/AuthContext';
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
     const auth = useAuth();
+    const profileRef = useRef(null);
+    
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (profileRef.current && !profileRef.current.contains(event.target)) {
+                setIsProfileOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
     
     // Early return if auth context is not yet initialized
     if (!auth) {
@@ -24,6 +39,10 @@ export default function Navbar() {
         setIsMenuOpen(!isMenuOpen);
     };
 
+    const toggleProfile = () => {
+        setIsProfileOpen(!isProfileOpen);
+    };
+
     const isActive = (path) => {
         return location.pathname === path;
     };
@@ -31,7 +50,13 @@ export default function Navbar() {
     const handleLogout = () => {
         if (logout) {
             logout();
+            setIsProfileOpen(false);
         }
+    };
+
+    const handleViewProfile = () => {
+        navigate('/User');
+        setIsProfileOpen(false);
     };
 
     return (
@@ -64,19 +89,30 @@ export default function Navbar() {
                             <div className="flex items-center gap-4">
                                 <img src={card} className="icon" alt="cart" />
                                 <img src={vector} className="icon" alt="notification" />
-                                <Link to="/User">
+                                <div className="relative" ref={profileRef}>
                                     <img 
                                         src={user} 
-                                        className={`icon ${isActive('/User') ? 'active' : ''}`} 
-                                        alt="user" 
+                                        className={`icon ${isActive('/User') ? 'active' : ''} cursor-pointer`} 
+                                        alt="user"
+                                        onClick={toggleProfile}
                                     />
-                                </Link>
-                                <button
-                                    onClick={handleLogout}
-                                    className="text-[#16404D] hover:opacity-80 text-sm font-medium"
-                                >
-                                    Logout
-                                </button>
+                                    {isProfileOpen && (
+                                        <div className="absolute right-0 mt-5 w-32 bg-white rounded-md shadow-lg py-1 z-50">
+                                            <button
+                                                onClick={handleViewProfile}
+                                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                                            >
+                                                View Profile
+                                            </button>
+                                            <button
+                                                onClick={handleLogout}
+                                                className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition-colors duration-200"
+                                            >
+                                                Logout
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     ) : (

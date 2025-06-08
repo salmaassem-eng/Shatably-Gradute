@@ -288,7 +288,7 @@ export default function User() {
     if (!isLoggedIn) return null;
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 m-auto">
             <div className="max-w-6xl mx-auto bg-white rounded-[25px] shadow-sm p-8 mt-10">
                 <div className="flex">
                     <div className="w-1/4 pr-8">
