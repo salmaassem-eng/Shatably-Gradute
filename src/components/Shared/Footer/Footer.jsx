@@ -38,10 +38,10 @@ const Footer = () => {
 
   return (
     <footer className="bg-white w-full pt-4 pb-2 bottom-0">
-      <div className="max-w-[1500px] grid grid-cols-2 gap-20 px-8 py-[2rem] md:grid-cols-2 sm:grid-cols-1 footer-container">
+      <div className="max-w-[1500px] grid lg:grid-cols-2 gap-20 px-8 py-[2rem] md:grid-cols-2 sm:grid-cols-1 footer-container">
         {/* Logo Section */}
-        <div className="grid grid-cols-[50px_250px] gap-[5rem] max-w-[500px] mx-auto items-start md:grid-cols-1 sm:grid-cols-1 logo-section">
-          <img src={logo} alt="Logo" className="w-[110px]" />
+        <div className="grid lg:grid-cols-[50px_250px] gap-[1rem] max-w-[500px] mx-auto items-start md:grid-cols-1 sm:grid-cols-1 logo-section">
+          <img src={logo} alt="Logo" className="w-[250px]" />
           <div className="flex flex-col gap-[10px]">
             <h4 className="font-bold">SHATABLY</h4>
             <p className="opacity-60">
@@ -49,12 +49,12 @@ const Footer = () => {
               services for apartments and homes.
             </p>
 
-            <div className="flex flex-col gap-[20px] mt-[10px] mb-[10px] items-start sm:items-center contact-info">
+            <div className="flex flex-col gap-[20px] mt-[10px] mb-[10px] lg:items-start md:items-start sm:items-center contact-info">
               <p className="flex items-center gap-[5px] phone">
                 <img src={phoneIcon} alt="Phone" className="w-[20px] h-[20px]" />
                 <span className="font-medium weight-550">+02 0123456789</span>
               </p>
-              <div className="flex gap-[10px] sm:flex-col sm:items-center contact-buttons">
+              <div className="flex lg:flex-row gap-[10px] sm:flex-col sm:items-center contact-buttons">
                 <a
                   href="#contact"
                   className="bg-[#16404D] text-[#fff] text-decoration-none font-semibold text-[0.9rem] py-[10px] px-[20px] rounded-[5px] hover:-translate-y-[5px] hover:text-[#fff] transition duration-300 ease-in-out contact-btn-footer"
