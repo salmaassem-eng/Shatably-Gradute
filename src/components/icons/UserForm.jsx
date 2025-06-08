@@ -26,6 +26,7 @@ export default function UserForm({ formData, onSubmit, onChange, onDiscard }) {
                 className="mb-6"
                 label="Email" 
                 name="email" 
+                type="email"
                 value={formData.email} 
                 onChange={onChange}
             />
@@ -43,23 +44,23 @@ export default function UserForm({ formData, onSubmit, onChange, onDiscard }) {
                     <UserInfo 
                         label="City" 
                         name="city" 
-                        value={formData.city} 
+                        value={formData.address.city} 
                         onChange={onChange}
-                        placeholder='city'
+                        placeholder="City"
                     />
                     <UserInfo 
                         label="Region" 
                         name="region" 
-                        value={formData.region} 
+                        value={formData.address.region} 
                         onChange={onChange}
-                        placeholder='region'
+                        placeholder="Region"
                     />
                     <UserInfo 
                         label="Street" 
                         name="street" 
-                        value={formData.street} 
+                        value={formData.address.street} 
                         onChange={onChange}
-                        placeholder='street'
+                        placeholder="Street"
                     />
                 </div>
             </div>

@@ -51,41 +51,38 @@ export default function User() {
                     throw new Error('No user ID found in token');
                 }
 
-                console.log('Attempting to fetch data for user ID:', userId);
+                console.log('Fetching user data for ID:', userId);
 
                 const response = await fetch(`https://shatably.runasp.net/api/users/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     }
                 });
 
                 if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('Server response:', {
-                        status: response.status,
-                        statusText: response.statusText,
-                        body: errorText
-                    });
-                    throw new Error(`Server returned ${response.status}: ${errorText}`);
+                    throw new Error(`Failed to fetch user data: ${response.status}`);
                 }
 
-                const resData = await response.json();
-                console.log('Received user data:', resData);
+                const userData = await response.json();
+                console.log('Received user data:', userData);
 
                 setFormData({
-                    firstName: resData.firstName || '',
-                    lastName: resData.lastName || '',
-                    email: resData.email || tokenPayload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] || '',
-                    city: resData.city || '',
-                    region: resData.region || '',
-                    street: resData.street || '',
+                    userName: userData.userName || `${userData.firstName} ${userData.lastName}`,
+                    email: userData.email || '',
+                    firstName: userData.firstName || '',
+                    lastName: userData.lastName || '',
+                    address: {
+                        city: userData.address?.city || '',
+                        region: userData.address?.region || '',
+                        street: userData.address?.street || ''
+                    }
                 });
+                
                 setError(null);
             } catch (err) {
-                console.error('Detailed error:', err);
+                console.error('Error fetching user data:', err);
                 setError('Failed to load user data. Please try again.');
             }
         }
@@ -93,14 +90,29 @@ export default function User() {
         fetchUserData();
     }, [isLoggedIn, navigate]);
 
-
-
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        // Handle nested address fields
+        if (name === 'city' || name === 'region' || name === 'street') {
+            setFormData(prev => ({
+                ...prev,
+                address: {
+                    ...prev.address,
+                    [name]: value
+                }
+            }));
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value,
+                // Update userName when first or last name changes
+                ...(name === 'firstName' || name === 'lastName' ? {
+                    userName: name === 'firstName' ? 
+                        `${value} ${prev.lastName}` : 
+                        `${prev.firstName} ${value}`
+                } : {})
+            }));
+        }
     };
 
     const handleDiscard = () => {
@@ -126,121 +138,124 @@ export default function User() {
                     throw new Error('No user ID found in token');
                 }
 
-                console.log('Attempting to fetch data for user ID:', userId);
+                console.log('Fetching user data for ID:', userId);
 
                 const response = await fetch(`https://shatably.runasp.net/api/users/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     }
                 });
 
                 if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('Server response:', {
-                        status: response.status,
-                        statusText: response.statusText,
-                        body: errorText
-                    });
-                    throw new Error(`Server returned ${response.status}: ${errorText}`);
+                    throw new Error(`Failed to fetch user data: ${response.status}`);
                 }
 
-                const resData = await response.json();
-                console.log('Received user data:', resData);
+                const userData = await response.json();
+                console.log('Received user data:', userData);
 
+                // Update form data with user data
                 setFormData({
-                    firstName: resData.firstName || '',
-                    lastName: resData.lastName || '',
-                    email: resData.email || tokenPayload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'] || '',
-                    city: resData.city || '',
-                    region: resData.region || '',
-                    street: resData.street || '',
+                    userName: userData.userName || `${userData.firstName} ${userData.lastName}`,
+                    email: userData.email || '',
+                    firstName: userData.firstName || '',
+                    lastName: userData.lastName || '',
+                    address: {
+                        city: userData.address?.city || '',
+                        region: userData.address?.region || '',
+                        street: userData.address?.street || ''
+                    }
                 });
+                
                 setError(null);
             } catch (err) {
-                console.error('Detailed error:', err);
+                console.error('Error fetching user data:', err);
                 setError('Failed to load user data. Please try again.');
             }
         }
         fetchUserData();
     };
 
-
     const handleSubmit = async (e) => {
-    e.preventDefault();
+        e.preventDefault();
+        console.log('Starting form submission with data:', formData);
 
-    try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            throw new Error('No authentication token found');
-        }
-
-        // Decode the JWT token to get the userId
-        const tokenParts = token.split('.');
-        if (tokenParts.length !== 3) {
-            throw new Error('Invalid token format');
-        }
-
-        const tokenPayload = JSON.parse(atob(tokenParts[1]));
-        console.log('Token payload:', tokenPayload); // For debugging
-
-        // Try several claim keys that might contain the user ID
-        const userId =
-            tokenPayload.userId ||
-            tokenPayload.sub ||
-            tokenPayload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-
-        if (!userId) {
-            throw new Error('No user ID found in token');
-        }
-
-        console.log('Using userId for request:', userId);
-
-        const payload = {
-            userName: `${formData.firstName} ${formData.lastName}`,
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-            address: {
-                city: formData.city,
-                region: formData.region,
-                street: formData.street,
-            },
-        };
-
-        const response = await fetch(`https://shatably.runasp.net/api/users/${userId}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify(payload),
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-
-            if (response.status === 404) {
-                throw new Error('User not found (404). The user ID might be incorrect or the user may not exist.');
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No authentication token found');
             }
 
-            throw new Error(`Failed to update user: ${response.status} - ${errorText}`);
+            // Decode the JWT token to get the token payload
+            const tokenParts = token.split('.');
+            if (tokenParts.length !== 3) {
+                throw new Error('Invalid token format');
+            }
+
+            const tokenPayload = JSON.parse(atob(tokenParts[1]));
+            console.log('Token payload:', tokenPayload);
+
+            // Get userId from token
+            const userId = tokenPayload.userId;
+            if (!userId) {
+                throw new Error('No user ID found in token');
+            }
+
+            // Construct payload to match backend schema exactly
+            const payload = {
+                id: userId, // ← Add this line
+                userName: formData.userName,
+                email: formData.email,
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                isActive: true,
+                address: {
+                    city: formData.address.city,
+                    region: formData.address.region,
+                    street: formData.address.street
+                }
+            };
+            
+
+            console.log('Sending update request to:', `https://shatably.runasp.net/api/users/${userId}`);
+            console.log('With payload:', payload);
+
+            const response = await fetch(`https://shatably.runasp.net/api/users/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const responseText = await response.text();
+            console.log('Response text:', responseText);
+
+            if (!response.ok) {
+                let errorMessage;
+                try {
+                    const errorData = JSON.parse(responseText);
+                    errorMessage = errorData.message || errorData.title || errorData.error;
+                } catch (parseError) {
+                    console.warn('Failed to parse error response:', parseError);
+                    errorMessage = responseText;
+                }
+
+                throw new Error(errorMessage || `Server returned ${response.status}`);
+            }
+
+            setError(null);
+            console.log('Update successful');
+            
+            // Force a fresh data fetch to confirm changes
+            handleDiscard();
+        } catch (err) {
+            console.error('Error updating user data:', err);
+            setError(err.message || 'Failed to update user data. Please try again.');
         }
-
-        setError(null);
-        console.log('User updated successfully.');
-    } catch (err) {
-        console.error('Error updating user data:', err);
-        setError(err.message || 'Failed to update user data. Please try again.');
-    }
-};
-
-
-
-
+    };
 
     const handleSectionChange = (section) => {
         setActiveSection(section);
