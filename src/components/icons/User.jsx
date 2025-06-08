@@ -177,85 +177,98 @@ export default function User() {
         fetchUserData();
     };
 
+
+
+            
+
+
+ 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log('Starting form submission with data:', formData);
+    e.preventDefault();
+    console.log('Starting form submission with data:', formData);
 
-        try {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                throw new Error('No authentication token found');
-            }
-
-            // Decode the JWT token to get the token payload
-            const tokenParts = token.split('.');
-            if (tokenParts.length !== 3) {
-                throw new Error('Invalid token format');
-            }
-
-            const tokenPayload = JSON.parse(atob(tokenParts[1]));
-            console.log('Token payload:', tokenPayload);
-
-            // Get userId from token
-            const userId = tokenPayload.userId;
-            if (!userId) {
-                throw new Error('No user ID found in token');
-            }
-
-            // Construct payload to match backend schema exactly
-            const payload = {
-                id: userId, // ← Add this line
-                userName: formData.userName,
-                email: formData.email,
-                firstName: formData.firstName,
-                lastName: formData.lastName,
-                isActive: true,
-                address: {
-                    city: formData.address.city,
-                    region: formData.address.region,
-                    street: formData.address.street
-                }
-            };
-            
-
-            console.log('Sending update request to:', `https://shatably.runasp.net/api/users/${userId}`);
-            console.log('With payload:', payload);
-
-            const response = await fetch(`https://shatably.runasp.net/api/users/${userId}`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
-
-            const responseText = await response.text();
-            console.log('Response text:', responseText);
-
-            if (!response.ok) {
-                let errorMessage;
-                try {
-                    const errorData = JSON.parse(responseText);
-                    errorMessage = errorData.message || errorData.title || errorData.error;
-                } catch (parseError) {
-                    console.warn('Failed to parse error response:', parseError);
-                    errorMessage = responseText;
-                }
-
-                throw new Error(errorMessage || `Server returned ${response.status}`);
-            }
-
-            setError(null);
-            console.log('Update successful');
-            
-            // Force a fresh data fetch to confirm changes
-            handleDiscard();
-        } catch (err) {
-            console.error('Error updating user data:', err);
-            setError(err.message || 'Failed to update user data. Please try again.');
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error('No authentication token found');
         }
-    };
+
+        // Decode JWT token to get userId
+        const tokenParts = token.split('.');
+        if (tokenParts.length !== 3) {
+            throw new Error('Invalid token format');
+        }
+
+        const tokenPayload = JSON.parse(atob(tokenParts[1]));
+        console.log('Token payload:', tokenPayload);
+
+        const userId = tokenPayload.userId;
+        if (!userId) {
+            throw new Error('No user ID found in token');
+        }
+
+        // Build payload exactly as expected
+        const payload = {
+            id: userId,
+            userName: `${formData.firstName}${formData.lastName}`,
+            email: formData.email,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            isActive: true,
+            address: {
+                city: formData.address.city,
+                region: formData.address.region,
+                street: formData.address.street
+            }
+        };
+
+        console.log('Sending update request to:', `https://shatably.runasp.net/api/users/${userId}`);
+        console.log('With payload:', payload);
+
+        const response = await fetch(`https://shatably.runasp.net/api/users/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        // Try to parse JSON if possible, otherwise get text
+        let responseData;
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+            responseData = await response.json();
+        } else {
+            responseData = await response.text();
+        }
+
+        console.log('Response data:', responseData);
+
+        if (!response.ok) {
+            let errorMessage = 'Unknown error';
+            if (typeof responseData === 'string') {
+                errorMessage = responseData; // Plain text error
+            } else if (responseData && (responseData.message || responseData.title || responseData.error)) {
+                errorMessage = responseData.message || responseData.title || responseData.error;
+            } else {
+                errorMessage = `Server returned status ${response.status}`;
+            }
+            throw new Error(errorMessage);
+        }
+
+        setError(null);
+        console.log('Update successful');
+
+        // Trigger data refresh or form discard/reset
+        handleDiscard();
+
+    } catch (err) {
+        console.error('Error updating user data:', err);
+        setError(err.message || 'Failed to update user data. Please try again.');
+    }
+};
+
 
     const handleSectionChange = (section) => {
         setActiveSection(section);
