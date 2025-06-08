@@ -50,14 +50,14 @@ const RightSide = () => {
         }),
       });
 
-      console.log('Login response status:', response.status);
+      // console.log('Login response status:', response.status);
       const resData = await response.json();
-      console.log('Login response data:', {
-        success: response.ok,
-        status: response.status,
-        hasToken: !!resData.token,
-        hasUser: !!resData.user
-      });
+      // console.log('Login response data:', {
+      //   success: response.ok,
+      //   status: response.status,
+      //   hasToken: !!resData.token,
+      //   hasUser: !!resData.user
+      // });
 
       if (!response.ok) {
         if (response.status === 404 || resData.message?.toLowerCase().includes('not found')) {
@@ -73,12 +73,10 @@ const RightSide = () => {
       }
       
       if (resData.token) {
-        console.log('Login successful, storing token and navigating...');
         login(resData.token, resData.user);
-        navigate('/');
-      } else {
-        console.error('No token received in login response');
-        setError('Login failed: No authentication token received');
+        setTimeout(() => {
+          navigate('/');
+        }, 3000);
       }
 
     } catch (e) {
