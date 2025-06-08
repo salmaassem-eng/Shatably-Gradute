@@ -2,14 +2,16 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Navbar from './components/Shared/navBar/Navbar'
 import Footer from './components/Shared/Footer/Footer'
 import Services from './components/Services/Services'
-import Login from './components/regestration/login'
+import Login from './components/regestration/login/loginPage'
 import './App.css'
 import ScrollToTop from './components/Shared/ScrollToTop'
 import IndexPage from './components/index/index'
 import ForgetPass from './components/regestration/forgotPassword/ForgetPass'
 import NewPass from './components/regestration/forgotPassword/NewPass'
-import RegisterationPage from './components/regestration/RegisterationPage';
+import RegisterationPage from './components/regestration/register/RegisterationPage';
 import { AuthProvider } from './context/AuthContext';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import User from './components/icons/User';
 
 function Layout() {
@@ -23,7 +25,7 @@ function Layout() {
         <Routes>
           <Route path="/" element={<IndexPage />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/RegisterationPage" element={<RegisterationPage />} />
+          <Route path="/Registeration" element={<RegisterationPage />} />
           <Route path="/services" element={<Services />} />
           <Route path="/forgetpass" element={<ForgetPass />} />
           <Route path="/newpass" element={<NewPass />} />
@@ -41,6 +43,7 @@ function App() {
       <Router>
         <ScrollToTop />
         <Layout />
+        <ToastContainer position="top-right" autoClose={3000} />
       </Router>
     </AuthProvider>
   );

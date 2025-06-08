@@ -1,4 +1,4 @@
-import Leftside from "./leftside/Leftside";
+import Leftside from "../leftside/Leftside";
 import Register from "./Register";
 
 export default function RegisterationPage(){

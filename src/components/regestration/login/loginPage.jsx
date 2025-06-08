@@ -1,6 +1,6 @@
 import React from "react";
-import Leftside from "./leftside/Leftside";
-import RightSide from "./rightside/RightSide";
+import Leftside from "../leftside/Leftside";
+import RightSide from "./Login";
 
 const Login = () => {
 
