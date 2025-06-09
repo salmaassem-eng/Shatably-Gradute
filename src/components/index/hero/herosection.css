@@ -7,6 +7,8 @@
     place-items: center;
     padding: 3rem;
     font-family: 'Segoe UI', sans-serif;
+    overflow-x: hidden;
+    overflow-y: hidden; /* Only prevent horizontal scroll */
 }
 
 .card-wrapper {
@@ -53,12 +55,12 @@
 }
 
 .hero-btn button {
-    padding: 8px 16px;
+    padding: 5px 25px;
     margin: 0 5px;
     border: 2px solid #16404D;
     background: transparent;
     color: #16404D;
-    border-radius: 20px;
+    border-radius: 25px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -98,6 +100,36 @@
     transform: translateY(-8%);
 }
 
+.hero-image[data-direction="prev"] {
+    animation: slideFromLeft 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-image[data-direction="next"] {
+    animation: slideFromRight 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideFromLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-150%) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+}
+
+@keyframes slideFromRight {
+    0% {
+        opacity: 0;
+        transform: translateX(50%) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+}
+
 .display {
     display: grid;
     grid-template-columns: 170px;
@@ -133,11 +165,13 @@
     width: 65px;
     height: 65px;
     background-color: #114b59;
+    color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: 1s;
+    transition: 0.5s;
+    z-index: 2;
 }
 
 .enter-button:hover {
@@ -146,16 +180,6 @@
     border: #114b59d8 solid 3px;
 }
 
-/* .image-container {
-    position: relative; */
-    /* width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    perspective: 1000px;
-    z-index: 1; */
-/* } */
 
 @media (max-width: 992px) {
     .hero-text {
@@ -164,17 +188,10 @@
         height: 450px;
     }
 
-    .hero-text h1 {
-        font-size: 2rem;
-    }
-
-    .hero-text p {
-        font-size: 1rem;
-    }
-
     .hero-btn button {
         width: 55px;
-        padding: 3px;
+        padding: 5px 20px;
+        margin-top: 20px;
     }
 
     .hero-btn button:hover {
@@ -182,7 +199,7 @@
     }
 
     .hero-image {
-        top: 180px;
+        top: 17%;
         height: 35rem;
         width: 40rem;
     }
@@ -215,7 +232,7 @@
 
     .hero-btn button {
         width: 45px;
-        padding: 2px;
+        padding: 2px 15px;
     }
 
     .hero-btn button:hover {
@@ -225,7 +242,7 @@
     .hero-image {
         height: 27rem;
         width: 32rem;
-        top: 160px;
+        top: 25%;
     }
 }
 
@@ -233,6 +250,6 @@
     .hero-image {
         height: 25rem;
         width: 26rem;
-        top: 160px;
+        top: 25%;
     }
 }

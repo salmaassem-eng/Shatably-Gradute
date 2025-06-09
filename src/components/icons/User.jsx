@@ -1,16 +1,19 @@
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import userIcon from '../../assets/user.svg';
 import UserBtn from './UserBtn';
 import UserForm from './UserForm';
 import Logout from './Logout';
+// import { uploadImage } from '../../firebase';
 
 export default function User() {
     const { isLoggedIn } = useAuth();
     const navigate = useNavigate();
     const [activeSection, setActiveSection] = useState('personal');
     const [error, setError] = useState(null);
+    const [profileImage, setProfileImage] = useState(userIcon);
+    const fileInputRef = useRef(null);
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -20,6 +23,8 @@ export default function User() {
             region: '',
             street: '',
         },
+        profilePictureUrl: '',
+        imageUrl: null,
     });
 
     // Handle authentication check and data fetching
@@ -77,7 +82,8 @@ export default function User() {
                         city: userData.address?.city || '',
                         region: userData.address?.region || '',
                         street: userData.address?.street || ''
-                    }
+                    },
+                    profilePictureUrl: userData.profilePictureUrl || '',
                 });
 
                 setError(null);
@@ -165,7 +171,8 @@ export default function User() {
                         city: userData.address?.city || '',
                         region: userData.address?.region || '',
                         street: userData.address?.street || ''
-                    }
+                    },
+                    profilePictureUrl: userData.profilePictureUrl || '',
                 });
 
                 setError(null);
@@ -187,62 +194,55 @@ export default function User() {
                 throw new Error('No authentication token found');
             }
 
-            // Decode JWT token to get userId
             const tokenParts = token.split('.');
             if (tokenParts.length !== 3) {
                 throw new Error('Invalid token format');
             }
 
             const tokenPayload = JSON.parse(atob(tokenParts[1]));
-            console.log('Token payload:', tokenPayload);
-
             const userId = tokenPayload.userId;
             if (!userId) {
                 throw new Error('No user ID found in token');
             }
 
-            // Build payload exactly as expected
-            const payload = {
-                id: userId,
-                userName: `${formData.firstName}${formData.lastName}`,
-                email: formData.email,
-                firstName: formData.firstName,
-                lastName: formData.lastName,
-                isActive: true,
-                address: {
-                    city: formData.address.city,
-                    region: formData.address.region,
-                    street: formData.address.street
-                }
-            };
+            const formDataToSend = new FormData();
+            formDataToSend.append('id', userId);
+            formDataToSend.append('userName', `${formData.firstName}${formData.lastName}`);
+            formDataToSend.append('email', formData.email);
+            formDataToSend.append('firstName', formData.firstName);
+            formDataToSend.append('lastName', formData.lastName);
+            formDataToSend.append('isActive', 'true');
+            formDataToSend.append('address.city', formData.address?.city || '');
+            formDataToSend.append('address.region', formData.address?.region || '');
+            formDataToSend.append('address.street', formData.address?.street || '');
 
-            console.log('Sending update request to:', `https://shatably.runasp.net/api/users/${userId}`);
-            console.log('With payload:', payload);
+            formDataToSend.append('profilePictureUrl', formData.profilePictureUrl || '');
+            console.log(formData.imageUrl.value);
+            if (formData.imageUrl instanceof File) {
+                formDataToSend.append('imageUrl', formData.imageUrl);
+            }
 
             const response = await fetch(`https://shatably.runasp.net/api/users/${userId}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(payload)
+                body: formDataToSend
             });
 
-            // Try to parse JSON if possible, otherwise get text
+
             let responseData;
             const contentType = response.headers.get('content-type') || '';
-            if (contentType.includes('application/json')) {
+            if (contentType.includes('multipart/form-data')) {
                 responseData = await response.json();
             } else {
                 responseData = await response.text();
             }
 
-            console.log('Response data:', responseData);
-
             if (!response.ok) {
                 let errorMessage = 'Unknown error';
                 if (typeof responseData === 'string') {
-                    errorMessage = responseData; // Plain text error
+                    errorMessage = responseData;
                 } else if (responseData && (responseData.message || responseData.title || responseData.error)) {
                     errorMessage = responseData.message || responseData.title || responseData.error;
                 } else {
@@ -253,8 +253,6 @@ export default function User() {
 
             setError(null);
             console.log('Update successful');
-
-            // Trigger data refresh or form discard/reset
             handleDiscard();
 
         } catch (err) {
@@ -263,11 +261,33 @@ export default function User() {
         }
     };
 
-
     const handleSectionChange = (section) => {
         setActiveSection(section);
         setError(null);
     };
+
+    const handleImageClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                setProfileImage(event.target.result); // Show preview
+            };
+            reader.readAsDataURL(file);
+
+            setFormData(prev => ({
+                ...prev,
+                imageUrl: file
+            }));
+        }
+    };
+
+
 
     const renderContent = () => {
         if (activeSection === 'logout') {
@@ -302,11 +322,26 @@ export default function User() {
                 <div className="flex">
                     <div className="w-1/4 pr-8">
                         <div className="flex flex-col items-center">
-                            <div className="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center">
+                            <div
+                                className="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center relative group cursor-pointer hover:bg-gray-200 transition-all duration-300 overflow-hidden"
+                                onClick={handleImageClick}
+                            >
                                 <img
-                                    src={userIcon}
+                                    src={!formData.profilePictureUrl ? profileImage : formData.profilePictureUrl}
                                     alt="Profile"
-                                    className="w-16 h-16"
+                                    className="w-full h-full object-cover group-hover:opacity-80 transition-opacity duration-300"
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-full transition-all duration-300">
+                                    <span className="text-white opacity-0 group-hover:opacity-100 text-sm font-medium">
+                                        Change Photo
+                                    </span>
+                                </div>
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    onChange={handleImageChange}
+                                    accept="image/*"
+                                    className="hidden"
                                 />
                             </div>
                             <h2 className="mt-4 text-xl font-semibold text-[#16404D]">

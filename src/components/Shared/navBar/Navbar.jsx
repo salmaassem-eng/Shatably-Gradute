@@ -90,9 +90,7 @@ export default function Navbar() {
                 <Link to="/ai" className={`pages ${isActive('/ai') ? 'active' : ''}`}>AI</Link>
             </div>
             <div className="sections-logo">
-                <Link to="/" className="logo-link">
-                    <p>shatably</p>
-                </Link>
+                <p>shatably</p>
             </div>
             <div className="sections-icons">
                 <div className="search-container">
@@ -101,8 +99,10 @@ export default function Navbar() {
                 </div>
                 <div className="icon-section">
                     {isLoggedIn ? (
+
                         <div className="relative ml-3">
                             <div className="flex items-center">
+
                                 <img src={card} className="icon" alt="cart" />
                                 <div className="relative" ref={notificationRef}>
                                     <img 
