@@ -14,8 +14,7 @@ const ServiceFilter = ({ activeFilter, activeCategory, onFilterChange, onCategor
     ],
     maintenance: [
       { id: 'all', label: 'All Maintenance' },
-      { id: 'electrical', label: 'Electrical' },
-      { id: 'hvac', label: 'HVAC' },
+      { id: 'electrical', label: 'Electrical' },      { id: 'hvac', label: 'HVAC' },
     ],
     projects: [
       { id: 'all', label: 'All Projects' },
