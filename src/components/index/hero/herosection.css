@@ -25,7 +25,7 @@
     border-radius: 3.5rem;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
     text-align: start;
-    position: relative;
+    position: absolute;
     height: 350px;
     z-index: 1;
 }
@@ -74,48 +74,28 @@
     transform: translateY(-2px);
 }
 
-.hero-image {
-    position: absolute;
-    top: 5rem;
+.image-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 15rem;
     left: 50%;
     transform: translateX(-50%);
-    width: 40rem;
+    width: 45rem;
     z-index: 2;
     max-width: 100%;
-    height: auto;
+    height: 25rem;
     transition: transform 0.3s ease;
     transform-style: preserve-3d;
+    overflow-y: hidden;
 }
 
-.display {
-    display: grid;
-    grid-template-columns: 170px auto;
-    justify-content: end;
-    width: 240px;
-    height: 220px;
-    transition: all 0.5s ease;
-    column-gap: 0.3rem;
-    position: relative; 
-}
-
-.display video {
+.image-container .hero-image{
+    margin: 0;
+    padding: 0;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 15px;
-    margin-left: 1.5rem;
-    border: #114b59d8 solid 4px;
-    transition: width 0.5s ease;
-}
-
-.display.expanded video {
-    width: 220%;
-    height: 100% !important;
-    object-fit: fill;
-}
-
-.video-grid.expanded {
-    grid-template-columns:250px auto; 
+    transform: translateY(-8%);
 }
 
 .enter-button {
@@ -139,35 +119,16 @@
     border: #114b59d8 solid 3px;
 }
 
-.image-container {
-    position: relative;
-    width: 100%;
+/* .image-container {
+    position: relative; */
+    /* width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     perspective: 1000px;
-}
-
-/* 
-.rotating {
-    animation: rotateBack 6s ease-in-out infinite;
-}
-
-@keyframes rotateBack {
-    0% {
-        transform: translateX(-50%) rotateY(0deg);
-    }
-    25% {
-        transform: translateX(-50%) rotateY(-25deg);
-    }
-    75% {
-        transform: translateX(-50%) rotateY(25deg);
-    }
-    100% {
-        transform: translateX(-50%) rotateY(0deg);
-    }
-} */
+    z-index: 1; */
+/* } */
 
 @media (max-width: 992px) {
     .hero-text {
