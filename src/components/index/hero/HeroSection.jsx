@@ -59,6 +59,7 @@ export default function HeroSection() {
     function handleMouseLeave() {
         setIsHover(false);
         if (videoRef.current) {
+
             videoRef.current.pause();
             videoRef.current.currentTime = 0;
         }
@@ -133,13 +134,14 @@ export default function HeroSection() {
                 <div className="image-container">
                     <img 
                         src={currentImage} 
-                        alt="3D Model" 
-                        className="hero-image rotating" 
+                        alt="3D Model"
                         key={activeImage}
                         data-direction={slideDirection}
+                        className="hero-image" 
                     />
                 </div>
             </div>
         </section>
     );
 }
+

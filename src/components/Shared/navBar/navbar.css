@@ -2,7 +2,8 @@
     display: grid;
     grid-template-columns: 1fr 200px 1fr;
     align-items: center;
-    padding: 10px 20px;
+    justify-content: space-between;
+    padding: 10px 0px 10px 10px;
     width: 100%;
     position: fixed;
     height: 60px;
@@ -18,8 +19,15 @@
     text-align: center;
     display: grid;
     grid-template-columns: repeat(4, auto);
-    gap: 24px;
+    gap: 15px;
     justify-content: start;
+}
+
+.sections-pages a {
+    text-decoration: none;
+    color: inherit;
+    background: none;
+    border: none;
 }
 
 .pages {
@@ -75,7 +83,6 @@
 .sections-icons {
     display: grid;
     grid-template-columns: auto auto;
-    gap: 10px;
     align-items: center;
     justify-content: end;
 }
@@ -110,16 +117,17 @@
 
 .icon-section {
     display: grid;
-    grid-template-columns: repeat(4, auto);
+    grid-template-columns: repeat(3, auto);
     align-items: center;
     padding: 0;
-    margin-right: 2rem;
+
+    gap: 0.5rem;
 }
 
 .icon {
     width: 20px;
     height: 20px;
-    margin: 0 24px;
+    margin: 0 12px;
     cursor: pointer;
 }
 
@@ -215,6 +223,10 @@
 
     .sections-logo p {
         font-size: 1.1rem;
+  }
+    .icon-section {
+        padding: 0;
+        gap: 0.5rem;
     }
 
     .icon {
