@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import {  useNavigate, Link, useSearchParams } from "react-router-dom";
 
 const NewPass = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const email = location.state?.email || "";
+  const [searchParams] = useSearchParams();
+  const email = searchParams.get('email');
+  const token = searchParams.get('token');
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -35,6 +36,7 @@ const NewPass = () => {
             Create a new password for your account
           </p>
           {email && <p className="text-xs mt-2 opacity-60">For: {email}</p>}
+          {token && <p className="text-xs mt-2 opacity-60">Token: {token}</p>}
         </div>
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
