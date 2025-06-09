@@ -10,15 +10,21 @@ import { useAuth } from '../../../context/AuthContext';
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+    const [notifications, setNotifications] = useState([]);
     const location = useLocation();
     const navigate = useNavigate();
     const auth = useAuth();
     const profileRef = useRef(null);
+    const notificationRef = useRef(null);
     
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (profileRef.current && !profileRef.current.contains(event.target)) {
                 setIsProfileOpen(false);
+            }
+            if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+                setIsNotificationOpen(false);
             }
         };
 
@@ -27,33 +33,43 @@ export default function Navbar() {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    // Add notification when user logs in
+    useEffect(() => {
+        if (auth?.isLoggedIn) {
+            addNotification('Successfully logged in', 'now');
+        }
+    }, [auth?.isLoggedIn]);
+
+    // Add notification when verification code is sent
+    useEffect(() => {
+        if (location.pathname === '/forgot-password' && location.state?.codeSent) {
+            addNotification('Verification code has been sent to your email', 'now');
+        }
+    }, [location]);
+
+    const addNotification = (message, time) => {
+        setNotifications(prev => [{
+            id: Date.now(),
+            message,
+            time
+        }, ...prev]);
+    };
     
-    // Early return if auth context is not yet initialized
-    if (!auth) {
-        return null;
-    }
+    if (!auth) return null;
     
     const { isLoggedIn, logout } = auth;
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
-
-    const toggleProfile = () => {
-        setIsProfileOpen(!isProfileOpen);
-    };
-
-    const isActive = (path) => {
-        return location.pathname === path;
-    };
-
+    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+    const toggleProfile = () => setIsProfileOpen(!isProfileOpen);
+    const toggleNotification = () => setIsNotificationOpen(!isNotificationOpen);
+    const isActive = (path) => location.pathname === path;
     const handleLogout = () => {
         if (logout) {
             logout();
             setIsProfileOpen(false);
         }
     };
-
     const handleViewProfile = () => {
         navigate('/User');
         setIsProfileOpen(false);
@@ -68,10 +84,10 @@ export default function Navbar() {
             </div>
 
             <div className={`sections-pages ${isMenuOpen ? 'active' : ''}`}>
-                <Link to="/" className={`pages ${isActive('/') ? 'active' : ''}`}>home</Link>
-                <Link to="/services" className={`pages ${isActive('/services') ? 'active' : ''}`}>services</Link>
-                <Link to="/community" className={`pages ${isActive('/community') ? 'active' : ''}`}>community</Link>
-                <Link to="/ai" className={`pages ${isActive('/ai') ? 'active' : ''}`}>Ai</Link>
+                <Link to="/" className={`pages ${isActive('/') ? 'active' : ''}`}>Home</Link>
+                <Link to="/services" className={`pages ${isActive('/services') ? 'active' : ''}`}>Services</Link>
+                <Link to="/community" className={`pages ${isActive('/community') ? 'active' : ''}`}>Shop</Link>
+                <Link to="/ai" className={`pages ${isActive('/ai') ? 'active' : ''}`}>AI</Link>
             </div>
             <div className="sections-logo">
                 <Link to="/" className="logo-link">
@@ -86,9 +102,37 @@ export default function Navbar() {
                 <div className="icon-section">
                     {isLoggedIn ? (
                         <div className="relative ml-3">
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center">
                                 <img src={card} className="icon" alt="cart" />
-                                <img src={vector} className="icon" alt="notification" />
+                                <div className="relative" ref={notificationRef}>
+                                    <img 
+                                        src={vector} 
+                                        className="icon cursor-pointer" 
+                                        alt="notification"
+                                        onClick={toggleNotification}
+                                    />
+                                    {isNotificationOpen && (
+                                        <div className="absolute right-0 mt-5 w-60 bg-white rounded-md shadow-lg py-1 z-50">
+                                            <div className="px-4 py-2 border-b border-gray-100">
+                                                <h3 className="text-sm font-semibold">Notifications</h3>
+                                            </div>
+                                            {notifications.length > 0 ? (
+                                                <div className="max-h-60 overflow-y-auto">
+                                                    {notifications.map(notification => (
+                                                        <div key={notification.id} className="px-4 py-3 hover:bg-gray-50">
+                                                            <p className="text-sm">{notification.message}</p>
+                                                            <p className="text-xs mt-1">{notification.time}</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div className="px-4 py-3 text-sm text-gray-500">
+                                                    No notifications
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
                                 <div className="relative" ref={profileRef}>
                                     <img 
                                         src={user} 
@@ -117,7 +161,7 @@ export default function Navbar() {
                         </div>
                     ) : (
                         <div className="flex items-center gap-4">
-                            <button className="bg-[#16404D] loginBtn " onClick={() => navigate('/login')}>
+                            <button className="bg-[#16404D] loginBtn" onClick={() => navigate('/login')}>
                                 <p>Login</p>
                             </button>
                             <Link

@@ -26,6 +26,7 @@ export default function HeroSection() {
     function handleMouseLeave() {
         setIsHover(false);
         if (videoRef.current) {
+
             videoRef.current.pause();
             videoRef.current.currentTime = 0;
         }
@@ -70,13 +71,15 @@ export default function HeroSection() {
                         </button>
                     </div>
                 </div>
-                <div className="image-container"></div>
+                <div className="image-container">
                     <img 
                         src={images[activeImage]} 
                         alt="3D Model" 
-                        className="hero-image rotating" 
+                        className="hero-image" 
                     />
+                </div>
             </div>
         </section>
     );
 }
+

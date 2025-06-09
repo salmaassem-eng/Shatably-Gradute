@@ -3,24 +3,55 @@ import { toast } from 'react-toastify';
 
 export default function UserForm({ formData, initialFormData, onSubmit, onChange, onDiscard }) {
     // Handler for Save
+    const isChanged = JSON.stringify(formData) !== JSON.stringify(initialFormData);
     const handleSave = async (e) => {
         e.preventDefault();
-        if (!isChanged) return; // Prevent further action if no changes
-
+        if (!isChanged) {
+            toast.info('No changes to save.', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            return;
+        }
+    
         const confirmed = window.confirm('Are you sure you want to save changes?');
-        if (confirmed) {
+        if (!confirmed) return;
             try {
-                await onSubmit(e); // assuming onSubmit returns a promise
-                toast.success('Changes saved successfully!', { icon: '✅' });
+                const safeAddress = formData.address || { city: '', region: '', street: '' };
+                const dataToSend = {
+                    ...formData,
+                    address: safeAddress
+                };
+                const result =await onSubmit(dataToSend); 
+                if (result?.success) {
+                    toast.success('Changes saved successfully!', { icon: '✅' });
+                } else {
+                    toast.error('Failed to save changes.', { icon: '❌' });
+                }
             } catch {
                 toast.error('Failed to save changes.', { icon: '❌' });
             }
         }
-    };
+    
 
     // Handler for Discard
     const handleDiscard = (e) => {
-        if (!isChanged) return; // Prevent further action if no changes
+        e.preventDefault();
+        if (!isChanged) {
+            toast.info('No changes to discard.', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            return;
+        }
 
         const confirmed = window.confirm('Are you sure you want to discard changes?');
         if (confirmed) {
@@ -29,7 +60,7 @@ export default function UserForm({ formData, initialFormData, onSubmit, onChange
         }
     };
 
-    const isChanged = JSON.stringify(formData) !== JSON.stringify(initialFormData);
+
 
     return (
         <form onSubmit={handleSave}>
@@ -74,21 +105,21 @@ export default function UserForm({ formData, initialFormData, onSubmit, onChange
                     <UserInfo 
                         label="City" 
                         name="city" 
-                        value={formData.address.city} 
+                        value={formData.address?.city || ''} 
                         onChange={onChange}
                         placeholder="City"
                     />
                     <UserInfo 
                         label="Region" 
                         name="region" 
-                        value={formData.address.region} 
+                        value={formData.address?.region || ''} 
                         onChange={onChange}
                         placeholder="Region"
                     />
                     <UserInfo 
                         label="Street" 
                         name="street" 
-                        value={formData.address.street} 
+                        value={formData.address?.street || ''} 
                         onChange={onChange}
                         placeholder="Street"
                     />
