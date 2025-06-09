@@ -79,7 +79,7 @@ export default function User() {
                         street: userData.address?.street || ''
                     }
                 });
-                
+
                 setError(null);
             } catch (err) {
                 console.error('Error fetching user data:', err);
@@ -107,8 +107,8 @@ export default function User() {
                 [name]: value,
                 // Update userName when first or last name changes
                 ...(name === 'firstName' || name === 'lastName' ? {
-                    userName: name === 'firstName' ? 
-                        `${value} ${prev.lastName}` : 
+                    userName: name === 'firstName' ?
+                        `${value} ${prev.lastName}` :
                         `${prev.firstName} ${value}`
                 } : {})
             }));
@@ -167,7 +167,7 @@ export default function User() {
                         street: userData.address?.street || ''
                     }
                 });
-                
+
                 setError(null);
             } catch (err) {
                 console.error('Error fetching user data:', err);
@@ -177,97 +177,91 @@ export default function User() {
         fetchUserData();
     };
 
-
-
-            
-
-
- 
     const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log('Starting form submission with data:', formData);
+        e.preventDefault();
+        console.log('Starting form submission with data:', formData);
 
-    try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            throw new Error('No authentication token found');
-        }
-
-        // Decode JWT token to get userId
-        const tokenParts = token.split('.');
-        if (tokenParts.length !== 3) {
-            throw new Error('Invalid token format');
-        }
-
-        const tokenPayload = JSON.parse(atob(tokenParts[1]));
-        console.log('Token payload:', tokenPayload);
-
-        const userId = tokenPayload.userId;
-        if (!userId) {
-            throw new Error('No user ID found in token');
-        }
-
-        // Build payload exactly as expected
-        const payload = {
-            id: userId,
-            userName: `${formData.firstName}${formData.lastName}`,
-            email: formData.email,
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            isActive: true,
-            address: {
-                city: formData.address.city,
-                region: formData.address.region,
-                street: formData.address.street
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No authentication token found');
             }
-        };
 
-        console.log('Sending update request to:', `https://shatably.runasp.net/api/users/${userId}`);
-        console.log('With payload:', payload);
+            // Decode JWT token to get userId
+            const tokenParts = token.split('.');
+            if (tokenParts.length !== 3) {
+                throw new Error('Invalid token format');
+            }
 
-        const response = await fetch(`https://shatably.runasp.net/api/users/${userId}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
+            const tokenPayload = JSON.parse(atob(tokenParts[1]));
+            console.log('Token payload:', tokenPayload);
 
-        // Try to parse JSON if possible, otherwise get text
-        let responseData;
-        const contentType = response.headers.get('content-type') || '';
-        if (contentType.includes('application/json')) {
-            responseData = await response.json();
-        } else {
-            responseData = await response.text();
-        }
+            const userId = tokenPayload.userId;
+            if (!userId) {
+                throw new Error('No user ID found in token');
+            }
 
-        console.log('Response data:', responseData);
+            // Build payload exactly as expected
+            const payload = {
+                id: userId,
+                userName: `${formData.firstName}${formData.lastName}`,
+                email: formData.email,
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                isActive: true,
+                address: {
+                    city: formData.address.city,
+                    region: formData.address.region,
+                    street: formData.address.street
+                }
+            };
 
-        if (!response.ok) {
-            let errorMessage = 'Unknown error';
-            if (typeof responseData === 'string') {
-                errorMessage = responseData; // Plain text error
-            } else if (responseData && (responseData.message || responseData.title || responseData.error)) {
-                errorMessage = responseData.message || responseData.title || responseData.error;
+            console.log('Sending update request to:', `https://shatably.runasp.net/api/users/${userId}`);
+            console.log('With payload:', payload);
+
+            const response = await fetch(`https://shatably.runasp.net/api/users/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            // Try to parse JSON if possible, otherwise get text
+            let responseData;
+            const contentType = response.headers.get('content-type') || '';
+            if (contentType.includes('application/json')) {
+                responseData = await response.json();
             } else {
-                errorMessage = `Server returned status ${response.status}`;
+                responseData = await response.text();
             }
-            throw new Error(errorMessage);
+
+            console.log('Response data:', responseData);
+
+            if (!response.ok) {
+                let errorMessage = 'Unknown error';
+                if (typeof responseData === 'string') {
+                    errorMessage = responseData; // Plain text error
+                } else if (responseData && (responseData.message || responseData.title || responseData.error)) {
+                    errorMessage = responseData.message || responseData.title || responseData.error;
+                } else {
+                    errorMessage = `Server returned status ${response.status}`;
+                }
+                throw new Error(errorMessage);
+            }
+
+            setError(null);
+            console.log('Update successful');
+
+            // Trigger data refresh or form discard/reset
+            handleDiscard();
+
+        } catch (err) {
+            console.error('Error updating user data:', err);
+            setError(err.message || 'Failed to update user data. Please try again.');
         }
-
-        setError(null);
-        console.log('Update successful');
-
-        // Trigger data refresh or form discard/reset
-        handleDiscard();
-
-    } catch (err) {
-        console.error('Error updating user data:', err);
-        setError(err.message || 'Failed to update user data. Please try again.');
-    }
-};
+    };
 
 
     const handleSectionChange = (section) => {
@@ -299,6 +293,8 @@ export default function User() {
 
     // If not logged in, render nothing while the useEffect handles navigation
     if (!isLoggedIn) return null;
+    const baseClasses = 'w-full py-2 px-4 text-left rounded-[25px] border-none text-[#16404D]';
+    const activeClasses = 'bg-[#16404d] text-[#ffffff] font-medium';
 
     return (
         <div className="container mx-auto px-4 py-8 m-auto">
@@ -322,12 +318,14 @@ export default function User() {
                                 <UserBtn
                                     isActive={activeSection === 'personal'}
                                     onClick={() => handleSectionChange('personal')}
+                                    className={`${baseClasses} ${activeSection === 'personal' ? activeClasses : ''}`}
                                 >
                                     Personal Information
                                 </UserBtn>
                                 <UserBtn
                                     isActive={activeSection === 'logout'}
                                     onClick={() => handleSectionChange('logout')}
+                                    className={`${baseClasses} text-[#DDA853] ${activeSection === 'logout' ? activeClasses : ''}`}
                                 >
                                     Log Out
                                 </UserBtn>

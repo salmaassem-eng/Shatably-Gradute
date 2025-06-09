@@ -9,7 +9,7 @@
 
   color-scheme: light dark;
   color: #16404D;
-  background-color: #F0F0F0 !important;
+  background-color: #E5F1EF !important;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -31,7 +31,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   color: #16404D;
-  background-color: #F0F0F0 !important;
+  background-color: #E5F1EF !important;
 }
 
 html {

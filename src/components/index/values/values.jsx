@@ -43,7 +43,7 @@ function About() {
           {coreValues.map((value, index) => (
             <div 
               key={index} 
-              className="flex flex-col items-center bg-[#A6CDC67D] p-[2rem] rounded-[25px] shadow-md transition-transform duration-300 hover:-translate-y-[5px] "
+              className="flex flex-col items-center bg-[#F7FCFB] p-[2rem] rounded-[25px] shadow-md transition-transform duration-300 hover:-translate-y-[5px] "
               style={{ animationDelay: `${index * 100 + 200}ms` }}
             >
               <img 
