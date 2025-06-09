@@ -23,7 +23,7 @@ export default function Logout({ onCancel }) {
                 </button>
                 <button
                     onClick={handleLogout}
-                    className="px-6 py-2 bg-[#DDA853] text-white rounded-[25px] hover:bg-[#DDA853]/90"
+                    className="px-6 py-2 bg-[#16404D] text-white rounded-[25px] hover:bg-[#DDA853]/90"
                 >
                     Confirm Logout
                 </button>
