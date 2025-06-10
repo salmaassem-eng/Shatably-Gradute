@@ -13,6 +13,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import User from './components/icons/User';
+import Shop from './components/shop/Shop';
 
 function Layout() {
   const location = useLocation();
@@ -30,6 +31,7 @@ function Layout() {
           <Route path="/forgetpass" element={<ForgetPass />} />
           <Route path="/newpass" element={<NewPass />} />
           <Route path="/User" element={<User />} />
+          <Route path="/Shop" element={<Shop />} />
         </Routes>
       </main>
       {!hideNavAndFooter && !hideFooter && <Footer />}

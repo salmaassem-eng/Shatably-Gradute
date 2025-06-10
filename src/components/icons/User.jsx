@@ -186,78 +186,54 @@ export default function User() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Starting form submission with data:', formData);
+
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId');
+
+        if (!formData.imageUrl || !(formData.imageUrl instanceof File)) {
+            alert("Please upload a profile picture before submitting.");
+            return;
+        }
+
+        const formDataToSend = new FormData();
+
+        formDataToSend.append('Id', userId);
+        formDataToSend.append('UserName', formData.userName);
+        formDataToSend.append('Email', formData.email);
+        formDataToSend.append('FirstName', formData.firstName);
+        formDataToSend.append('LastName', formData.lastName);
+        formDataToSend.append('IsActive', 'true'); // as string
+        formDataToSend.append('Address.city', formData.address.city);
+        formDataToSend.append('Address.region', formData.address.region);
+        formDataToSend.append('Address.street', formData.address.street);
+        formDataToSend.append('ProfilePictureUrl', formData.profilePictureUrl || '');
+        formDataToSend.append('ImageUrl', formData.imageUrl); // real file
 
         try {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                throw new Error('No authentication token found');
-            }
-
-            const tokenParts = token.split('.');
-            if (tokenParts.length !== 3) {
-                throw new Error('Invalid token format');
-            }
-
-            const tokenPayload = JSON.parse(atob(tokenParts[1]));
-            const userId = tokenPayload.userId;
-            if (!userId) {
-                throw new Error('No user ID found in token');
-            }
-
-            const formDataToSend = new FormData();
-            formDataToSend.append('id', userId);
-            formDataToSend.append('userName', `${formData.firstName}${formData.lastName}`);
-            formDataToSend.append('email', formData.email);
-            formDataToSend.append('firstName', formData.firstName);
-            formDataToSend.append('lastName', formData.lastName);
-            formDataToSend.append('isActive', 'true');
-            formDataToSend.append('address.city', formData.address?.city || '');
-            formDataToSend.append('address.region', formData.address?.region || '');
-            formDataToSend.append('address.street', formData.address?.street || '');
-
-            formDataToSend.append('profilePictureUrl', formData.profilePictureUrl || '');
-            console.log(formData.imageUrl.value);
-            if (formData.imageUrl instanceof File) {
-                formDataToSend.append('imageUrl', formData.imageUrl);
+            console.log("Submitting data to backend...");
+            for (let [key, val] of formDataToSend.entries()) {
+                console.log(`${key}:`, val);
             }
 
             const response = await fetch(`https://shatably.runasp.net/api/users/${userId}`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`,
+                    // DO NOT set Content-Type header — let browser do it for FormData
                 },
-                body: formDataToSend
+                body: formDataToSend,
             });
 
-
-            let responseData;
-            const contentType = response.headers.get('content-type') || '';
-            if (contentType.includes('multipart/form-data')) {
-                responseData = await response.json();
-            } else {
-                responseData = await response.text();
-            }
-
             if (!response.ok) {
-                let errorMessage = 'Unknown error';
-                if (typeof responseData === 'string') {
-                    errorMessage = responseData;
-                } else if (responseData && (responseData.message || responseData.title || responseData.error)) {
-                    errorMessage = responseData.message || responseData.title || responseData.error;
-                } else {
-                    errorMessage = `Server returned status ${response.status}`;
-                }
-                throw new Error(errorMessage);
+                const errorData = await response.json();
+                console.error("Error updating user data:", errorData);
+                throw new Error(JSON.stringify(errorData));
             }
 
-            setError(null);
-            console.log('Update successful');
-            handleDiscard();
-
-        } catch (err) {
-            console.error('Error updating user data:', err);
-            setError(err.message || 'Failed to update user data. Please try again.');
+            const result = await response.json();
+            console.log("User updated successfully:", result);
+        } catch (error) {
+            console.error("Error updating user data:", error);
         }
     };
 

@@ -86,7 +86,7 @@ export default function Navbar() {
             <div className={`sections-pages ${isMenuOpen ? 'active' : ''}`}>
                 <Link to="/" className={`pages ${isActive('/') ? 'active' : ''}`}>Home</Link>
                 <Link to="/services" className={`pages ${isActive('/services') ? 'active' : ''}`}>Services</Link>
-                <Link to="/community" className={`pages ${isActive('/community') ? 'active' : ''}`}>Shop</Link>
+                <Link to="/Shop" className={`pages ${isActive('/Shop') ? 'active' : ''}`}>Shop</Link>
                 <Link to="/ai" className={`pages ${isActive('/ai') ? 'active' : ''}`}>AI</Link>
             </div>
             <div className="sections-logo">
