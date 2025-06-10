@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import cart from '../../assets/cart.svg';
 import './shop.css';
@@ -7,64 +7,97 @@ import carpentary from '../../assets/carpentary.svg';
 import painter from '../../assets/painter.svg';
 import plumber from '../../assets/plumber.svg';
 
-
 export default function Shop() {
     const [activeCategory, setActiveCategory] = useState('all');
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // Your previous nested data structure
-    const product = {
-        electrican: [
-            { id: 1, title: 'Pipe Repair', description: 'Professional pipe repair services', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Pipe Repair' },
-            { id: 2, title: 'Pipe Repair', description: 'Professional pipe repair services', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Pipe Repair' },
-        ],
-        Carpentry: [
-            { id: 3, title: 'Electrical Repair', description: 'Professional electrical repair services', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Electrical Repair' },
-            { id: 4, title: 'Wiring Installation', description: 'Safe and reliable wiring installation', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Wiring Installation' },
-        ],
-        Painter: [
-            { id: 5, title: 'Home Renovation', description: 'Complete home renovation services', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Home Renovation' },
-            { id: 6, title: 'Kitchen Remodel', description: 'Professional kitchen remodeling', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Kitchen Remodel' },
-        ],
-        Plumber: [
-            { id: 7, title: 'Home Renovation', description: 'Complete home renovation services', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Home Renovation' },
-            { id: 8, title: 'Kitchen Remodel', description: 'Professional kitchen remodeling', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Kitchen Remodel' },
-        ],
-    };
+    useEffect(() => {
+        async function fetchProducts() {
+            try {
+                setLoading(true);
+                const response = await fetch('https://shatably.runasp.net/api/Products', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
 
-    // Filter categories derived from your previous data structure
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch Product data: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Raw API Response:', data);
+
+                // Handle both array and object responses
+                let productsArray = [];
+                if (Array.isArray(data)) {
+                    productsArray = data;
+                } else if (typeof data === 'object' && data !== null) {
+                    // If it's a single object or has a nested data structure
+                    if (data.data && Array.isArray(data.data)) {
+                        productsArray = data.data;
+                    } else {
+                        productsArray = [data];
+                    }
+                }
+
+                // Ensure each product has all required fields
+                const processedProducts = productsArray.map(product => ({
+                    productId: product.productId || Math.random().toString(36).substr(2, 9),
+                    name: product.name || 'Unnamed Product',
+                    details: product.details || 'No description available',
+                    price: product.price || 0,
+                    imageUrl: product.imageUrl || 'https://via.placeholder.com/300x200',
+                    category: product.category || 'uncategorized'
+                }));
+
+                console.log('Processed Products:', processedProducts);
+                setProducts(processedProducts);
+            } catch (err) {
+                console.error('Error fetching products:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchProducts();
+    }, []);
+
+    // Filter categories based on unique categories in products
     const categories = [
-        { name: 'All Products', value: 'all'},
-        { name: 'electrican', value: 'electrican', image: electrican },
+        { name: 'All Products', value: 'all' },
+        { name: 'Electrician', value: 'Electrician', image: electrican },
         { name: 'Carpentry', value: 'Carpentry', image: carpentary },
-        { name: 'Painter', value: 'Painter' , image : painter},
-        { name: 'Plumber', value: 'Plumber', image : plumber },
+        { name: 'Painter', value: 'Painter', image: painter },
+        { name: 'Plumber', value: 'Plumber', image: plumber },
     ];
 
-    const getFilteredServices = () => {
-        let filtered = [];
+    const getFilteredProducts = () => {
+        if (!Array.isArray(products)) {
+            console.error('Products is not an array:', products);
+            return [];
+        }
 
         if (activeCategory === 'all') {
-            // Flatten all services from the nested structure
-            Object.values(product).forEach(topCategory => {
-                Object.values(topCategory).forEach(subCategory => {
-                    filtered = filtered.concat(subCategory);
-                });
-            });
-        } else if (product[activeCategory]) { // Check if it's a top-level category
-            Object.values(product[activeCategory]).forEach(subCategory => {
-                filtered = filtered.concat(subCategory);
-            });
-        } else { // It's a sub-category
-            Object.values(product).forEach(topCategory => {
-                if (topCategory[activeCategory]) {
-                    filtered = filtered.concat(topCategory[activeCategory]);
-                }
-            });
+            return products;
         }
-        return filtered;
+        return products.filter(product => product.category.toLowerCase() === activeCategory.toLowerCase());
     };
 
-    const filteredServices = getFilteredServices();
+    const filteredProducts = getFilteredProducts();
+    console.log('Filtered Products:', filteredProducts);
+
+    if (loading) {
+        return <div className="text-center py-12">Loading products...</div>;
+    }
+
+    if (error) {
+        return <div className="text-center py-12 text-red-600">Error: {error}</div>;
+    }
 
     return (
         <div className="sm:px-6 lg:px-8 mb-[100px] mt-[3rem]">
@@ -109,29 +142,38 @@ export default function Shop() {
                     </div>
                 </div>
 
-                {/* Services Grid */}
+                {/* Products Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[2rem]">
-                    {filteredServices.map(service => (
-                        <div key={service.id} className="bg-white rounded-[25px] shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
-                            <div className="relative w-full h-48">
-                                <img
-                                    src={service.image}
-                                    alt={service.title}
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                            <div className="p-6 pt-10">
-                                <h3 className="text-[24px] font-semibold text-[#16404d] mb-2">{service.title}</h3>
-                                <p className="text-gray-600 text-sm mb-4">{service.description}</p>
-                                <div className="flex justify-between items-center px-1">
-                                    <p className="text-[#866734] mb-2 text-[20px]">150$</p>
-                                    <div className="p-2 border-2 border-[#9C722C] rounded-full hover:bg-[#DDA853] hover:border-[#DDA853] group transition-colors cursor-pointer cart-container">
-                                        <img className="cart w-6 h-6 group-hover:filter-dda853" src={cart} alt="Shopping cart icon" />
+                    {filteredProducts.length > 0 ? (
+                        filteredProducts.map(product => (
+                            <div key={product.productId} className="bg-white rounded-[25px] shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
+                                <div className="relative w-full h-48">
+                                    <img
+                                        src={product.imageUrl}
+                                        alt={product.name}
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => {
+                                            e.target.src = 'https://via.placeholder.com/300x200';
+                                        }}
+                                    />
+                                </div>
+                                <div className="p-6 pt-10">
+                                    <h3 className="text-[24px] font-semibold text-[#16404d] mb-2">{product.name}</h3>
+                                    <p className="text-gray-600 text-sm mb-4">{product.details}</p>
+                                    <div className="flex justify-between items-center px-1">
+                                        <p className="text-[#866734] mb-2 text-[20px]">${product.price}</p>
+                                        <div className="p-2 border-2 border-[#9C722C] rounded-full hover:bg-[#DDA853] hover:border-[#DDA853] group transition-colors cursor-pointer cart-container">
+                                            <img className="cart w-6 h-6 group-hover:filter-dda853" src={cart} alt="Shopping cart icon" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        ))
+                    ) : (
+                        <div className="col-span-full text-center py-8 text-gray-500">
+                            No products found in this category
                         </div>
-                    ))}
+                    )}
                 </div>
             </div>
         </div>
