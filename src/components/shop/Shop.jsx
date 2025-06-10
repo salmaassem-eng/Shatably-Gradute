@@ -13,7 +13,7 @@ export default function Shop() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 6; // Number of items per page
+    const pageSize = 9; // Number of items per page
 
     useEffect(() => {
         async function fetchProducts() {
@@ -101,7 +101,7 @@ export default function Shop() {
             <div className="max-w-7xl mx-auto py-12">
                 <div className="text-center mb-12">
                     <h1 className="text-4xl font-extrabold mb-4">Our Shop</h1>
-                    <p className="text-lg max-w-2xl mx-auto">From walls to wiring — we've got your finishing needs covered.</p>
+                    <p className="text-[1rem] max-w-2xl mx-auto">From walls to wiring — we've got your finishing needs covered.</p>
                 </div>
 
                 {/* Filter Section */}
@@ -114,8 +114,8 @@ export default function Shop() {
                                 className={`
                                     relative overflow-hidden rounded-[30px] transition-all duration-200 p-0 m-0
                                     ${activeCategory === category.value 
-                                        ? 'bg-[#DDA853] text-white shadow-md' 
-                                        : 'bg-white border-2 border-gray-200 text-[#16404D] hover:border-[#DDA853] hover:text-[#DDA853]'
+                                        ? 'border-[#DDA853] bg-[#fad8a0] border-[2px] shadow-md' 
+                                        : ' border-2 border-[#DDA853] text-[#16404D] hover:border-[#DDA853] hover:text-[#DDA853]'
                                     }
                                 `}
                                 onClick={() => handleCategoryChange(category.value)}
@@ -131,7 +131,11 @@ export default function Shop() {
                                         </div>
                                     )}
                                     <div className="p-3">
-                                        <span className="font-medium">{category.name}</span>
+                                        {category.value === 'all' ? (
+                                            <span className="text-[1.55rem] font-bold">{category.name}</span>
+                                        ) : (
+                                            <span className="text-[1.15rem]">{category.name}</span>
+                                        )}
                                     </div>
                                 </div>
                             </button>
@@ -175,7 +179,7 @@ export default function Shop() {
 
                 {/* Pagination */}
                 <div className="mt-8 flex justify-center gap-2">
-                    {[1, 2, 3, 4].map((pageNumber) => (
+                    {[1, 2, 3].map((pageNumber) => (
                         <button
                             key={pageNumber}
                             onClick={() => setCurrentPage(pageNumber)}
