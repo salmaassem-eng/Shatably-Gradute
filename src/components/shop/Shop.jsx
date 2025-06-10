@@ -12,12 +12,21 @@ export default function Shop() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 6; // Number of items per page
 
     useEffect(() => {
         async function fetchProducts() {
             try {
                 setLoading(true);
-                const response = await fetch('https://shatably.runasp.net/api/Products', {
+                // Construct query parameters
+                const queryParams = new URLSearchParams({
+                    pageIndex: currentPage,
+                    PageSize: pageSize,
+                    category: activeCategory !== 'all' ? activeCategory : ''
+                });
+
+                const response = await fetch(`https://shatably.runasp.net/api/Products?${queryParams}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -36,7 +45,6 @@ export default function Shop() {
                 if (Array.isArray(data)) {
                     productsArray = data;
                 } else if (typeof data === 'object' && data !== null) {
-                    // If it's a single object or has a nested data structure
                     if (data.data && Array.isArray(data.data)) {
                         productsArray = data.data;
                     } else {
@@ -54,7 +62,6 @@ export default function Shop() {
                     category: product.category || 'uncategorized'
                 }));
 
-                console.log('Processed Products:', processedProducts);
                 setProducts(processedProducts);
             } catch (err) {
                 console.error('Error fetching products:', err);
@@ -65,9 +72,8 @@ export default function Shop() {
         }
 
         fetchProducts();
-    }, []);
+    }, [currentPage, activeCategory]); // Dependencies for re-fetching
 
-    // Filter categories based on unique categories in products
     const categories = [
         { name: 'All Products', value: 'all' },
         { name: 'Electrician', value: 'Electrician', image: electrican },
@@ -76,20 +82,11 @@ export default function Shop() {
         { name: 'Plumber', value: 'Plumber', image: plumber },
     ];
 
-    const getFilteredProducts = () => {
-        if (!Array.isArray(products)) {
-            console.error('Products is not an array:', products);
-            return [];
-        }
-
-        if (activeCategory === 'all') {
-            return products;
-        }
-        return products.filter(product => product.category.toLowerCase() === activeCategory.toLowerCase());
+    // Handle category change
+    const handleCategoryChange = (category) => {
+        setActiveCategory(category);
+        setCurrentPage(1); // Reset to first page when changing category
     };
-
-    const filteredProducts = getFilteredProducts();
-    console.log('Filtered Products:', filteredProducts);
 
     if (loading) {
         return <div className="text-center py-12">Loading products...</div>;
@@ -121,7 +118,7 @@ export default function Shop() {
                                         : 'bg-white border-2 border-gray-200 text-[#16404D] hover:border-[#DDA853] hover:text-[#DDA853]'
                                     }
                                 `}
-                                onClick={() => setActiveCategory(category.value)}
+                                onClick={() => handleCategoryChange(category.value)}
                             >
                                 <div className="flex flex-col">
                                     {category.image && (
@@ -144,8 +141,8 @@ export default function Shop() {
 
                 {/* Products Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[2rem]">
-                    {filteredProducts.length > 0 ? (
-                        filteredProducts.map(product => (
+                    {products.length > 0 ? (
+                        products.map(product => (
                             <div key={product.productId} className="bg-white rounded-[25px] shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
                                 <div className="relative w-full h-48">
                                     <img
@@ -171,9 +168,26 @@ export default function Shop() {
                         ))
                     ) : (
                         <div className="col-span-full text-center py-8 text-gray-500">
-                            No products found in this category
+                            No products found
                         </div>
                     )}
+                </div>
+
+                {/* Pagination */}
+                <div className="mt-8 flex justify-center gap-2">
+                    {[1, 2, 3, 4].map((pageNumber) => (
+                        <button
+                            key={pageNumber}
+                            onClick={() => setCurrentPage(pageNumber)}
+                            className={`px-4 py-2 rounded-lg ${
+                                currentPage === pageNumber
+                                    ? 'bg-[#DDA853] text-white'
+                                    : 'bg-white border border-gray-300 text-gray-700 hover:border-[#DDA853]'
+                            }`}
+                        >
+                            {pageNumber}
+                        </button>
+                    ))}
                 </div>
             </div>
         </div>
