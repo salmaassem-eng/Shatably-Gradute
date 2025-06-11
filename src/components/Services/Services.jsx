@@ -1,103 +1,156 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // import ServiceFilter from './ServiceFilter'; // Will be removed or replaced
 import { Link } from 'react-router-dom';
+import SmallServiceCards from './SmallServiceCards'; // Import the new component
+
+// Import icons for maintenance and projects
+import maintenanceIcon from '../../assets/maintainence work.svg';
+import projectIcon from '../../assets/serviceProject.svg';
 
 
 const Services = () => {
+  const [allDisplayableItems, setAllDisplayableItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activeCategory, setActiveCategory] = useState('all');
 
-  // Your previous nested data structure
-  const services = {
-    small: {
-      plumber: [
-        { id: 1, title: 'Pipe Repair', description: 'Professional pipe repair services', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Pipe Repair'},
-        { id: 2, title: 'Leak Detection', description: 'Advanced leak detection and repair', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Leak Detection' },
-      ],
-      carpenter: [
-        { id: 3, title: 'Furniture Repair', description: 'Expert furniture repair services', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Furniture Repair'},
-        { id: 4, title: 'Custom Woodwork', description: 'Custom woodworking solutions', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Custom Woodwork' },
-      ],
-    },
-    maintenance: {
-      electrical: [
-        { id: 5, title: 'Electrical Repair', description: 'Professional electrical repair services', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Electrical Repair'},
-        { id: 6, title: 'Wiring Installation', description: 'Safe and reliable wiring installation', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Wiring Installation'},
-      ],
-      hvac: [
-        { id: 7, title: 'AC Maintenance', description: 'Regular AC maintenance services', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=AC Maintenance' },
-        { id: 8, title: 'Heating Repair', description: 'Expert heating system repair', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Heating Repair' },
-      ],
-    },
-    projects: {
-      renovation: [
-        { id: 9, title: 'Home Renovation', description: 'Complete home renovation services', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Home Renovation' },
-        { id: 10, title: 'Kitchen Remodel', description: 'Professional kitchen remodeling', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Kitchen Remodel' },
-      ],
-      construction: [
-        { id: 11, title: 'New Construction', description: 'Custom home construction services', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=New Construction' },
-        { id: 12, title: 'Building Extension', description: 'Professional building extension services', image: 'https://via.placeholder.com/300x200/ADD8E6/808080?text=Building Extension' },
-      ],
-    },
-  };
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        setLoading(true);
+        // Only fetch Services (for maintenance) and Projects
+        const [servicesResponse, projectsResponse] = await Promise.all([
+          fetch('https://shatably.runasp.net/api/Services'),
+          fetch('https://shatably.runasp.net/api/Projects'),
+        ]);
 
-  // Filter categories derived from your previous data structure
+        if (!servicesResponse.ok) throw new Error(`HTTP error! status: ${servicesResponse.status} from Services`);
+        if (!projectsResponse.ok) throw new Error(`HTTP error! status: ${projectsResponse.status} from Projects`);
+
+        const servicesData = await servicesResponse.json();
+        // console.log('Fetched servicesData:', servicesData); // Removed previous log
+        const projectsData = await projectsResponse.json();
+
+        const transformedData = [];
+
+        // Define keywords for categorizing services
+        // (These are now only for distinguishing maintenance from what *would* be small services if they were dynamic)
+        const smallServiceKeywords = {
+          plumber: ['plumber', 'pipe', 'leak'],
+          carpenter: ['carpenter', 'woodwork', 'furniture'],
+          electrician: ['electrician', 'electrical', 'wiring'],
+          painter: ['painter', 'painting', 'color'],
+          cleaning: ['cleaning', 'housekeeping'],
+        };
+
+        // Helper to determine service category based on keywords
+        const getServiceCategory = (name, details) => {
+          const lowerName = name.toLowerCase();
+          const lowerDetails = details.toLowerCase();
+          for (const key in smallServiceKeywords) {
+            if (smallServiceKeywords[key].some(keyword => lowerName.includes(keyword) || lowerDetails.includes(keyword))) {
+              return key; // e.g., 'plumber'
+            }
+          }
+          return 'maintenance'; // Default for services not matched as small projects
+        };
+
+        // Transform Services data (now only adding 'maintenance' type services from API)
+        (Array.isArray(servicesData) ? servicesData : []).forEach(service => {
+            const serviceCategory = getServiceCategory(service.name, service.details);
+            console.log(`Service: ${service.name}, Category: ${serviceCategory}`);
+            // Only add services categorized as 'maintenance' to the main displayable items
+            if (serviceCategory === 'maintenance') {
+                transformedData.push({
+                    id: `s-${service.serviceId}`,
+                    mainType: 'maintenance',
+                    subType: 'maintenance',
+                    name: service.name,
+                    details: service.details,
+                    imageUrl: service.imageUrl || 'https://via.placeholder.com/300x200?text=No+Image',
+                    price: service.price,
+                    averageRating: service.averageRating,
+                    reviewCount: service.reviewCount,
+                    linkTo: `/service-details/${service.serviceId}`,
+                    iconUrl: maintenanceIcon, // Add maintenance icon
+                });
+            }
+        });
+
+        // Transform Projects data
+        (Array.isArray(projectsData) ? projectsData : []).forEach(project => {
+          transformedData.push({
+            id: `p-${project.projectId}`,
+            mainType: 'project',
+            name: project.title,
+            details: project.description,
+            imageUrl: project.mainImageURL || 'https://via.placeholder.com/300x200?text=No+Image',
+            price: project.price,
+            createdDate: project.createdDate,
+            linkTo: `/project-item-details/${project.projectId}`,
+            iconUrl: projectIcon, // Add project icon
+          });
+        });
+
+        console.log('Transformed Data before setting state:', transformedData); // Add this new log
+        setAllDisplayableItems(transformedData);
+      } catch (err) {
+        console.error("Failed to fetch data:", err);
+        setError("Failed to load data. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllData();
+  }, []);
+
   const categories = [
-    { name: 'All Services', value: 'all' },
-    { name: 'Small Projects', value: 'small' },
-    { name: 'Plumber', value: 'plumber' },
-    { name: 'Carpenter', value: 'carpenter' },
-    { name: 'Maintenance', value: 'maintenance' },
-    { name: 'Electrical', value: 'electrical' },
-    { name: 'HVAC', value: 'hvac' },
-    { name: 'Big Projects', value: 'projects' },
-    { name: 'Renovation', value: 'renovation' },
-    { name: 'Construction', value: 'construction' },
+    { name: 'All', value: 'all' },
+    { name: 'Maintenance', value: 'maintenance' }, // Only dynamic services from API
+    { name: 'Projects', value: 'project' },
   ];
 
-  const getFilteredServices = () => {
-    let filtered = [];
-
+  const getFilteredItems = () => {
     if (activeCategory === 'all') {
-      // Flatten all services from the nested structure
-      Object.values(services).forEach(topCategory => {
-        Object.values(topCategory).forEach(subCategory => {
-          filtered = filtered.concat(subCategory);
-        });
-      });
-    } else if (services[activeCategory]) { // Check if it's a top-level category
-      Object.values(services[activeCategory]).forEach(subCategory => {
-        filtered = filtered.concat(subCategory);
-      });
-    } else { // It's a sub-category
-      Object.values(services).forEach(topCategory => {
-        if (topCategory[activeCategory]) {
-          filtered = filtered.concat(topCategory[activeCategory]);
-        }
-      });
+      return allDisplayableItems;
+    } else {
+      return allDisplayableItems.filter(item => item.mainType === activeCategory);
     }
-    return filtered;
   };
 
-  const filteredServices = getFilteredServices();
+  const filteredItems = getFilteredItems();
+  console.log('Filtered Items for rendering:', filteredItems);
+
+  if (loading) {
+    return <div className="text-center mt-20 text-xl">Loading data...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center mt-20 text-red-500 text-xl">{error}</div>;
+  }
 
   return (
     <div className="sm:px-6 lg:px-8 mb-[100px] mt-[3rem]">
-      <div className="max-w-7xl mx-auto py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold mb-4">Our Services</h1>
-          <p className="text-lg  max-w-2xl mx-auto">From walls to wiring — we’ve got your finishing needs covered.</p>
+      <div className=" max-w-7xl mx-auto">
+        <div className="text-center mb-5">
+          <h1 className="text-4xl font-extrabold">Our Services</h1>
+          <p className="text-[1rem] max-w-2xl mx-auto">Explore our services, projects, and skilled workers.</p>
         </div>
+    <div className='flex flex-col gap-[5rem]'>
+        <SmallServiceCards/> {/* Render the new component here */}
 
+      <div>
+        <h2 className="text-3xl font-bold mb-8 text-center text-[#16404D]">Full Services</h2>
         {/* Filter Section */}
         <div className="flex flex-wrap justify-center gap-x-6 mb-12 text-sm font-medium">
           {categories.map((category) => (
             <button
               key={category.value}
-              className={`px-4 py-2 relative transition-colors duration-200 ${activeCategory === category.value ? 'text-blue-600' : 'hover:text-blue-500'}`}
+              className={`px-4 py-2 relative transition-colors duration-200 ${activeCategory === category.value ? 'text-[#16404D]' : 'text-[#16404D] opacity-60'}`}
               onClick={() => setActiveCategory(category.value)}
             >
               {category.name}
-              {/* Vertical divider */}
               {category.value !== categories[categories.length - 1].value && (
                 <span className="absolute right-[-12px] top-1/2 -translate-y-1/2 h-4 w-px bg-gray-300"></span>
               )}
@@ -105,33 +158,37 @@ const Services = () => {
           ))}
         </div>
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[2rem]">
-          {filteredServices.map(service => (
-            <div key={service.id} className="bg-white rounded-[25px] shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
+        {/* Items Grid (for maintenance services and projects) */}
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[2rem] justify-items-center">
+          {filteredItems.map(item => (
+            <div key={item.id} className="bg-white rounded-[25px] mb-5 w-[22rem] shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
               <div className="relative w-full h-48">
                 <img 
-                  src={service.image}
-                  alt={service.title}
+                  src={item.imageUrl}
+                  alt={item.name}
                   className="w-full h-full object-cover"
                 />
-                {/* <div className="absolute -bottom-6 left-4 bg-white p-3 rounded-full shadow-md">
-                  <img src={service.icon} alt="Service Icon" className="w-8 h-8 text-blue-600" /> 
-                </div> */}
+                {item.iconUrl && (
+                  <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-white p-3 rounded-full shadow-md">
+                    <img src={item.iconUrl} alt={`${item.mainType} icon`} className="w-8 h-8" /> 
+                  </div>
+                )}
               </div>
-              <div className="p-6 pt-10">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">{service.title}</h3>
-                <p className="text-gray-600 text-sm mb-4">{service.description}</p>
+              <div className="p-6 pt-10 flex flex-col text-center items-center ">
+                <h3 className="text-xl font-semibold mb-2 capitalize">{item.name}</h3>
+                <p className="text-sm mb-4 ">{item.details}</p>
                 <Link 
-                  to={`/services/${service.id}`} 
-                  className="text-blue-600 hover:underline text-sm font-medium"
-                >
-                  View Service
+                  to={item.linkTo} 
+                  className="mt-auto px-6 py-2 bg-[#16404D] text-white rounded-[25px] hover:bg-[#16404D]/90 hover:text-white text-sm font-medium"
+                  >
+                  View {item.mainType.charAt(0).toUpperCase() + item.mainType.slice(1).replace('-', ' ')}
                 </Link>
               </div>
             </div>
           ))}
         </div>
+      </div>
+      </div>
       </div>
     </div>
   );

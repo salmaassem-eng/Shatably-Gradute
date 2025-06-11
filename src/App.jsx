@@ -2,6 +2,9 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Navbar from './components/Shared/navBar/Navbar'
 import Footer from './components/Shared/Footer/Footer'
 import Services from './components/Services/Services'
+import ServiceDetails from './components/Services/ServiceDetails';
+import WorkersByCategory from './components/Services/WorkersByCategory';
+import WorkerItemDetails from './components/Services/WorkerItemDetails';
 import Login from './components/regestration/login/loginPage'
 import './App.css'
 import ScrollToTop from './components/Shared/ScrollToTop'
@@ -18,7 +21,7 @@ import Shop from './components/shop/Shop';
 function Layout() {
   const location = useLocation();
   const hideNavAndFooter = location.pathname === '/login' || location.pathname === '/forgetpass'|| location.pathname === "/RegisterationPage" || location.pathname === '/newpass';
-  const hideFooter = location.pathname === '/User';
+  const hideFooter = location.pathname === '/User' || location.pathname.startsWith('/service-details/') || location.pathname.startsWith('/workers-by-category/') || location.pathname.startsWith('/worker-item-details/');
   return (
     <div className="app-container">
       {!hideNavAndFooter && <Navbar />}
@@ -28,6 +31,9 @@ function Layout() {
           <Route path="/login" element={<Login />} />
           <Route path="/RegisterationPage" element={<RegisterationPage />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/service-details/:serviceId" element={<ServiceDetails />} />
+          <Route path="/workers-by-category/:category" element={<WorkersByCategory />} />
+          <Route path="/worker-item-details/:workerId" element={<WorkerItemDetails />} />
           <Route path="/forgetpass" element={<ForgetPass />} />
           <Route path="/newpass" element={<NewPass />} />
           <Route path="/User" element={<User />} />
