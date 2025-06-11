@@ -17,11 +17,12 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import User from './components/icons/User';
 import Shop from './components/shop/Shop';
+import Cart from './components/shop/Cart';
 
 function Layout() {
   const location = useLocation();
   const hideNavAndFooter = location.pathname === '/login' || location.pathname === '/forgetpass'|| location.pathname === "/RegisterationPage" || location.pathname === '/newpass';
-  const hideFooter = location.pathname === '/User' || location.pathname.startsWith('/service-details/') || location.pathname.startsWith('/workers-by-category/') || location.pathname.startsWith('/worker-item-details/');
+  const hideFooter = location.pathname === '/User' ||location.pathname === '/Cart'|| location.pathname.startsWith('/service-details/') || location.pathname.startsWith('/workers-by-category/') || location.pathname.startsWith('/worker-item-details/');
   return (
     <div className="app-container">
       {!hideNavAndFooter && <Navbar />}
@@ -38,6 +39,7 @@ function Layout() {
           <Route path="/newpass" element={<NewPass />} />
           <Route path="/User" element={<User />} />
           <Route path="/Shop" element={<Shop />} />
+          <Route path="/Cart" element={<Cart />} />
         </Routes>
       </main>
       {!hideNavAndFooter && !hideFooter && <Footer />}
