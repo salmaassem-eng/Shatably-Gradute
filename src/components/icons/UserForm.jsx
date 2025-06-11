@@ -5,27 +5,27 @@ export default function UserForm({ formData, initialFormData, onSubmit, onChange
     // Handler for Save
     const isChanged = JSON.stringify(formData) !== JSON.stringify(initialFormData);
 
-        // const confirmed = window.confirm('Are you sure you want to save changes?');
-        // if (!confirmed) return;
-        //     try {
-        //         const safeAddress = formData.address || { city: '', region: '', street: '' };
-        //         const dataToSend = {
-        //             ...formData,
-        //             address: safeAddress
-        //         };
-        //         const result =await onSubmit(dataToSend); 
-        //         if (result?.success) {
-        //             toast.success('Changes saved successfully!', { icon: '✅' });
-        //         } else {
-        //             toast.error('Failed to save changes.', { icon: '❌' });
-        //         }
-        //     } catch {
-        //         toast.error('Failed to save changes.', { icon: '❌' });
-        //     }
-        // }
+    //     const confirmed = window.confirm('Are you sure you want to save changes?');
+    //     if (!confirmed) return;
+    //         try {
+    //             const safeAddress = formData.address || { city: '', region: '', street: '' };
+    //             const dataToSend = {
+    //                 ...formData,
+    //                 address: safeAddress
+    //             };
+    //             const result =await onSubmit(dataToSend); 
+    //             if (result?.success) {
+    //                 toast.success('Changes saved successfully!', { icon: '✅' });
+    //             } else {
+    //                 toast.error('Failed to save changes.', { icon: '❌' });
+    //             }
+    //         } catch {
+    //             toast.error('Failed to save changes.', { icon: '❌' });
+    //         }
+    //     }
     
 
-    // Handler for Discard
+    // // Handler for Discard
     // const handleDiscard = (e) => {
     //     e.preventDefault();
     //     if (!isChanged) {
@@ -79,14 +79,6 @@ export default function UserForm({ formData, initialFormData, onSubmit, onChange
                 onChange={onChange}
             />
 
-            {/* <UserInfo 
-                className="mb-6"
-                label="address" 
-                name="address" 
-                value={formData.address} 
-                onChange={onChange}
-                placeholder='city , region , street'
-            /> */}
             <div className="mb-6">
                 <div className="grid grid-cols-3 gap-4">
                     <UserInfo 
