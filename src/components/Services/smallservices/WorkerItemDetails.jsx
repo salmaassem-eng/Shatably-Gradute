@@ -125,9 +125,9 @@ export default function WorkerItemDetails() {
                     reviewCount={worker.ratingReview.length}
                 />
                 <div className="flex flex-col justify-center mt-8">
-                    <button className="bg-[#16404D] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#16404D]\90 transition-colors duration-200 text-lg">
+                    <Link to={`/Booking/worker/${workerId}`} className="bg-[#16404D] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#16404D]/90 transition-colors duration-200 text-lg text-center">
                         Hire Now
-                    </button>
+                    </Link>
                 </div>
             </div>
         </div>

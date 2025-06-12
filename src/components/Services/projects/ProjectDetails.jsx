@@ -107,7 +107,9 @@ export default function ProjectDetails() {
                     </div>
                 }
                 <div className='flex flex-col justify-center '>
-                    <button onClick={() => toast.info("Contact functionality coming soon!")} className="mt-2 px-6 py-2 bg-[#16404D] text-white rounded-[25px] hover:bg-[#16404D]\90">Book Now</button>
+                    <Link to={`/Booking/project/${projectId}`} className="mt-2 px-6 py-2 bg-[#16404D] text-white rounded-[25px] hover:bg-[#16404D]/90 w-full text-center">
+                        Book Now
+                    </Link>
                 </div>
             </div>
         </div>

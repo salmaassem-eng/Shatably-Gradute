@@ -7,26 +7,52 @@ const NewPass = () => {
   const email = searchParams.get('email');
   const token = searchParams.get('token');
   const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmNewPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handlePasswordReset = (e) => {
+  const handlePasswordReset = async (e) => {
     e.preventDefault();
     setError("");
-    if (!newPassword || !confirmPassword) {
-      setError("Both fields are required");
+    setSuccess("");
+    if (!newPassword || !confirmNewPassword) {
+      setError("Both new password and confirm password are required");
       return;
     }
-    if (newPassword !== confirmPassword) {
+    if (newPassword !== confirmNewPassword) {
       setError("Passwords do not match");
       return;
     }
-    // For now, just show success
-    setSuccess("Password reset successful!");
-    setTimeout(() => navigate("/login"), 1500);
-  };
+    if (!email || !token) {
+      setError("Missing email or token for password reset.");
+      return;
+    }
 
+    setLoading(true);
+    try {
+      const response = await fetch('https://shatably.runasp.net/api/Auth/reset-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ email,token , newPassword, confirmNewPassword }),
+      });
+    
+      if (response.ok) {
+        setSuccess("Password reset successful!");
+        setTimeout(() => navigate("/login"), 1500);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || "Failed to reset password. Please try again.");
+      }
+    } catch{
+      setError("An unexpected error occurred. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="w-full h-screen flex items-center justify-center">
       <div className="w-full max-w-md p-8 space-y-8">
@@ -36,7 +62,6 @@ const NewPass = () => {
             Create a new password for your account
           </p>
           {email && <p className="text-xs mt-2 opacity-60">For: {email}</p>}
-          {token && <p className="text-xs mt-2 opacity-60">Token: {token}</p>}
         </div>
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
@@ -65,6 +90,7 @@ const NewPass = () => {
                     onChange={(e) => setNewPassword(e.target.value)}
                     className="appearance-none block w-[324px] px-[10px] py-[20px] bg-[#D9D9D9] border-none rounded-[15px] h-[44px] placeholder-gray-400 focus:outline-none focus:opacity-80 focus:text-[#16404D] transition duration-150 ease-in-out"
                     placeholder="Enter new password"
+                    disabled={loading || !!success}
                   />
                 </div>
               </div>
@@ -77,19 +103,21 @@ const NewPass = () => {
                     id="confirmPassword"
                     type="password"
                     required
-                    value={confirmPassword}
+                    value={confirmNewPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className="appearance-none block w-[324px] px-[10px] py-[20px] bg-[#D9D9D9] border-none rounded-[15px] h-[44px] placeholder-gray-400 focus:outline-none focus:opacity-80 focus:text-[#16404D] transition duration-150 ease-in-out"
                     placeholder="Confirm new password"
+                    disabled={loading || !!success}
                   />
                 </div>
               </div>
             </div>
             <button
               type="submit"
-              className="w-[324px] h-[48px] flex justify-center items-center py-3 px-4 bg-[#16404D] text-[#fff] border border-transparent rounded-[15px] shadow-sm text-sm font-medium hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+              className="w-[324px] h-[48px] flex justify-center items-center py-3 px-4 bg-[#16404D] text-[#fff] border border-transparent rounded-[15px] shadow-sm text-sm font-medium hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out disabled:opacity-50"
+              disabled={loading || !!success}
             >
-              Reset Password
+              {loading ? 'Resetting...' : 'Reset Password'}
             </button>
           </form>
         </div>
@@ -114,5 +142,4 @@ const NewPass = () => {
     </div>
   );
 };
-
 export default NewPass; 

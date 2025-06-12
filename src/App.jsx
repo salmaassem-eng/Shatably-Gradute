@@ -20,13 +20,12 @@ import Shop from './components/shop/Shop';
 import ProjectDetails from './components/Services/projects/ProjectDetails';
 import ContactUs from './components/ContactUs/ContactUs';
 import Cart from './components/shop/Cart';
+import Booking from './Booking/Bookservice';
 import Payment from './components/shop/Payment';
-
-
 function Layout() {
   const location = useLocation();
   const hideNavAndFooter = location.pathname === '/login' || location.pathname === '/forgetpass'|| location.pathname === "/RegisterationPage" || location.pathname === '/newpass';
-  const hideFooter = location.pathname === '/User' || location.pathname.startsWith('/service-details/') || location.pathname.startsWith('/workers-by-category/') || location.pathname.startsWith('/worker-item-details/') || location.pathname.startsWith('/project-item-details/') || location.pathname.startsWith('/contact-us');
+  const hideFooter = location.pathname === '/User' || location.pathname.startsWith('/service-details/') || location.pathname.startsWith('/workers-by-category/') || location.pathname.startsWith('/worker-item-details/') || location.pathname.startsWith('/project-item-details/') || location.pathname.startsWith('/contact-us') || location.pathname.startsWith('/Booking') ;
 
   return (
     <div className="app-container">
@@ -47,7 +46,9 @@ function Layout() {
           <Route path="/Shop" element={<Shop />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/Cart" element={<Cart />} />
+          <Route path='/Booking/:type/:id' element={<Booking />} />
           <Route path="/Payment" element={<Payment />} />
+
         </Routes>
       </main>
       {!hideNavAndFooter && !hideFooter && <Footer />}

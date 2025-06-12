@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import CreativeError from '../../Shared/CreativeError';
 
@@ -59,7 +59,7 @@ export default function ProjectItemDetails() {
                     <p className="text-gray-500">Specific project offers or additional details would go here.</p>
                 </div>
                 
-                <button onClick={() => toast.info("Contact functionality for projects coming soon!")} className="mt-8 px-6 py-2 bg-[#16404D] text-white rounded-[25px] hover:bg-[#16404D]/90">Get a Quote</button>
+                <Link to={`/Booking/project/${projectId}`} className="mt-8 px-6 py-2 bg-[#16404D] text-white rounded-[25px] hover:bg-[#16404D]/90 w-full text-center">Book Now</Link>
             </div>
         </div>
     );
