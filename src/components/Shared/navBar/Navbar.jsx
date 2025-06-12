@@ -6,6 +6,7 @@ import card from '../../../assets/cart.svg';
 import user from '../../../assets/user.svg';
 import vector from '../../../assets/Vector.svg';
 import { useAuth } from '../../../context/AuthContext';
+import logo from '../../../assets/logo.png';
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -90,7 +91,9 @@ export default function Navbar() {
                 <Link to="/ai" className={`pages ${isActive('/ai') ? 'active' : ''}`}>AI</Link>
             </div>
             <div className="sections-logo">
-                <p>shatably</p>
+                <Link to="/">
+                    <img src={logo} alt="shatably logo" className='h-14' />
+                </Link>
             </div>
             <div className="sections-icons">
                 <div className="search-container">

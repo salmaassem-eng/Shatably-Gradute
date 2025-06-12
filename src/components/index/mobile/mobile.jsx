@@ -5,6 +5,7 @@ import serviceTracking from '../../../assets/orderTracking.svg';
 import taskScheduling from '../../../assets/TaskSchedualing.svg';
 import './mobile.css';
 import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
+import { Link } from 'react-router-dom';
 
 const Mobile = () => {
   const sectionRef = useIntersectionObserver();// for animation
@@ -19,7 +20,7 @@ const Mobile = () => {
          SHATABLY helps you find skilled professionals near you,
            making it simple to book reliable help for your home or office projects.
           </p>
-          <button className="contact-btn">Contact us</button>
+          <Link to="/contact-us" className="contact-btn">Contact us</Link>
         </div>
 
         {/* Center Mobile Image */}

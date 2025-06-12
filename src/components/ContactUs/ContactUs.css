@@ -1,0 +1,177 @@
+.contact-us-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background-color: #F0F0F0; /* Light background for the page */
+}
+
+.contact-us-container {
+    background-color: #fff;
+    border-radius: 25px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 900px; /* Adjust max-width as needed */
+    position: relative;
+    overflow: hidden;
+}
+
+.back-arrow {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    z-index: 10;
+}
+
+.contact-us-container h1 {
+    color: #16404D;
+    margin-bottom: 2rem;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+}
+
+.input-group input,
+.input-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    padding-left: 2.5rem; /* Space for icon */
+    border: 1px solid #E5E7EB;
+    border-radius: 0.5rem;
+    background-color: #F9FAFB;
+    color: #374151;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+    border-color: #DDA853;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(221, 168, 83, 0.2); /* Focus ring */
+}
+
+.input-group .relative {
+    position: relative;
+}
+
+.input-group svg {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9CA3AF;
+}
+
+.input-group textarea.pl-10 {
+    padding-top: 0.75rem; /* Adjust for textarea icon alignment */
+    transform: translateY(0%);
+}
+
+.input-group textarea.pl-10 + svg {
+    top: 1.25rem; /* Adjust icon position for textarea */
+    transform: translateY(-50%);
+}
+
+.social-links {
+    margin-top: 2rem;
+    gap: 1rem;
+}
+
+.social-icon img {
+    width: 24px;
+    height: 24px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .contact-us-container {
+        padding: 2rem;
+    }
+
+    .back-arrow {
+        top: 1rem;
+        left: 1rem;
+    }
+
+    .contact-us-container h1 {
+        font-size: 2rem;
+    }
+
+    .input-group input,
+    .input-group textarea {
+        padding: 0.6rem 1rem;
+        padding-left: 2rem;
+    }
+
+    .input-group svg {
+        width: 18px;
+        height: 18px;
+        left: 0.5rem;
+    }
+
+    .input-group textarea.pl-10 + svg {
+        top: 1rem;
+    }
+
+    .submit-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .social-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .social-icon img {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-us-page {
+        padding: 0 1rem;
+    }
+
+    .contact-us-container {
+        padding: 1.5rem;
+    }
+
+    .contact-us-container h1 {
+        font-size: 1.75rem;
+    }
+
+    .input-group input,
+    .input-group textarea {
+        padding: 0.5rem 0.8rem;
+        padding-left: 1.8rem;
+    }
+
+    .input-group svg {
+        width: 16px;
+        height: 16px;
+        left: 0.4rem;
+    }
+
+    .input-group textarea.pl-10 + svg {
+        top: 0.8rem;
+    }
+
+    .submit-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .social-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .social-icon img {
+        width: 18px;
+        height: 18px;
+    }
+} 

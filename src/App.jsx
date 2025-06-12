@@ -2,9 +2,9 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Navbar from './components/Shared/navBar/Navbar'
 import Footer from './components/Shared/Footer/Footer'
 import Services from './components/Services/Services'
-import ServiceDetails from './components/Services/ServiceDetails';
-import WorkersByCategory from './components/Services/WorkersByCategory';
-import WorkerItemDetails from './components/Services/WorkerItemDetails';
+import ServiceDetails from './components/Services/services/ServiceDetails';
+import WorkersByCategory from './components/Services/smallservices/WorkersByCategory';
+import WorkerItemDetails from './components/Services/smallservices/WorkerItemDetails';
 import Login from './components/regestration/login/loginPage'
 import './App.css'
 import ScrollToTop from './components/Shared/ScrollToTop'
@@ -17,11 +17,13 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import User from './components/icons/User';
 import Shop from './components/shop/Shop';
+import ProjectDetails from './components/Services/projects/ProjectDetails';
+import ContactUs from './components/ContactUs/ContactUs';
 
 function Layout() {
   const location = useLocation();
   const hideNavAndFooter = location.pathname === '/login' || location.pathname === '/forgetpass'|| location.pathname === "/RegisterationPage" || location.pathname === '/newpass';
-  const hideFooter = location.pathname === '/User' || location.pathname.startsWith('/service-details/') || location.pathname.startsWith('/workers-by-category/') || location.pathname.startsWith('/worker-item-details/');
+  const hideFooter = location.pathname === '/User' || location.pathname.startsWith('/service-details/') || location.pathname.startsWith('/workers-by-category/') || location.pathname.startsWith('/worker-item-details/') || location.pathname.startsWith('/project-item-details/') || location.pathname.startsWith('/contact-us');
   return (
     <div className="app-container">
       {!hideNavAndFooter && <Navbar />}
@@ -32,12 +34,14 @@ function Layout() {
           <Route path="/RegisterationPage" element={<RegisterationPage />} />
           <Route path="/services" element={<Services />} />
           <Route path="/service-details/:serviceId" element={<ServiceDetails />} />
+          <Route path="/project-item-details/:projectId" element={<ProjectDetails />} />
           <Route path="/workers-by-category/:category" element={<WorkersByCategory />} />
           <Route path="/worker-item-details/:workerId" element={<WorkerItemDetails />} />
           <Route path="/forgetpass" element={<ForgetPass />} />
           <Route path="/newpass" element={<NewPass />} />
           <Route path="/User" element={<User />} />
           <Route path="/Shop" element={<Shop />} />
+          <Route path="/contact-us" element={<ContactUs />} />
         </Routes>
       </main>
       {!hideNavAndFooter && !hideFooter && <Footer />}

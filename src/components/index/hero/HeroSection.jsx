@@ -7,7 +7,7 @@ import { useRef, useState } from "react";
 
 export default function HeroSection() {
     const videoRef = useRef(null);
-    const [isHover, setIsHover] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
     const [activeImage, setActiveImage] = useState(1);
 
     const images = {
@@ -16,19 +16,14 @@ export default function HeroSection() {
         3: img3d_3
     };
 
-    function handleMouseEnter() {
-        setIsHover(true);
+    function togglePlayPause() {
         if (videoRef.current) {
-            videoRef.current.play();
-        }
-    }
-
-    function handleMouseLeave() {
-        setIsHover(false);
-        if (videoRef.current) {
-
-            videoRef.current.pause();
-            videoRef.current.currentTime = 0;
+            if (isPlaying) {
+                videoRef.current.pause();
+            } else {
+                videoRef.current.play();
+            }
+            setIsPlaying(!isPlaying);
         }
     }
 
@@ -60,14 +55,21 @@ export default function HeroSection() {
                         <h1>SHATABLY</h1>
                         <p>"All your home projects—fixed, maintained, and transformed with one tap."</p>
                     </div>
-                    <div className={`display ${isHover ? 'expanded' : ''}`}>
+                    <div className={`display ${isPlaying ? 'expanded' : ''}`}>
                         <video src={display} ref={videoRef} muted loop playsInline />
                         <button 
-                            className="enter-button"
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
+                            className="play-pause-button"
+                            onClick={togglePlayPause}
                         >
-                            Enter
+                            {isPlaying ? (
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#fff" className="w-8 h-8">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+                                </svg>
+                            ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="#fff" className="w-8 h-8">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653v13.694c0 .905 1.18 1.447 1.987.951l11.21-6.822a1.08 1.08 0 000-1.902L7.237 4.702A1.08 1.08 0 005.25 5.653z" />
+                                </svg>
+                            )}
                         </button>
                     </div>
                 </div>

@@ -3,6 +3,7 @@ import smallService from '../../../assets/smallservice.svg';
 import work from '../../../assets/maintainence work.svg';
 import project from '../../../assets/serviceProject.svg';
 import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
+import { Link } from 'react-router-dom';
 
 
 const services = [
@@ -10,16 +11,19 @@ const services = [
         title: 'Small Service',
         description: 'Book skilled pros for quick fixes—plumbing drips, shelf installs, furniture assembly—at clear, upfront prices.',
         icon: smallService,
+        linkTo: '/services'
     },
     {
         title: 'Maintenance Work',
         description: 'Schedule routine checks or urgent repairs for HVAC, plumbing, electrical, and appliances, all tracked in‑app.',
         icon: work,
+        linkTo: '/services?category=maintenance'
     },
     {
         title: 'Projects',
         description: 'From kitchen remodels to bathroom overhauls, get end‑to‑end project management with progress updates in one place.',
         icon: project,
+        linkTo: '/services?category=project'
     },
 ];
 
@@ -34,8 +38,9 @@ export default function Service() {
             </p>
             <div className="services-container">
                 {services.map((service, index) => (
-                    <div
+                    <Link
                         key={index}
+                        to={service.linkTo}
                         className={`service-card ${service.active ? 'active' : ''}`}
                     >
                         <div className="service-icon">
@@ -43,7 +48,7 @@ export default function Service() {
                         </div>
                         <h3>{service.title}</h3>
                         <p className="service-description">{service.description}</p>
-                    </div>
+                    </Link>
                 ))}
             </div>
 

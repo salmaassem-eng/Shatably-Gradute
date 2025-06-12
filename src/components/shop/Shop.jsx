@@ -6,6 +6,7 @@ import electrican from '../../assets/electrician-shop.svg';
 import carpentary from '../../assets/carpentary.svg';
 import painter from '../../assets/painter.svg';
 import plumber from '../../assets/plumber.svg';
+import HammerLoading from '../Shared/HammerLoading';
 
 export default function Shop() {
     const [activeCategory, setActiveCategory] = useState('all');
@@ -89,7 +90,7 @@ export default function Shop() {
     };
 
     if (loading) {
-        return <div className="text-center py-12">Loading products...</div>;
+        return <HammerLoading />;
     }
 
     if (error) {
