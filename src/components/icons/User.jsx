@@ -188,8 +188,24 @@ export default function User() {
         e.preventDefault();
 
         const token = localStorage.getItem('token');
-        const userId = localStorage.getItem('userId');
+        if (!token) {
+            throw new Error('No authentication token found');
+        }
 
+        // Decode the JWT token to get the token payload
+        const tokenParts = token.split('.');
+        if (tokenParts.length !== 3) {
+            throw new Error('Invalid token format');
+        }
+
+        const tokenPayload = JSON.parse(atob(tokenParts[1]));
+        console.log('Token payload:', tokenPayload);
+
+        // Get userId from token
+        const userId = tokenPayload.userId;
+        if (!userId) {
+            throw new Error('No user ID found in token');
+        }
         if (!formData.imageUrl || !(formData.imageUrl instanceof File)) {
             alert("Please upload a profile picture before submitting.");
             return;
