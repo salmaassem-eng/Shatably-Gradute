@@ -247,7 +247,35 @@ export default function Cart() {
     return (
         <div className="px-[5rem] py-[3rem] w-full mx-auto mt-[5rem]">
             <h1 className="text-[#16404D] text-4xl font-extrabold text-center mb-[5rem]">My Cart</h1>
-            
+            <div className="flex justify-center w-full mb-[5rem] ml-[4rem]">
+                <div className="flex items-center justify-center w-[36rem]">
+                    {/* Shipping */}
+                    <div className="relative w-[12rem]">
+                        <div className="flex items-center">
+                            <div className="w-7 h-7 rounded-[50%] bg-[#16404D] flex items-center justify-center"></div>
+                            <div className="h-[2px] bg-gray-200 w-[12rem] absolute left-7"></div>
+                        </div>
+                        <span className="absolute text-sm text-[#16404D] left-[-0.8rem] top-10">Shopping</span>
+                    </div>
+
+                    {/* Payment */}
+                    <div className="relative w-[12rem]">
+                        <div className="flex items-center">
+                            <div className="w-7 h-7 rounded-[50%] bg-gray-200 flex items-center justify-center"></div>
+                            <div className="h-[2px] bg-gray-200 w-[12rem] absolute left-7"></div>
+                        </div>
+                        <span className="absolute text-sm text-gray-500 left-[-0.8rem] top-10">Payment</span>
+                    </div>
+
+                    {/* Review */}
+                    <div className="relative w-[12rem]">
+                        <div className="flex items-center">
+                            <div className="w-7 h-7 rounded-[50%] bg-gray-200 flex items-center justify-center"></div>
+                        </div>
+                        <span className="absolute text-sm text-gray-500 left-[-0.5rem] top-10">Review</span>
+                    </div>
+                </div>
+            </div>
             <div>
                 <div className="col-span-12 lg:col-span-8">
                     <div className="space-y-4">
@@ -345,9 +373,11 @@ export default function Cart() {
                                     ← Continue Shopping
                                 </button>
                             </Link>
-                            <button className="text-[white] bg-[#16404D] rounded-[25px] hover:opacity-90 w-[14rem] p-3 mx-3">
-                                Checkout
-                            </button>
+                            <Link to='/Payment'>
+                                <button className="text-[white] bg-[#16404D] rounded-[25px] hover:opacity-90 w-[14rem] p-3 mx-3">
+                                    Checkout
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 </div>

@@ -21,7 +21,7 @@ import ProjectDetails from './components/Services/projects/ProjectDetails';
 import ContactUs from './components/ContactUs/ContactUs';
 import Cart from './components/shop/Cart';
 import Booking from './Booking/Bookservice';
-
+import Payment from './components/shop/Payment';
 function Layout() {
   const location = useLocation();
   const hideNavAndFooter = location.pathname === '/login' || location.pathname === '/forgetpass'|| location.pathname === "/RegisterationPage" || location.pathname === '/newpass';
@@ -47,6 +47,8 @@ function Layout() {
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/Cart" element={<Cart />} />
           <Route path='/Booking/:type/:id' element={<Booking />} />
+          <Route path="/Payment" element={<Payment />} />
+
         </Routes>
       </main>
       {!hideNavAndFooter && !hideFooter && <Footer />}
