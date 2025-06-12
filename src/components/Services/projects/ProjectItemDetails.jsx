@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import CreativeError from '../../Shared/CreativeError';
 
 export default function ProjectItemDetails() {
     const { projectId } = useParams();
@@ -34,7 +35,7 @@ export default function ProjectItemDetails() {
     }
 
     if (error) {
-        return <div className="text-center mt-20 text-red-500 text-xl">{error}</div>;
+        return <CreativeError message={error} />;
     }
 
     if (!project) {

@@ -1,7 +1,7 @@
 import React from "react";
 import "./footer.css";
 import FooterColumn from "./Column";
-import logo from "../../../assets/react.svg";
+import logo from "../../../assets/logo.png";
 import facebook from "../../../assets/Facebook.svg";
 import pinterest from "../../../assets/pinterest.svg";
 import linkedin from "../../../assets/linkedin.svg";
@@ -19,8 +19,8 @@ const Footer = () => {
       title: "Services",
       items: ["Carpenter", "Electrician", "Painter"],
       extraItems: [
-        { text: "Plumber", link: "#" },
-        { text: "Maid", link: "#" }
+        { text: "Plumber", link: "/workers-by-category/plumbing" },
+        { text: "Maid", link: "workers-by-category/cleaning" }
       ]
     },
     {
@@ -40,10 +40,9 @@ const Footer = () => {
     <footer className="bg-white w-full pt-4 pb-2 bottom-0">
       <div className="max-w-[1500px] grid lg:grid-cols-2 gap-20 px-8 py-[2rem] md:grid-cols-2 sm:grid-cols-1 footer-container">
         {/* Logo Section */}
-        <div className="grid lg:grid-cols-[50px_250px] gap-[1rem] max-w-[500px] mx-auto items-start md:grid-cols-1 sm:grid-cols-1 logo-section">
-          <img src={logo} alt="Logo" className="w-[250px]" />
-          <div className="flex flex-col gap-[10px]">
-            <h4 className="font-bold">SHATABLY</h4>
+        <div className="grid lg:grid-cols-[250px] max-w-[500px] mx-auto items-start md:grid-cols-1 sm:grid-cols-1 logo-section">
+             <div className="flex flex-col gap-[10px]">
+             <img src={logo} alt="shatably logo" className="w-48 h-14 -translate-x-2" />
             <p className="opacity-60">
               A team of skilled professionals offering high-quality finishing
               services for apartments and homes.
@@ -56,13 +55,13 @@ const Footer = () => {
               </p>
               <div className="flex lg:flex-row gap-[10px] sm:flex-col sm:items-center contact-buttons">
                 <a
-                  href="#contact"
+                  href="/contact-us"
                   className="bg-[#16404D] text-[#fff] text-decoration-none font-semibold text-[0.9rem] py-[10px] px-[20px] rounded-[5px] hover:-translate-y-[5px] hover:text-[#fff] transition duration-300 ease-in-out contact-btn-footer"
                 >
                   Contact us
                 </a>
                 <a
-                  href="#visit"
+                  href="/contact-us"
                   className="border border-[#16404D] text-[#16404D] text-decoration-none font-semibold text-[0.9rem] py-[10px] px-[20px] rounded-[5px] hover:-translate-y-[5px] hover:text-[#16404D] hover:bg-white transition duration-300 ease-in-out visit-btn-footer"
                 >
                   Visit us
@@ -73,7 +72,7 @@ const Footer = () => {
         </div>
 
         {/* Footer Columns */}
-        <div className="grid grid-cols-3 gap-16 text-sm justify-around text-[#333] FooterCol-grid">
+        <div className="grid grid-cols-3 gap-16 text-sm my-auto text-[#333] FooterCol-grid">
           {footerColumns.map((column, index) => (
             <FooterColumn
               key={index}

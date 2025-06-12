@@ -1,20 +1,15 @@
 const ServiceFilter = ({ activeFilter, activeCategory, onFilterChange, onCategoryChange }) => {
   const filters = [
     { id: 'all', label: 'All Services' },
-    { id: 'small', label: 'Small Services' },
     { id: 'maintenance', label: 'Maintenance' },
     { id: 'projects', label: 'Projects' },
   ];
 
   const categories = {
-    small: [
-      { id: 'all', label: 'All Small Services' },
-      { id: 'plumber', label: 'Plumbing' },
-      { id: 'carpenter', label: 'Carpentry' },
-    ],
     maintenance: [
       { id: 'all', label: 'All Maintenance' },
-      { id: 'electrical', label: 'Electrical' },      { id: 'hvac', label: 'HVAC' },
+      { id: 'electrical', label: 'Electrical' },
+      { id: 'hvac', label: 'HVAC' },
     ],
     projects: [
       { id: 'all', label: 'All Projects' },

@@ -1,0 +1,140 @@
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Full viewport height */
+    width: 100%;
+    background-color: #f0f2f5;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.hammer-nail-loader {
+    position: relative;
+    width: 150px;
+    height: 100px;
+    margin-bottom: 20px;
+}
+
+.hammer {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    width: 80px;
+    height: 60px;
+    animation: hammer-strike 1.5s infinite ease-in-out;
+}
+
+.hammer .handle {
+    width: 20px;
+    height: 60px;
+    background-color: #DDA853;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 0;
+    left: 10px;
+}
+
+.hammer .head {
+    width: 60px;
+    height: 30px;
+    background-color: #bdbcbc; 
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: bottom right;
+}
+
+.hammer .strike {
+    width: 20px;
+    height: 30px;
+    background-color: #16404D;
+    border-radius: 0 5px 5px 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.hammer .claw {
+    width: 20px;
+    height: 30px;
+    background-color: #bdbcbc; /* Gray */
+    border-radius: 5px 0 0 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.nail {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15px;
+    height: 50px;
+    background-color: #bdbcbc;
+    border-radius: 5px;
+    transform-origin: bottom center;
+    animation: nail-hit 1.5s infinite ease-in-out;
+}
+
+.nail .head {
+    width: 25px;
+    height: 10px;
+    background-color: #bdbcbc;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.nail .shaft {
+    width: 15px;
+    height: 40px;
+    background-color: #bdbcbc;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.loading-text {
+    font-size: 1.2rem;
+    color: #555;
+    margin-top: 10px;
+}
+
+@keyframes hammer-strike {
+    0% {
+        transform: translateX(0) translateY(0) rotate(0deg); /* Start position */
+    }
+    20% {
+        transform: translateX(-10px) translateY(-20px) rotate(-30deg); /* Lift up and back */
+    }
+    40% {
+        transform: translateX(20px) translateY(0) rotate(-45deg); /* Strike down */
+    }
+    50% {
+        transform: translateX(0) translateY(0) rotate(0deg); /* Reset after first strike */
+    }
+    70% {
+        transform: translateX(-10px) translateY(-20px) rotate(-30deg); /* Lift up and back again */
+    }
+    90% {
+        transform: translateX(20px) translateY(0) rotate(-45deg); /* Strike down again */
+    }
+    100% {
+        transform: translateX(0) translateY(0) rotate(0deg); /* Return to start */
+    }
+}
+
+@keyframes nail-hit {
+    0%, 100% { transform: translateX(-50%) translateY(0); } /* Start and end position */
+    40% { transform: translateX(-50%) translateY(20px); } /* Move down further when hit */
+    50% { transform: translateX(-50%) translateY(20px); } /* Hold position */
+    60% { transform: translateX(-50%) translateY(0); } /* Rebound slightly */
+} 

@@ -1,0 +1,50 @@
+.creative-error-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    width: 100%;
+    background-color: #f8f8f8;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.oops-text {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #FF6B6B; /* A vibrant red for attention */
+    margin-bottom: 10px;
+    animation: pulse 1.5s infinite alternate;
+}
+
+.character {
+    font-size: 5rem; /* Larger emoji */
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.error-message {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 15px;
+    max-width: 600px;
+    line-height: 1.4;
+}
+
+.fix-it-text {
+    font-size: 1.1rem;
+    color: #666;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.05); opacity: 0.8; }
+}
+
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+} 

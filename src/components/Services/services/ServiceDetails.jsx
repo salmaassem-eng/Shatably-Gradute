@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ServiceFeatures from './ServiceFeatures';
+import HammerLoading from '../../Shared/HammerLoading';
+import CreativeError from '../../Shared/CreativeError';
 
 export default function ServiceDetails() {
     const { serviceId } = useParams();
@@ -31,19 +33,18 @@ export default function ServiceDetails() {
     }, [serviceId]);
 
     if (loading) {
-        return <div className="text-center mt-20 text-xl">Loading service details...</div>;
+        return <HammerLoading />;
     }
 
     if (error) {
-        return <div className="text-center mt-20 text-red-500 text-xl">{error}</div>;
+        return <CreativeError message={error} />;
     }
 
     if (!service) {
         return <div className="text-center mt-20 text-xl">Service not found.</div>;
     }
-    console.log('Service averageRating:', service.averageRating);
-    return (
-        <div className="sm:px-6 lg:px-8 mb-[100px] mt-[3rem]">
+        return (
+        <div className="sm:px-6 lg:px-8 mb-[100px] mt-[5rem]">
             <Link
                 to="/services"
                 className="inline-flex items-center px-4 py-2 mb-4 text-sm font-medium text-[#16404D] bg-gray-100 rounded-md hover:bg-gray-200"
@@ -87,7 +88,7 @@ export default function ServiceDetails() {
                     </div>
                 }
                 <div className='flex flex-col justify-center '>
-                    <button onClick={() => toast.info("Booking functionality coming soon!")} className="mt-2 px-6 py-2 bg-[#16404D] text-white rounded-[25px] hover:bg-[#DDA853]">Book Now</button>
+                    <button onClick={() => toast.info("Booking functionality coming soon!")} className="mt-2 px-6 py-2 bg-[#16404D] text-white rounded-[25px] hover:bg-[#16404D]/90">Book Now</button>
                 </div>
                 </div>
         </div>

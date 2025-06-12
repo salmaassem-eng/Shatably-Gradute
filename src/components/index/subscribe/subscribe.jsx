@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './subscribe.css';
 import arrow from '../../../assets/Arrow.svg';
 import useIntersectionObserver from '../../../hooks/useIntersectionObserver';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Subscribe() {
     const [email, setEmail] = useState('');
@@ -11,6 +13,14 @@ function Subscribe() {
         if (email) {
             // Handle subscription logic here
             console.log('Subscribing:', email);
+            toast.success('Successfully subscribed to our newsletter!', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
             setEmail('');
         }
     };

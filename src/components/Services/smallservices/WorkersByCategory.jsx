@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import HammerLoading from '../../Shared/HammerLoading';
+import CreativeError from '../../Shared/CreativeError';
 
 export default function WorkersByCategory() {
     const { category } = useParams(); // e.g., 'plumber', 'electrician'
     const [workers, setWorkers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
 
     useEffect(() => {
         const fetchWorkers = async () => {
@@ -23,6 +26,7 @@ export default function WorkersByCategory() {
                 const filtered = data.filter(worker => 
                     worker.type && worker.type.toLowerCase() === category.toLowerCase()
                 );
+                
                 setWorkers(filtered);
 
             } catch (err) {
@@ -37,12 +41,17 @@ export default function WorkersByCategory() {
         fetchWorkers();
     }, [category]);
 
+    // Helper function to get rating for a worker
+    const getWorkerRating =() => {
+        return 4; // Default rating of 4 stars
+    };
+
     if (loading) {
-        return <div className="text-center mt-20 text-xl">Loading workers...</div>;
+        return <HammerLoading />;
     }
 
     if (error) {
-        return <div className="text-center mt-20 text-red-500 text-xl">{error}</div>;
+        return <CreativeError message={error} />;
     }
 
     if (workers.length === 0) {
@@ -50,7 +59,7 @@ export default function WorkersByCategory() {
     }
 
     return (
-        <div className="sm:px-6 lg:px-8 mb-[100px] mt-[3rem]">
+        <div className="sm:px-6 lg:px-8 mb-[100px] mt-[5rem]">
             <Link 
                 to="/services" 
                 className="inline-flex items-center px-4 py-2 mb-4 text-sm font-medium text-[#16404D] bg-gray-100 rounded-md hover:bg-gray-200"
@@ -61,7 +70,7 @@ export default function WorkersByCategory() {
             </Link>
             <div className="max-w-7xl mx-auto py-12">
                 <h1 className="text-3xl font-bold mb-8 text-center text-[#16404D]">{category.charAt(0).toUpperCase() + category.slice(1)} Workers</h1>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[2rem]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[2rem] ">
                     {workers.map(worker => (
                         <div key={worker.workerId} className="bg-white rounded-[25px] shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 flex flex-col items-center p-6">
                             <img 
@@ -71,25 +80,33 @@ export default function WorkersByCategory() {
                             />
                             <h3 className="text-xl font-semibold text-gray-800 mb-1 text-center">{worker.fullName}</h3>
                             <p className="text-gray-600 text-sm mb-2">{worker.experienceDisplay || `Experience: ${worker.experience} years`}</p>
-                            {worker.price && <p className="text-lg font-semibold text-[#16404D] mb-4">Rate: {worker.price} EGP/Hour</p>}
-                            <div className="flex items-center mb-4">
+                            {worker.price && 
+                            <div className="flex items-baseline">
+                            <p className="text-lg font-semibold text-[#DDA853] mr-2">{worker.price}</p>
+                            <p className="text-sm font-semibold text-[#16404D] " >EGP/Hour</p>
+                            </div>                            
+                            }
+                            <div className="flex items-center mt-4 mb-2">
                                 {Array.from({ length: 5 }, (_, i) => (
                                     <svg 
                                         key={i} 
-                                        className={`w-5 h-5`}
-                                       viewBox="0 0 20 20"
+                                        className="w-5 h-5"
+                                        viewBox="0 0 20 20"
                                     >
                                         <path 
-                                          fill={i < Math.floor(worker.ratingReview.rating) ? '#DDA853' : '#E5E7EB'}
-
-                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.538 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.783.57-1.838-.197-1.538-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.929 8.72c-.783-.57-.381-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z" />
+                                            // Fill star based on rating
+                                            // If current star index is less than worker's rating, fill with gold color
+                                            // Otherwise fill with gray color
+                                            fill={i < getWorkerRating(worker.workerId) ? '#DDA853' : '#E5E7EB'}
+                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.538 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.783.57-1.838-.197-1.538-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.929 8.72c-.783-.57-.381-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z" 
+                                        />
                                     </svg>
                                 ))}
-                                <span className="ml-2 text-gray-600 text-sm">({worker.ratingReview.rating || 0})</span>
+                                <span className="ml-2 text-gray-600 text-sm">({getWorkerRating(worker.workerId)})</span>
                             </div>
                             <Link 
                                 to={`/worker-item-details/${worker.workerId}`} 
-                                className="mt-auto px-6 py-2 bg-[#DDA853] text-white rounded-[25px] hover:bg-[#DDA853]/90 text-sm font-medium"
+                                className="mt-auto px-6 py-2 bg-[#16404D] text-white rounded-[25px] hover:bg-[#16404D]/90 hover:text-white text-sm font-medium"
                             >
                                 View Profile
                             </Link>

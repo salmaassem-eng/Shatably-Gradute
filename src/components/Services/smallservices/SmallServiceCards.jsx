@@ -2,11 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 // Import your images here. Replace these placeholder paths with your actual asset paths.
-import electricianImage from '../../assets/electricianservice.svg'; 
-import carpentryImage from '../../assets/carpenter.jpg';
-import painterImage from '../../assets/painting.svg';
-import plumberImage from '../../assets/plumbing.svg';
-import cleaningImage from '../../assets/cleaning.svg';
+import electricianImage from '../../../assets/electricianservice.svg'; 
+import carpentryImage from '../../../assets/carpenter.jpg';
+import painterImage from '../../../assets/painting.svg';
+import plumberImage from '../../../assets/plumbing.svg';
+import cleaningImage from '../../../assets/cleaning.svg';
 
 const smallServiceData = [
     {
