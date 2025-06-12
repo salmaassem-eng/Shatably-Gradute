@@ -8,6 +8,7 @@ import painter from '../../assets/painter.svg';
 import plumber from '../../assets/plumber.svg';
 import HammerLoading from '../Shared/HammerLoading';
 
+
 export default function Shop() {
     const [activeCategory, setActiveCategory] = useState('all');
     const [products, setProducts] = useState([]);
@@ -15,6 +16,121 @@ export default function Shop() {
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 9; // Number of items per page
+
+    const addToCart = async (product) => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No authentication token found');
+            }
+
+            // Decode the JWT token to get the token payload
+            const tokenParts = token.split('.');
+            if (tokenParts.length !== 3) {
+                throw new Error('Invalid token format');
+            }
+
+            const tokenPayload = JSON.parse(atob(tokenParts[1]));
+            console.log('Token payload:', tokenPayload);
+
+            // Get userId from token
+            const userId = tokenPayload.userId;
+            if (!userId) {
+                throw new Error('No user ID found in token');
+            }
+
+            console.log('Adding to cart for user ID:', userId);
+
+            // First, get current cart
+            const getCurrentCart = await fetch(`https://shatably.runasp.net/api/Basket/${userId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            let currentCart;
+            if (getCurrentCart.ok) {
+                currentCart = await getCurrentCart.json();
+                console.log('Current cart:', currentCart);
+            } else {
+                console.log('No existing cart found, creating new cart');
+                currentCart = {
+                    username: userId,
+                    items: [],
+                    paymentIntentId: "",
+                    clientSecret: "",
+                    shippingPrice: 0
+                };
+            }
+
+            // Check if the product is already in the cart
+            const existingItemIndex = currentCart.items.findIndex(item => item.productId === product.productId);
+            let updatedItems;
+
+            if (existingItemIndex !== -1) {
+                // If item exists, increase its quantity by 1
+                updatedItems = currentCart.items.map((item, index) => {
+                    if (index === existingItemIndex) {
+                        return { ...item, quantity: item.quantity + 1 };
+                    }
+                    return item;
+                });
+            } else {
+                // If item doesn't exist, add it with quantity 1
+                updatedItems = [
+                    ...currentCart.items,
+                    {
+                        productId: product.productId,
+                        productName: product.name,
+                        price: product.price,
+                        quantity: 1,
+                        imageUrl: product.imageUrl
+                    }
+                ];
+            }
+
+            // Prepare new cart data
+            const basketData = {
+                username: userId,
+                items: updatedItems,
+                paymentIntentId: currentCart?.paymentIntentId || "",
+                clientSecret: currentCart?.clientSecret || "",
+            };
+
+            console.log('Sending updated cart data:', basketData);
+
+            const response = await fetch('https://shatably.runasp.net/api/Basket', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(basketData)
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Server response:', errorText);
+                throw new Error('Failed to add item to cart');
+            }
+
+            const result = await response.json();
+            console.log('Add to cart response:', result);
+
+            // Calculate total items in cart and dispatch update event
+            const totalItems = result.items.reduce((sum, item) => sum + item.quantity, 0);
+            window.dispatchEvent(new CustomEvent('cartUpdate', { detail: { count: totalItems } }));
+
+            // Show success message or notification
+            const message = existingItemIndex !== -1 ? 'Product quantity increased!' : 'Product added to cart successfully!';
+            alert(message);
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+            alert('Failed to add item to cart: ' + error.message);
+        }
+    };
 
     useEffect(() => {
         async function fetchProducts() {
@@ -106,9 +222,9 @@ export default function Shop() {
                 </div>
 
                 {/* Filter Section */}
-                <div className="mb-12">
+                <div className="mb-12 mx-5 ">
                     <h2 className="text-[#16404D] text-2xl font-semibold mb-6">Shop by categories</h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-[3rem]">
                         {categories.map((category) => (
                             <button
                                 key={category.value}
@@ -145,7 +261,7 @@ export default function Shop() {
                 </div>
 
                 {/* Products Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[2rem]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[5rem] ">
                     {products.length > 0 ? (
                         products.map(product => (
                             <div key={product.productId} className="bg-white rounded-[25px] shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
@@ -159,14 +275,19 @@ export default function Shop() {
                                         }}
                                     />
                                 </div>
-                                <div className="p-6 pt-10">
-                                    <h3 className="text-[24px] font-semibold text-[#16404d] mb-2">{product.name}</h3>
-                                    <p className="text-gray-600 text-sm mb-4">{product.details}</p>
+                                <div className="p-6 pt-10 flex flex-col h-[200px]">
+                                    <div className="flex-grow">
+                                        <h3 className="text-[24px] font-semibold text-center text-[#16404d] mb-2">{product.name}</h3>
+                                        <p className="text-gray-600 text-center text-sm mb-4">{product.details}</p>
+                                    </div>
                                     <div className="flex justify-between items-center px-1">
                                         <p className="text-[#866734] mb-2 text-[20px]">${product.price}</p>
-                                        <div className="p-2 border-2 border-[#9C722C] rounded-full hover:bg-[#DDA853] hover:border-[#DDA853] group transition-colors cursor-pointer cart-container">
+                                        <button 
+                                            onClick={() => addToCart(product)}
+                                            className="p-2 border-2 border-[#9C722C] rounded-full hover:bg-[#DDA853] hover:border-[#DDA853] group transition-colors cursor-pointer cart-container"
+                                        >
                                             <img className="cart w-6 h-6 group-hover:filter-dda853" src={cart} alt="Shopping cart icon" />
-                                        </div>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

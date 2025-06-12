@@ -19,11 +19,13 @@ import User from './components/icons/User';
 import Shop from './components/shop/Shop';
 import ProjectDetails from './components/Services/projects/ProjectDetails';
 import ContactUs from './components/ContactUs/ContactUs';
+import Cart from './components/shop/Cart';
 
 function Layout() {
   const location = useLocation();
   const hideNavAndFooter = location.pathname === '/login' || location.pathname === '/forgetpass'|| location.pathname === "/RegisterationPage" || location.pathname === '/newpass';
   const hideFooter = location.pathname === '/User' || location.pathname.startsWith('/service-details/') || location.pathname.startsWith('/workers-by-category/') || location.pathname.startsWith('/worker-item-details/') || location.pathname.startsWith('/project-item-details/') || location.pathname.startsWith('/contact-us');
+
   return (
     <div className="app-container">
       {!hideNavAndFooter && <Navbar />}
@@ -42,6 +44,7 @@ function Layout() {
           <Route path="/User" element={<User />} />
           <Route path="/Shop" element={<Shop />} />
           <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/Cart" element={<Cart />} />
         </Routes>
       </main>
       {!hideNavAndFooter && !hideFooter && <Footer />}

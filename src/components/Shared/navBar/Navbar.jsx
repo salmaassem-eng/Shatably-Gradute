@@ -2,7 +2,7 @@ import './navbar.css';
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import searchicon from '../../../assets/search-normal.svg';
-import card from '../../../assets/cart.svg';
+import cart from '../../../assets/cart.svg';
 import user from '../../../assets/user.svg';
 import vector from '../../../assets/Vector.svg';
 import { useAuth } from '../../../context/AuthContext';
@@ -13,6 +13,7 @@ export default function Navbar() {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
     const [notifications, setNotifications] = useState([]);
+    const [cartItemsCount, setCartItemsCount] = useState(0);
     const location = useLocation();
     const navigate = useNavigate();
     const auth = useAuth();
@@ -48,6 +49,56 @@ export default function Navbar() {
             addNotification('Verification code has been sent to your email', 'now');
         }
     }, [location]);
+
+    // Listen for cart updates
+    useEffect(() => {
+        const handleCartUpdate = (event) => {
+            setCartItemsCount(event.detail.count);
+        };
+
+        window.addEventListener('cartUpdate', handleCartUpdate);
+
+        return () => {
+            window.removeEventListener('cartUpdate', handleCartUpdate);
+        };
+    }, []);
+
+    // Fetch cart count when component mounts and when location changes
+    useEffect(() => {
+        async function updateCartCount() {
+            if (!auth?.isLoggedIn) return;
+            
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) return;
+
+                const tokenParts = token.split('.');
+                if (tokenParts.length !== 3) return;
+
+                const tokenPayload = JSON.parse(atob(tokenParts[1]));
+                const userId = tokenPayload.userId;
+                if (!userId) return;
+
+                const response = await fetch(`https://shatably.runasp.net/api/Basket/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) return;
+
+                const data = await response.json();
+                const totalItems = data?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
+                setCartItemsCount(totalItems);
+            } catch (error) {
+                console.error('Error fetching cart count:', error);
+            }
+        }
+
+        updateCartCount();
+    }, [auth?.isLoggedIn, location.pathname]);
 
     const addNotification = (message, time) => {
         setNotifications(prev => [{
@@ -102,11 +153,16 @@ export default function Navbar() {
                 </div>
                 <div className="icon-section">
                     {isLoggedIn ? (
-
                         <div className="relative ml-3">
                             <div className="flex items-center">
-
-                                <img src={card} className="icon" alt="cart" />
+                                <Link to="/Cart" className="relative">
+                                    <img src={cart} className={`icon ${isActive('/Cart') ? 'active' : ''} cursor-pointer`} alt="cart"/>
+                                    {cartItemsCount > 0 && (
+                                        <div className="absolute -top-2 -right-[1px] bg-[#dda853cc] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                                            {cartItemsCount}
+                                        </div>
+                                    )}
+                                </Link>
                                 <div className="relative" ref={notificationRef}>
                                     <img 
                                         src={vector} 
