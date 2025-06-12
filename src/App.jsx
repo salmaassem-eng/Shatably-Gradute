@@ -20,6 +20,8 @@ import Shop from './components/shop/Shop';
 import ProjectDetails from './components/Services/projects/ProjectDetails';
 import ContactUs from './components/ContactUs/ContactUs';
 import Cart from './components/shop/Cart';
+import Payment from './components/shop/Payment';
+
 
 function Layout() {
   const location = useLocation();
@@ -45,6 +47,7 @@ function Layout() {
           <Route path="/Shop" element={<Shop />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/Cart" element={<Cart />} />
+          <Route path="/Payment" element={<Payment />} />
         </Routes>
       </main>
       {!hideNavAndFooter && !hideFooter && <Footer />}
