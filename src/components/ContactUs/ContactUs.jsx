@@ -127,10 +127,10 @@ export default function ContactUs() {
                 </div>
                 <div className="flex justify-center gap-3 mt-8 tranform translate-y-14 sm:gap-4">
                     <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full bg-[transperent] border-[#DDA853] border-2 transform hover:-translate-y-[2px] sm:w-10 sm:h-10 md:w-12 md:h-12">
-                        <FontAwesomeIcon icon={["fab", "facebook-f"]} className="w-4 h-4 text-white sm:w-5 sm:h-5 md:w-6 md:h-6" /> 
+                        <FontAwesomeIcon icon={["fab", "facebook-f"]} className="w-4 h-4  sm:w-5 sm:h-5 md:w-6 md:h-6" /> 
                     </a>
                     <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full  bg-[transperent] border-[#DDA853] border-2 transform hover:-translate-y-[2px] sm:w-10 sm:h-10 md:w-12 md:h-12">
-                        <FontAwesomeIcon icon={["fab", "twitter"]} className="w-4 h-4 text-white sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                        <FontAwesomeIcon icon={["fab", "twitter"]} className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                     </a>
                     <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full  bg-[transperent] border-[#DDA853] border-2 transform hover:-translate-y-[2px] sm:w-10 sm:h-10 md:w-12 md:h-12">
                         <FontAwesomeIcon icon={["fab", "instagram"]} className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
