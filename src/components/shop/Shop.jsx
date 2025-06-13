@@ -261,10 +261,10 @@ export default function Shop() {
                 </div>
 
                 {/* Products Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[5rem] ">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-[3rem] gap-x-[2rem] ">
                     {products.length > 0 ? (
                         products.map(product => (
-                            <div key={product.productId} className="bg-white rounded-[25px] shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105">
+                            <div key={product.productId} className="bg-white rounded-[25px] m-auto shadow-md w-[23rem] overflow-hidden transform transition-transform duration-300 hover:scale-105">
                                 <div className="relative w-full h-48">
                                     <img
                                         src={product.imageUrl}
