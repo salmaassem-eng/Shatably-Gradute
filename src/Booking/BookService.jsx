@@ -101,13 +101,11 @@ export default function BookService() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Here you would typically make an API call to create the booking
-            // For now, we'll just show a success message
-            toast.success("Booking submitted successfully!");
-            navigate('/'); // Redirect to home page after successful booking
+            // Instead of submitting here, navigate to the BookingCheckout page
+            navigate(`/booking-checkout/${type}/${id}`);
         } catch (err) {
-            console.error("Failed to submit booking:", err);
-            toast.error("Failed to submit booking. Please try again.");
+            console.error("Failed to navigate to checkout:", err);
+            toast.error("Failed to proceed to checkout. Please try again.");
         }
     };
 
