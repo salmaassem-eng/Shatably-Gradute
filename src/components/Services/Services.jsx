@@ -290,7 +290,7 @@ const Services = () => {
         <div className="mt-5">
           <Link
             to={item.linkTo}
-            className="px-6 py-2 w-[170px] bg-[#16404D] text-white rounded-[25px] hover:bg-[#16404D]/90 hover:text-white text-sm font-medium"
+            className="px-6 py-2 w-[170px] inline-block bg-[#16404D] text-white rounded-[25px] hover:bg-[#16404D]/90 hover:text-white text-sm font-medium"
           >
             View{" "}
             {item.mainType.charAt(0).toUpperCase() +

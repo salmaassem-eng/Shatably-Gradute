@@ -83,12 +83,14 @@ export default function ServiceDetails() {
 
                 {service.price &&
                     <div className="flex items-baseline">
-                        <p className="text-lg font-semibold mb-2">Price: {service.price} EGP</p> 
+                        <p className="text-lg font-semibold mb-2">{service.price} EGP</p> 
                         <p className="opacity-60 ml-2">Per Hour</p>
                     </div>
                 }
-                <div className='flex flex-col justify-center '>
-                    <button onClick={() => toast.info("Booking functionality coming soon!")} className="mt-2 px-6 py-2 bg-[#16404D] text-white rounded-[25px] hover:bg-[#16404D]/90">Book Now</button>
+                <div className='flex flex-col justify-center'>
+                    <Link to={`/Booking/service/${serviceId}`}>
+                       <button className="mt-2 px-6 py-2 bg-[#16404D] text-white rounded-[25px] hover:bg-[#16404D]/90 w-full">Book Now</button>
+                    </Link>
                 </div>
                 </div>
         </div>
