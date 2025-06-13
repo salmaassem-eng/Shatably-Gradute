@@ -5,8 +5,10 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 export default function Payment() {
+    const navigate = useNavigate();
     const [cartData, setCartData] = useState({
         username: "",
         items: [],
@@ -368,7 +370,7 @@ export default function Payment() {
             `Are you sure you want to proceed with the payment of $${total.toFixed(2)}?`,
             async () => {
                 try {
-        const userId = getUsername();
+                    const userId = getUsername();
                     const token = localStorage.getItem('token');
 
                     // Clear the cart
@@ -390,10 +392,10 @@ export default function Payment() {
                     setCartData(result);
                     
                     // Update payment data
-        setPaymentData(prev => ({
-            ...prev,
-            userId: userId
-        }));
+                    setPaymentData(prev => ({
+                        ...prev,
+                        userId: userId
+                    }));
 
                     // Update cart count
                     window.dispatchEvent(new CustomEvent('cartUpdate', { detail: { count: 0 } }));
@@ -409,6 +411,9 @@ export default function Payment() {
                         progress: undefined,
                         theme: "light",
                     });
+
+                    // Navigate to Review page after successful payment
+                    navigate('/Review');
                 } catch (error) {
                     console.error('Error processing payment:', error);
                     toast.error('Failed to process payment: ' + error.message, {
@@ -499,12 +504,12 @@ export default function Payment() {
                             <span className="absolute text-sm text-[#16404D] left-[-0.8rem] top-10">Payment</span>
                         </div>
 
-                        {/* Review */}
+                        {/* shipping */}
                         <div className="relative w-[12rem]">
                             <div className="flex items-center">
                                 <div className="w-7 h-7 rounded-[50%] bg-gray-200 flex items-center justify-center"></div>
                             </div>
-                            <span className="absolute text-sm text-gray-500 left-[-0.5rem] top-10">Review</span>
+                            <span className="absolute text-sm text-gray-500 left-[-0.8rem] top-10">Shipping</span>
                         </div>
                     </div>
                 </div>

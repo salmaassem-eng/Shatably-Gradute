@@ -11,6 +11,26 @@ export default function Cart() {
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [modalConfig, setModalConfig] = useState({
+        title: '',
+        message: '',
+        onConfirm: () => {},
+        onCancel: () => {}
+    });
+
+    const showModal = (title, message, onConfirm) => {
+        setModalConfig({
+            title,
+            message,
+            onConfirm: () => {
+                onConfirm();
+                setShowConfirmModal(false);
+            },
+            onCancel: () => setShowConfirmModal(false)
+        });
+        setShowConfirmModal(true);
+    };
 
     const getUsername = () => {
         const token = localStorage.getItem('token');
@@ -142,95 +162,97 @@ export default function Cart() {
     };
 
     const removeItem = async (itemId) => {
-        // Ask for confirmation before removing
-        if (!window.confirm('Are you sure you want to remove this item from your cart?')) {
-            return; // If user clicks Cancel, do nothing
-        }
+        showModal(
+            "Remove Item",
+            "Are you sure you want to remove this item from your cart?",
+            async () => {
+                try {
+                    const username = getUsername();
+                    const token = localStorage.getItem('token');
 
-        try {
-            const username = getUsername();
-            const token = localStorage.getItem('token');
+                    const updatedItems = cartData.items.filter(item => item.productId !== itemId);
+                    const updatedCart = {
+                        ...cartData,
+                        items: updatedItems,
+                        username: username
+                    };
 
-            const updatedItems = cartData.items.filter(item => item.productId !== itemId);
-            const updatedCart = {
-                ...cartData,
-                items: updatedItems,
-                username: username
-            };
+                    console.log('Removing item, updated cart:', updatedCart);
 
-            console.log('Removing item, updated cart:', updatedCart);
+                    const response = await fetch('https://shatably.runasp.net/api/Basket', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(updatedCart)
+                    });
 
-            const response = await fetch('https://shatably.runasp.net/api/Basket', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(updatedCart)
-            });
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error('Server response:', errorText);
+                        throw new Error('Failed to remove item');
+                    }
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Server response:', errorText);
-                throw new Error('Failed to remove item');
+                    const result = await response.json();
+                    console.log('Remove item response:', result);
+                    setCartData(result);
+                    
+                    // Dispatch custom event for cart update
+                    const totalItems = result.items.reduce((sum, item) => sum + item.quantity, 0);
+                    window.dispatchEvent(new CustomEvent('cartUpdate', { detail: { count: totalItems } }));
+                } catch (error) {
+                    console.error('Error removing item:', error);
+                    alert('Failed to remove item: ' + error.message);
+                }
             }
-
-            const result = await response.json();
-            console.log('Remove item response:', result);
-            setCartData(result);
-            
-            // Dispatch custom event for cart update
-            const totalItems = result.items.reduce((sum, item) => sum + item.quantity, 0);
-            window.dispatchEvent(new CustomEvent('cartUpdate', { detail: { count: totalItems } }));
-        } catch (error) {
-            console.error('Error removing item:', error);
-            alert('Failed to remove item: ' + error.message);
-        }
+        );
     };
 
     const clearCart = async () => {
-        // Ask for confirmation before clearing
-        if (!window.confirm('Are you sure you want to clear your entire cart? This action cannot be undone.')) {
-            return; // If user clicks Cancel, do nothing
-        }
+        showModal(
+            "Clear Cart",
+            "Are you sure you want to clear your entire cart? This action cannot be undone.",
+            async () => {
+                try {
+                    const username = getUsername();
+                    const token = localStorage.getItem('token');
 
-        try {
-            const username = getUsername();
-            const token = localStorage.getItem('token');
+                    const emptyCart = {
+                        ...cartData,
+                        items: [],
+                        username: username
+                    };
 
-            const emptyCart = {
-                ...cartData,
-                items: [],
-                username: username
-            };
+                    console.log('Clearing cart:', emptyCart);
 
-            console.log('Clearing cart:', emptyCart);
+                    const response = await fetch('https://shatably.runasp.net/api/Basket', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(emptyCart)
+                    });
 
-            const response = await fetch('https://shatably.runasp.net/api/Basket', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(emptyCart)
-            });
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error('Server response:', errorText);
+                        throw new Error('Failed to clear cart');
+                    }
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Server response:', errorText);
-                throw new Error('Failed to clear cart');
+                    const result = await response.json();
+                    console.log('Clear cart response:', result);
+                    setCartData(result);
+                    
+                    // Dispatch custom event for cart update
+                    window.dispatchEvent(new CustomEvent('cartUpdate', { detail: { count: 0 } }));
+                } catch (error) {
+                    console.error('Error clearing cart:', error);
+                    alert('Failed to clear cart: ' + error.message);
+                }
             }
-
-            const result = await response.json();
-            console.log('Clear cart response:', result);
-            setCartData(result);
-            
-            // Dispatch custom event for cart update
-            window.dispatchEvent(new CustomEvent('cartUpdate', { detail: { count: 0 } }));
-        } catch (error) {
-            console.error('Error clearing cart:', error);
-            alert('Failed to clear cart: ' + error.message);
-        }
+        );
     };
 
     if (loading) {
@@ -245,161 +267,189 @@ export default function Cart() {
     const total = subtotal + cartData.shippingPrice;
 
     return (
-        <div className="px-[5rem] py-[3rem] w-full mx-auto mt-[3rem]">
-            <h1 className="text-[#16404D] text-4xl font-extrabold text-center mb-[2rem]">My Cart</h1>
-            
-            {cartData.items.length > 0 ? (
-                <>
-                    <div className="flex justify-center w-full mb-[5rem] ml-[4rem]">
-                        {/* Shipping */}
-                        <div className="relative w-[12rem]">
-                            <div className="flex items-center">
-                                <div className="w-7 h-7 rounded-[50%] bg-[#16404D] flex items-center justify-center"></div>
-                                <div className="h-[2px] bg-gray-200 w-[12rem] absolute left-7"></div>
-                            </div>
-                            <span className="absolute text-sm text-[#16404D] left-[-0.8rem] top-10">Shopping</span>
-                        </div>
-
-                        {/* Payment */}
-                        <div className="relative w-[12rem]">
-                            <div className="flex items-center">
-                                <div className="w-7 h-7 rounded-[50%] bg-gray-200 flex items-center justify-center"></div>
-                                <div className="h-[2px] bg-gray-200 w-[12rem] absolute left-7"></div>
-                            </div>
-                            <span className="absolute text-sm text-gray-500 left-[-0.8rem] top-10">Payment</span>
-                        </div>
-
-                        {/* Review */}
-                        <div className="relative w-[12rem]">
-                            <div className="flex items-center">
-                                <div className="w-7 h-7 rounded-[50%] bg-gray-200 flex items-center justify-center"></div>
-                            </div>
-                            <span className="absolute text-sm text-gray-500 left-[-0.5rem] top-10">Review</span>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div className="col-span-12 lg:col-span-8">
-                            <div className="space-y-4">
-                                {/* Header */}
-                                <div className="grid grid-cols-12 text-sm text-gray-500 px-[3.3rem]">
-                                    <div className="col-span-6 text-[18px]">Item</div>
-                                    <div className="col-span-2 text-right text-[18px]">Price</div>
-                                    <div className="col-span-2 text-center text-[18px]">Quantity</div>
-                                    <div className="col-span-2 text-right text-[18px]">Total</div>
+        <>
+            <div className="px-[5rem] py-[3rem] w-full mx-auto mt-[3rem]">
+                <h1 className="text-[#16404D] text-4xl font-extrabold text-center mb-[2rem]">My Cart</h1>
+                
+                {cartData.items.length > 0 ? (
+                    <>
+                        <div className="flex justify-center w-full mb-[5rem] ml-[4rem]">
+                            {/* Shipping */}
+                            <div className="relative w-[12rem]">
+                                <div className="flex items-center">
+                                    <div className="w-7 h-7 rounded-[50%] bg-[#16404D] flex items-center justify-center"></div>
+                                    <div className="h-[2px] bg-gray-200 w-[12rem] absolute left-7"></div>
                                 </div>
+                                <span className="absolute text-sm text-[#16404D] left-[-0.8rem] top-10">Shopping</span>
+                            </div>
 
-                                {/* Cart Items */}
-                                <div className="space-y-8 bg-[white] p-10 rounded-[25px]">
-                                    {cartData.items.map((item, index) => (
-                                        <div key={item.productId}>
-                                            <div className="grid grid-cols-12 items-center">
-                                                <div className="col-span-6">
-                                                    <div className="flex items-center gap-4">
-                                                        <button 
-                                                            className="text-gray-400 hover:text-[#16404D] text-xl font-medium"
-                                                            onClick={() => removeItem(item.productId)}
-                                                        >
-                                                            ×
-                                                        </button>
-                                                        <img 
-                                                            src={item.imageUrl || 'https://via.placeholder.com/300x200'} 
-                                                            alt={item.productName} 
-                                                            className="w-20 h-20 object-cover rounded-lg bg-gray-100" 
-                                                        />
-                                                        <div>
-                                                            <h3 className="font-medium">{item.productName}</h3>
+                            {/* Payment */}
+                            <div className="relative w-[12rem]">
+                                <div className="flex items-center">
+                                    <div className="w-7 h-7 rounded-[50%] bg-gray-200 flex items-center justify-center"></div>
+                                    <div className="h-[2px] bg-gray-200 w-[12rem] absolute left-7"></div>
+                                </div>
+                                <span className="absolute text-sm text-gray-500 left-[-0.8rem] top-10">Payment</span>
+                            </div>
+
+                            {/* shipping */}
+                            <div className="relative w-[12rem]">
+                                <div className="flex items-center">
+                                    <div className="w-7 h-7 rounded-[50%] bg-gray-200 flex items-center justify-center"></div>
+                                </div>
+                                <span className="absolute text-sm text-gray-500 left-[-0.8rem] top-10">Shipping</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div className="col-span-12 lg:col-span-8">
+                                <div className="space-y-4">
+                                    {/* Header */}
+                                    <div className="grid grid-cols-12 text-sm text-gray-500 px-[3.3rem]">
+                                        <div className="col-span-6 text-[18px]">Item</div>
+                                        <div className="col-span-2 text-right text-[18px]">Price</div>
+                                        <div className="col-span-2 text-center text-[18px]">Quantity</div>
+                                        <div className="col-span-2 text-right text-[18px]">Total</div>
+                                    </div>
+
+                                    {/* Cart Items */}
+                                    <div className="space-y-8 bg-[white] p-10 rounded-[25px]">
+                                        {cartData.items.map((item, index) => (
+                                            <div key={item.productId}>
+                                                <div className="grid grid-cols-12 items-center">
+                                                    <div className="col-span-6">
+                                                        <div className="flex items-center gap-4">
+                                                            <button 
+                                                                className="text-gray-400 hover:text-[#16404D] text-xl font-medium"
+                                                                onClick={() => removeItem(item.productId)}
+                                                            >
+                                                                ×
+                                                            </button>
+                                                            <img 
+                                                                src={item.imageUrl || 'https://via.placeholder.com/300x200'} 
+                                                                alt={item.productName} 
+                                                                className="w-20 h-20 object-cover rounded-lg bg-gray-100" 
+                                                            />
+                                                            <div>
+                                                                <h3 className="font-medium">{item.productName}</h3>
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                    <div className="col-span-2 text-right">${item.price.toFixed(2)}</div>
+                                                    <div className="col-span-2 flex justify-center items-center gap-3">
+                                                        <button 
+                                                            className="w-6 h-6 flex items-center justify-center border border-gray-300 rounded-full hover:bg-[#16404D] hover:text-white hover:border-[#16404D]"
+                                                            onClick={() => updateQuantity(item.productId, Math.max(1, item.quantity - 1))}
+                                                        >
+                                                            -
+                                                        </button>
+                                                        <span>{item.quantity}</span>
+                                                        <button 
+                                                            className="w-6 h-6 flex items-center justify-center border border-gray-300 rounded-full hover:bg-[#16404D] hover:text-white hover:border-[#16404D]"
+                                                            onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                                                        >
+                                                            +
+                                                        </button>
+                                                    </div>
+                                                    <div className="col-span-2 text-right">${(item.price * item.quantity).toFixed(2)}</div>
                                                 </div>
-                                                <div className="col-span-2 text-right">${item.price.toFixed(2)}</div>
-                                                <div className="col-span-2 flex justify-center items-center gap-3">
-                                                    <button 
-                                                        className="w-6 h-6 flex items-center justify-center border border-gray-300 rounded-full hover:bg-[#16404D] hover:text-white hover:border-[#16404D]"
-                                                        onClick={() => updateQuantity(item.productId, Math.max(1, item.quantity - 1))}
-                                                    >
-                                                        -
-                                                    </button>
-                                                    <span>{item.quantity}</span>
-                                                    <button 
-                                                        className="w-6 h-6 flex items-center justify-center border border-gray-300 rounded-full hover:bg-[#16404D] hover:text-white hover:border-[#16404D]"
-                                                        onClick={() => updateQuantity(item.productId, item.quantity + 1)}
-                                                    >
-                                                        +
-                                                    </button>
-                                                </div>
-                                                <div className="col-span-2 text-right">${(item.price * item.quantity).toFixed(2)}</div>
+                                                {index < cartData.items.length - 1 && <hr className="my-8" />}
                                             </div>
-                                            {index < cartData.items.length - 1 && <hr className="my-8" />}
-                                        </div>
-                                    ))}
+                                        ))}
 
-                                    {/* checkout section */}
-                                    <hr/>
-                                    <div className="rounded-[15px] p-6">
-                                        <div className="flex justify-between items-start">
-                                            <button 
-                                                onClick={clearCart}
-                                                className="text-[white] bg-[#16404D] rounded-[25px] hover:opacity-90 text-center py-auto my-auto text-[16px]"
-                                            >
-                                                Clear all Products
-                                            </button>
-                                            <div className="text-right space-y-2">
-                                                <div className="flex justify-end items-center">
-                                                    <span className="text-gray-600 w-32 text-[18px]">Subtotal</span>
-                                                    <span className="text-gray-600 w-24 text-right text-[18px]">${subtotal.toFixed(2)}</span>
-                                                </div>
-                                                <div className="flex justify-end items-center">
-                                                    <span className="text-gray-600 w-32 text-[18px]">Delivery Fee</span>
-                                                    <span className="text-[#16404D] w-24 text-right text-[18px]">${cartData.shippingPrice.toFixed(2)}</span>
-                                                </div>
-                                                <div className="flex justify-end items-center pt-2 border-t">
-                                                    <span className="text-gray-600 w-32 font-bold text-[18px]">Total</span>
-                                                    <span className="text-gray-600 w-24 text-right font-bold text-[18px]">${total.toFixed(2)}</span>
+                                        {/* checkout section */}
+                                        <hr/>
+                                        <div className="rounded-[15px] p-6">
+                                            <div className="flex justify-between items-start">
+                                                <button 
+                                                    onClick={clearCart}
+                                                    className="text-[white] bg-[#16404D] rounded-[25px] hover:opacity-90 text-center py-auto my-auto text-[16px]"
+                                                >
+                                                    Clear all Products
+                                                </button>
+                                                <div className="text-right space-y-2">
+                                                    <div className="flex justify-end items-center">
+                                                        <span className="text-gray-600 w-32 text-[18px]">Subtotal</span>
+                                                        <span className="text-gray-600 w-24 text-right text-[18px]">${subtotal.toFixed(2)}</span>
+                                                    </div>
+                                                    <div className="flex justify-end items-center">
+                                                        <span className="text-gray-600 w-32 text-[18px]">Delivery Fee</span>
+                                                        <span className="text-[#16404D] w-24 text-right text-[18px]">${cartData.shippingPrice.toFixed(2)}</span>
+                                                    </div>
+                                                    <div className="flex justify-end items-center pt-2 border-t">
+                                                        <span className="text-gray-600 w-32 font-bold text-[18px]">Total</span>
+                                                        <span className="text-gray-600 w-24 text-right font-bold text-[18px]">${total.toFixed(2)}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                {/* Actions */}
-                                <div className="flex items-center justify-between pt-8">
-                                    <Link to="/Shop">
-                                        <button className="text-[#16404D] hover:text-[#DDA853]">
-                                            ← Continue Shopping
-                                        </button>
-                                    </Link>
-                                    <Link to='/Payment'>
-                                        <button className="text-[white] bg-[#16404D] rounded-[25px] hover:opacity-90 w-[14rem] p-3 mx-3">
-                                            Checkout
-                                        </button>
-                                    </Link>
+                                    {/* Actions */}
+                                    <div className="flex items-center justify-between pt-8">
+                                        <Link to="/Shop">
+                                            <button className="text-[#16404D] hover:text-[#DDA853]">
+                                                ← Continue Shopping
+                                            </button>
+                                        </Link>
+                                        <Link to='/Payment'>
+                                            <button className="text-[white] bg-[#16404D] rounded-[25px] hover:opacity-90 w-[14rem] p-3 mx-3">
+                                                Checkout
+                                            </button>
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </>
-            ) : (
-                <div className="flex flex-col items-center justify-center py-16 bg-white rounded-[25px] shadow-lg">
-                    <div className="w-48 h-48 mb-8">
-                        <svg className="w-full h-full text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                            <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                    </div>
-                    <h2 className="text-2xl font-bold text-[#16404D] mb-4">Your Cart is Empty</h2>
-                    <p className="text-gray-600 mb-8 text-center max-w-md">
-                        Looks like you haven't added any items to your cart yet. Start shopping to fill it up!
-                    </p>
-                    <Link to="/Shop">
-                        <button className="bg-[#16404D] text-white px-8 py-4 rounded-[25px] hover:bg-[#16404D]/90 transition-colors duration-200 text-lg font-semibold flex items-center gap-2">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </>
+                ) : (
+                    <div className="flex flex-col items-center justify-center py-16 bg-white rounded-[25px] shadow-lg">
+                        <div className="w-48 h-48 mb-8">
+                            <svg className="w-full h-full text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
-                            Start Shopping
-                        </button>
-                    </Link>
+                        </div>
+                        <h2 className="text-2xl font-bold text-[#16404D] mb-4">Your Cart is Empty</h2>
+                        <p className="text-gray-600 mb-8 text-center max-w-md">
+                            Looks like you haven't added any items to your cart yet. Start shopping to fill it up!
+                        </p>
+                        <Link to="/Shop">
+                            <button className="bg-[#16404D] text-white px-8 py-4 rounded-[25px] hover:bg-[#16404D]/90 transition-colors duration-200 text-lg font-semibold flex items-center gap-2">
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                                Start Shopping
+                            </button>
+                        </Link>
+                    </div>
+                )}
+            </div>
+
+            {/* Custom Confirmation Modal */}
+            {showConfirmModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-[25px] p-8 max-w-md w-full mx-4 transform transition-all">
+                        <div className="text-center">
+                            <h3 className="text-2xl font-bold text-[#16404D] mb-4">{modalConfig.title}</h3>
+                            <p className="text-gray-600 mb-8">{modalConfig.message}</p>
+                            <div className="flex justify-center gap-4">
+                                <button
+                                    onClick={modalConfig.onCancel}
+                                    className="px-6 py-3 border-2 border-[#16404D] text-[#16404D] rounded-[25px] hover:bg-gray-100 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={modalConfig.onConfirm}
+                                    className="px-6 py-3 bg-[#16404D] text-white rounded-[25px] hover:bg-opacity-90 transition-colors"
+                                >
+                                    Confirm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
-        </div>
+        </>
     );
 }

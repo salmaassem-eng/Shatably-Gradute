@@ -1,5 +1,5 @@
 import { useState , useEffect} from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import cart from '../../assets/cart.svg';
 import './shop.css';
 import electrican from '../../assets/electrician-shop.svg';
@@ -122,10 +122,6 @@ export default function Shop() {
             // Calculate total items in cart and dispatch update event
             const totalItems = result.items.reduce((sum, item) => sum + item.quantity, 0);
             window.dispatchEvent(new CustomEvent('cartUpdate', { detail: { count: totalItems } }));
-
-            // Show success message or notification
-            const message = existingItemIndex !== -1 ? 'Product quantity increased!' : 'Product added to cart successfully!';
-            alert(message);
         } catch (error) {
             console.error('Error adding to cart:', error);
             alert('Failed to add item to cart: ' + error.message);
