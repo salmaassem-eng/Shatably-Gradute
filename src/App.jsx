@@ -23,13 +23,16 @@ import Cart from './components/shop/Cart';
 import Booking from './Booking/Bookservice';
 import Payment from './components/shop/Payment';
 import BookingCheckout from './Booking/BookingCheckout';
+import Review from './components/shop/Review';
+
+
 function Layout() {
   const location = useLocation();
-  const hideNavAndFooter = location.pathname === '/login' || location.pathname === '/forgetpass'|| location.pathname === "/RegisterationPage" || location.pathname === '/newpass';
+  const hideNavAndFooter = location.pathname === '/login' || location.pathname === '/forgetpass' || location.pathname === "/RegisterationPage" || location.pathname === '/newpass';
   const hideFooter = location.pathname === '/User' || location.pathname.startsWith('/service-details/') ||
-   location.pathname.startsWith('/workers-by-category/') || location.pathname.startsWith('/worker-item-details/') ||
-    location.pathname.startsWith('/project-item-details/') || location.pathname.startsWith('/contact-us') || 
-    location.pathname.startsWith('/Booking') || location.pathname.startsWith('/Cart') || location.pathname.startsWith('/Payment') ;
+    location.pathname.startsWith('/workers-by-category/') || location.pathname.startsWith('/worker-item-details/') ||
+    location.pathname.startsWith('/project-item-details/') || location.pathname.startsWith('/contact-us') ||
+    location.pathname.startsWith('/Booking') || location.pathname.startsWith('/Cart') || location.pathname.startsWith('/Payment') ||  location.pathname.startsWith('/Review');
 
   return (
     <div className="app-container">
@@ -53,6 +56,7 @@ function Layout() {
           <Route path='/Booking/:type/:id' element={<Booking />} />
           <Route path="/Payment" element={<Payment />} />
           <Route path="/booking-checkout/:type/:id" element={<BookingCheckout />} />
+          <Route path="/Review" element={<Review />} />
         </Routes>
       </main>
       {!hideNavAndFooter && !hideFooter && <Footer />}
