@@ -136,6 +136,17 @@
     filter: invert(71%) sepia(75%) saturate(389%) hue-rotate(346deg) brightness(89%) contrast(91%);
 }
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
 .side-nav {
     display: none;
     flex-direction: column;
