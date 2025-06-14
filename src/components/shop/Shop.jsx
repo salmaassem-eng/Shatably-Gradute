@@ -8,6 +8,7 @@ import painter from '../../assets/painter.svg';
 import plumber from '../../assets/plumber.svg';
 import HammerLoading from '../Shared/HammerLoading';
 import { useSearch } from '../../context/SearchContext';
+import { toast } from 'react-toastify';
 
 
 export default function Shop() {
@@ -155,6 +156,17 @@ export default function Shop() {
             // Calculate total items in cart and dispatch update event
             const totalItems = result.items.reduce((sum, item) => sum + item.quantity, 0);
             window.dispatchEvent(new CustomEvent('cartUpdate', { detail: { count: totalItems } }));
+
+            toast.success(`The product added successfully!`, {
+                                    position: "top-right",
+                                    autoClose: 3000,
+                                    hideProgressBar: false,
+                                    closeOnClick: true,
+                                    pauseOnHover: true,
+                                    draggable: true,
+                                    progress: undefined,
+                                    theme: "light",
+                                });
         } catch (error) {
             console.error('Error adding to cart:', error);
             alert('Failed to add item to cart: ' + error.message);
