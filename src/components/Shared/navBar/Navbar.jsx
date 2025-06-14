@@ -6,6 +6,7 @@ import cart from '../../../assets/cart.svg';
 import user from '../../../assets/user.svg';
 import vector from '../../../assets/Vector.svg';
 import { useAuth } from '../../../context/AuthContext';
+import { useSearch } from '../../../context/SearchContext';
 import logo from '../../../assets/logo.png';
 
 export default function Navbar() {
@@ -17,6 +18,7 @@ export default function Navbar() {
     const location = useLocation();
     const navigate = useNavigate();
     const auth = useAuth();
+    const { searchTerm, setSearchTerm } = useSearch();
     const profileRef = useRef(null);
     const notificationRef = useRef(null);
     
@@ -148,7 +150,14 @@ export default function Navbar() {
             </div>
             <div className="sections-icons">
                 <div className="search-container">
-                    <input type="search" className="search-bar" placeholder='Search'/>
+                    <input 
+                        type="search" 
+                        className="search-bar" 
+                        placeholder='Search'
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        disabled={!(location.pathname === '/services' || location.pathname === '/Shop')}
+                    />
                     <img src={searchicon} className="search-icon" alt="search" />
                 </div>
                 <div className="icon-section">
@@ -166,7 +175,7 @@ export default function Navbar() {
                                 <div className="relative" ref={notificationRef}>
                                     <img 
                                         src={vector} 
-                                        className="icon cursor-pointer" 
+                                        className={`icon cursor-pointer`}
                                         alt="notification"
                                         onClick={toggleNotification}
                                     />
@@ -219,8 +228,8 @@ export default function Navbar() {
                             </div>
                         </div>
                     ) : (
-                        <div className="flex items-center gap-4">
-                            <button className="bg-[#16404D] loginBtn" onClick={() => navigate('/login')}>
+                        <div className="flex items-center gap-4 ml-[1rem]">
+                            <button className="bg-[#16404D] text-white rounded-[10px]" onClick={() => navigate('/login')}>
                                 <p>Login</p>
                             </button>
                             <Link

@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { getUserLocation } from '../../../src/geolocationHelper';
 
 export default function Payment() {
     const navigate = useNavigate();
@@ -359,12 +360,28 @@ export default function Payment() {
         return isValid;
     };
 
-    const handlePaymentSubmit = (e) => {
+    const handlePaymentSubmit = async (e) => {
         e.preventDefault();
         if (!validateForm()) {
             return;
         }
-        
+
+        try {
+            await getUserLocation(); // Check for location before showing modal
+        } catch (error) {
+            toast.error(error, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return; // Stop payment if location access is denied
+        }
+
         showModal(
             "Confirm Payment",
             `Are you sure you want to proceed with the payment of $${total.toFixed(2)}?`,
@@ -486,7 +503,7 @@ export default function Payment() {
             <div className="max-w-4xl mx-0 ml-[10rem] mb-[5rem]">
                 <div className="flex justify-center items-center">
                     <div className="flex items-center">
-                        {/* Shipping */}
+                        {/* Shopping */}
                         <div className="relative w-[12rem] ">
                             <div className="flex items-center">
                                 <div className="w-7 h-7 rounded-[50%] bg-[#16404D] flex items-center justify-center"></div>
@@ -504,7 +521,7 @@ export default function Payment() {
                             <span className="absolute text-sm text-[#16404D] left-[-0.8rem] top-10">Payment</span>
                         </div>
 
-                        {/* shipping */}
+                        {/* Shipping */}
                         <div className="relative w-[12rem]">
                             <div className="flex items-center">
                                 <div className="w-7 h-7 rounded-[50%] bg-gray-200 flex items-center justify-center"></div>

@@ -50,7 +50,7 @@ export default function BookingForm({ formData, setFormData, onSubmit}) {
                     value={formData.date}
                     onChange={handleChange}
                     min={new Date().toISOString().split('T')[0]}
-                    className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#16404D] focus:ring-[#16404D] sm:text-sm ${
+                    className={`mt-1 block w-full rounded-md bg-[#f4f4f4] border-gray-300 shadow-sm focus:border-[#16404D] focus:ring-[#16404D] sm:text-sm ${
                         errors.date ? 'border-red-500' : ''
                     }`}
                 />
@@ -67,7 +67,7 @@ export default function BookingForm({ formData, setFormData, onSubmit}) {
                     name="time"
                     value={formData.time}
                     onChange={handleChange}
-                    className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#16404D] focus:ring-[#16404D] sm:text-sm ${
+                    className={`mt-1 block w-full rounded-md bg-[#f4f4f4] border-gray-300 shadow-sm focus:border-[#16404D] focus:ring-[#16404D] sm:text-sm ${
                         errors.time ? 'border-red-500' : ''
                     }`}
                 />
@@ -83,7 +83,7 @@ export default function BookingForm({ formData, setFormData, onSubmit}) {
                     name="duration"
                     value={formData.duration}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#16404D] focus:ring-[#16404D] sm:text-sm"
+                    className="mt-1 block w-full rounded-md bg-[#f4f4f4] border-gray-300 shadow-sm focus:border-[#16404D] focus:ring-[#16404D] sm:text-sm"
                 >
                     {[1, 2, 3, 4, 5, 6, 7, 8].map(hour => (
                         <option key={hour} value={hour}>{hour} {hour === 1 ? 'hour' : 'hours'}</option>
@@ -101,7 +101,7 @@ export default function BookingForm({ formData, setFormData, onSubmit}) {
                     rows={3}
                     value={formData.address}
                     onChange={handleChange}
-                    className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#16404D] focus:ring-[#16404D] sm:text-sm ${
+                    className={`mt-1 block w-full rounded-md bg-[#f4f4f4] border-gray-300 shadow-sm focus:border-[#16404D] focus:ring-[#16404D] sm:text-sm ${
                         errors.address ? 'border-red-500' : ''
                     }`}
                     placeholder="Enter the complete address where the service will be performed"
@@ -153,7 +153,7 @@ export default function BookingForm({ formData, setFormData, onSubmit}) {
                     rows={3}
                     value={formData.notes}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#16404D] focus:ring-[#16404D] sm:text-sm"
+                    className="mt-1 block w-full rounded-md bg-[#f4f4f4] border-gray-300 shadow-sm focus:border-[#16404D] focus:ring-[#16404D] sm:text-sm"
                     placeholder="Any additional information or special requirements"
                 />
             </div>

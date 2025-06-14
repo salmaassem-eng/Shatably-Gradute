@@ -24,15 +24,21 @@ import Booking from './Booking/Bookservice';
 import Payment from './components/shop/Payment';
 import BookingCheckout from './Booking/BookingCheckout';
 import Review from './components/shop/Review';
+import ReviewBooking from './Booking/ReviewBooking'
+import { SearchProvider } from './context/SearchContext.jsx';
+import AI from './components/AI/AI.jsx';
+import ShatablyAssistantChat from './components/AI/ShatablyAssistantChat.jsx';
+import HomeVision from './components/AI/HomeVision.jsx';
 
 
 function Layout() {
   const location = useLocation();
-  const hideNavAndFooter = location.pathname === '/login' || location.pathname === '/forgetpass' || location.pathname === "/RegisterationPage" || location.pathname === '/newpass';
+  const hideNavAndFooter = location.pathname === '/login' || location.pathname === '/forgetpass' || location.pathname === "/RegisterationPage" || location.pathname === '/newpass'
+  ||location.pathname.startsWith('/ai') || location.pathname.startsWith('/ai-chat') || location.pathname.startsWith('/home-vision');
   const hideFooter = location.pathname === '/User' || location.pathname.startsWith('/service-details/') ||
     location.pathname.startsWith('/workers-by-category/') || location.pathname.startsWith('/worker-item-details/') ||
     location.pathname.startsWith('/project-item-details/') || location.pathname.startsWith('/contact-us') ||
-    location.pathname.startsWith('/Booking') || location.pathname.startsWith('/Cart') || location.pathname.startsWith('/Payment') ||  location.pathname.startsWith('/Review');
+    location.pathname.startsWith('/Booking') || location.pathname.startsWith('/Cart') || location.pathname.startsWith('/Payment') ||  location.pathname.startsWith('/Review') ;
 
   return (
     <div className="app-container">
@@ -57,6 +63,10 @@ function Layout() {
           <Route path="/Payment" element={<Payment />} />
           <Route path="/booking-checkout/:type/:id" element={<BookingCheckout />} />
           <Route path="/Review" element={<Review />} />
+          <Route path="/ReviewBooking" element={<ReviewBooking />} />
+          <Route path="/ai" element={<AI />} />
+          <Route path="/ai-chat" element={<ShatablyAssistantChat />} />
+          <Route path="/home-vision" element={<HomeVision />} />
         </Routes>
       </main>
       {!hideNavAndFooter && !hideFooter && <Footer />}
@@ -69,7 +79,9 @@ function App() {
     <AuthProvider>
       <Router>
         <ScrollToTop />
-        <Layout />
+        <SearchProvider>
+          <Layout />
+        </SearchProvider>
         <ToastContainer position="top-right" autoClose={3000} />
       </Router>
     </AuthProvider>

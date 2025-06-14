@@ -20,7 +20,7 @@ const Mobile = () => {
          SHATABLY helps you find skilled professionals near you,
            making it simple to book reliable help for your home or office projects.
           </p>
-          <Link to="/contact-us" className="contact-btn">Contact us</Link>
+          <Link to="/contact-us" ><button className="contact-btn">Contact us</button></Link>
         </div>
 
         {/* Center Mobile Image */}

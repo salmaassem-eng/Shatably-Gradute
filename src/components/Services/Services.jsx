@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import SmallServiceCards from "./smallservices/SmallServiceCards"; // Import the new component
 import HammerLoading from "../Shared/HammerLoading"; // Import HammerLoading
 import CreativeError from "../Shared/CreativeError";
+import { useSearch } from "../../context/SearchContext"; // Import useSearch
 
 // Import icons for maintenance and projects
 import maintenanceIcon from "../../assets/maintainence work.svg";
@@ -14,7 +15,8 @@ const Services = () => {
   const [error, setError] = useState(null);
   const location = useLocation(); // Get the current location object
   const fullServicesRef = useRef(null); // Create a ref for the full services section
-   const [expandedItems, setExpandedItems] = useState({});
+  const [expandedItems, setExpandedItems] = useState({});
+  const { searchTerm } = useSearch(); // Get the search term from context
 
   const toggleExpand = (id) => {
     setExpandedItems((prev) => ({
@@ -22,6 +24,26 @@ const Services = () => {
       [id]: !prev[id],
     }));
   };
+
+  // Helper function to highlight text
+  const highlightText = (text, highlight) => {
+    if (!highlight) return text;
+    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+    return (
+      <span>
+        {parts.map((part, i) =>
+          part.toLowerCase() === highlight.toLowerCase() ? (
+            <mark key={i} className="bg-yellow-200">
+              {part}
+            </mark>
+          ) : (
+            part
+          )
+        )}
+      </span>
+    );
+  };
+
   // Initialize activeCategory from URL query parameters on mount or location change
   const initialCategory =
     new URLSearchParams(location.search).get("category") || "all";
@@ -172,13 +194,24 @@ const Services = () => {
   ];
 
   const getFilteredItems = () => {
-    if (activeCategory === "all") {
-      return allDisplayableItems;
-    } else {
-      return allDisplayableItems.filter(
+    let itemsToFilter = allDisplayableItems;
+
+    if (activeCategory !== "all") {
+      itemsToFilter = itemsToFilter.filter(
         (item) => item.mainType === activeCategory
       );
     }
+
+    if (searchTerm) {
+      const lowerCaseSearchTerm = searchTerm.toLowerCase();
+      itemsToFilter = itemsToFilter.filter(
+        (item) =>
+          item.name.toLowerCase().includes(lowerCaseSearchTerm) ||
+          item.details.toLowerCase().includes(lowerCaseSearchTerm)
+      );
+    }
+
+    return itemsToFilter;
   };
 
   const filteredItems = getFilteredItems();
@@ -235,72 +268,70 @@ const Services = () => {
                 const isLong = item.details.length > lineLimit;
                 const shortText = item.details.slice(0, lineLimit).trim();
 
-  return (
-    <div
-      key={item.id}
-      className="bg-white rounded-[25px] mb-5 w-[22rem] shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105"
-    >
-      <div className="relative w-full h-48">
-        <img
-          src={item.imageUrl}
-          alt={item.name}
-          className="w-full h-full object-cover"
-        />
-        {item.iconUrl && (
-          <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-white p-3 rounded-full shadow-md">
-            <img
-              src={item.iconUrl}
-              alt={`${item.mainType} icon`}
-              className="w-8 h-8"
-            />
-          </div>
-        )}
-      </div>
-      <div className="p-6 pt-10 flex flex-col text-center  items-center">
-        <h3 className="text-xl font-semibold mb-2 capitalize">
-          {item.name}
-        </h3>
+                return (
+                  <div
+                    key={item.id}
+                    className="bg-white rounded-[25px] mb-5 w-[22rem] shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105"
+                  >
+                    <div className="relative w-full h-48">
+                      <img
+                        src={item.imageUrl}
+                        alt={item.name}
+                        className="w-full h-full object-cover"
+                      />
+                      {item.iconUrl && (
+                        <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-white p-3 rounded-full shadow-md">
+                          <img
+                            src={item.iconUrl}
+                            alt={`${item.mainType} icon`}
+                            className="w-8 h-8"
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-6 pt-10 flex flex-col text-center  items-center">
+                      <h3 className="text-xl font-semibold mb-2 capitalize">{highlightText(item.name, searchTerm)}</h3>
 
-        <p className="text-sm mb-2">
-          {isExpanded || !isLong ? (
-            <>
-              {item.details}
-              {isLong && (
-                <span
-                  onClick={() => toggleExpand(item.id)}
-                  className="text-[#16404D] text-xs font-medium cursor-pointer ml-1 hover:underline"
-                >
-                  Show less
-                </span>
-              )}
-            </>
-          ) : (
-            <>
-              {shortText}...
-              <span
-                onClick={() => toggleExpand(item.id)}
-                className="text-[#16404D] text-xs font-bold cursor-pointer ml-1 hover:underline"
-              >
-                Read more
-              </span>
-            </>
-          )}
-        </p>
+                      <p className="text-sm mb-2">
+                        {isExpanded || !isLong ? (
+                          <>
+                            {highlightText(item.details, searchTerm)}
+                            {isLong && (
+                              <span
+                                onClick={() => toggleExpand(item.id)}
+                                className="text-[#16404D] text-xs font-medium cursor-pointer ml-1 hover:underline"
+                              >
+                                Show less
+                              </span>
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            {highlightText(shortText, searchTerm)}...
+                            <span
+                              onClick={() => toggleExpand(item.id)}
+                              className="text-[#16404D] text-xs font-bold cursor-pointer ml-1 hover:underline"
+                            >
+                              Read more
+                            </span>
+                          </>
+                        )}
+                      </p>
 
-        <div className="mt-5">
-          <Link
-            to={item.linkTo}
-            className="px-6 py-2 w-[170px] inline-block bg-[#16404D] text-white rounded-[25px] hover:bg-[#16404D]/90 hover:text-white text-sm font-medium"
-          >
-            View{" "}
-            {item.mainType.charAt(0).toUpperCase() +
-              item.mainType.slice(1).replace("-", " ")}
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-})}
+                      <div className="mt-5">
+                        <Link
+                          to={item.linkTo}
+                          className="px-6 py-2 w-[170px] inline-block bg-[#16404D] text-white rounded-[25px] hover:bg-[#16404D]/90 hover:text-white text-sm font-medium"
+                        >
+                          View{" "}
+                          {item.mainType.charAt(0).toUpperCase() +
+                            item.mainType.slice(1).replace("-", " ")}
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

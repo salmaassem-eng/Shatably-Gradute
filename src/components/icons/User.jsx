@@ -5,6 +5,8 @@ import userIcon from '../../assets/user.svg';
 import UserBtn from './UserBtn';
 import UserForm from './UserForm';
 import Logout from './Logout';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // import { uploadImage } from '../../firebase';
 
 export default function User() {
@@ -26,6 +28,17 @@ export default function User() {
         profilePictureUrl: '',
         imageUrl: null,
     });
+
+    // Synchronize profile image with localStorage
+    useEffect(() => {
+        if (formData.profilePictureUrl) {
+            localStorage.setItem('userProfileImage', formData.profilePictureUrl);
+        } else if (profileImage && profileImage !== userIcon) { // Only set Base64 if it's a new selection, not the default
+            localStorage.setItem('userProfileImage', profileImage);
+        } else {
+            localStorage.removeItem('userProfileImage');
+        }
+    }, [formData.profilePictureUrl, profileImage]);
 
     // Handle authentication check and data fetching
     useEffect(() => {
@@ -85,6 +98,13 @@ export default function User() {
                     },
                     profilePictureUrl: userData.profilePictureUrl || '',
                 });
+
+                // Save profile picture URL to localStorage
+                if (userData.profilePictureUrl) {
+                    localStorage.setItem('userProfileImage', userData.profilePictureUrl);
+                } else {
+                    localStorage.removeItem('userProfileImage');
+                }
 
                 setError(null);
             } catch (err) {
@@ -175,6 +195,13 @@ export default function User() {
                     profilePictureUrl: userData.profilePictureUrl || '',
                 });
 
+                // Save profile picture URL to localStorage
+                if (userData.profilePictureUrl) {
+                    localStorage.setItem('userProfileImage', userData.profilePictureUrl);
+                } else {
+                    localStorage.removeItem('userProfileImage');
+                }
+
                 setError(null);
             } catch (err) {
                 console.error('Error fetching user data:', err);
@@ -247,7 +274,14 @@ export default function User() {
             }
 
             const result = await response.json();
+            toast.success("User updated successfully...");
             console.log("User updated successfully:", result);
+            // Update localStorage with the new profile picture URL if available
+            if (result.profilePictureUrl) {
+                localStorage.setItem('userProfileImage', result.profilePictureUrl);
+                setFormData(prev => ({ ...prev, profilePictureUrl: result.profilePictureUrl }));
+            }
+
         } catch (error) {
             console.error("Error updating user data:", error);
         }
@@ -269,6 +303,7 @@ export default function User() {
             const reader = new FileReader();
             reader.onload = (event) => {
                 setProfileImage(event.target.result); // Show preview
+                localStorage.setItem('userProfileImage', event.target.result); // Set in localStorage immediately
             };
             reader.readAsDataURL(file);
 
@@ -278,8 +313,6 @@ export default function User() {
             }));
         }
     };
-
-
 
     const renderContent = () => {
         if (activeSection === 'logout') {
