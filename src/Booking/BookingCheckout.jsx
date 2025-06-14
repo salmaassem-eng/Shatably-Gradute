@@ -258,6 +258,17 @@ export default function BookingCheckout() {
                         userId: userId
                     }));
 
+                    console.log('Dispatching booking payment notification...');
+                    // Dispatch payment notification
+                    window.dispatchEvent(new CustomEvent('paymentNotification', { 
+                        detail: { 
+                            message: `Booking payment successful! Your booking has been confirmed.`,
+                            time: 'now',
+                            type: 'booking'
+                        } 
+                    }));
+                    console.log('Booking payment notification dispatched');
+
                     // On successful booking, you might want to redirect or show a success page
                     toast.success(`Thank you ${paymentData.cardholderName} for your booking of ${bookingDetails?.name}!`, {
                         position: "top-right",

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import HammerLoading from '../Shared/HammerLoading';
 
 export default function Cart() {
     const [cartData, setCartData] = useState({
@@ -256,7 +257,7 @@ export default function Cart() {
     };
 
     if (loading) {
-        return <div className="text-center mt-20">Loading cart items...</div>;
+        return <HammerLoading />;
     }
 
     if (error) {

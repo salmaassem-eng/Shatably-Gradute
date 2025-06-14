@@ -5,6 +5,9 @@ import searchicon from '../../../assets/search-normal.svg';
 import cart from '../../../assets/cart.svg';
 import user from '../../../assets/user.svg';
 import vector from '../../../assets/Vector.svg';
+import paymentIcon from '../../../assets/Payment.svg';
+import bookingIcon from '../../../assets/Booking.svg';
+import successIcon from '../../../assets/Success.svg';
 import { useAuth } from '../../../context/AuthContext';
 import { useSearch } from '../../../context/SearchContext';
 import logo from '../../../assets/logo.png';
@@ -13,7 +16,18 @@ export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-    const [notifications, setNotifications] = useState([]);
+    const [notifications, setNotifications] = useState(() => {
+        const savedNotifications = localStorage.getItem('notifications');
+        return savedNotifications ? JSON.parse(savedNotifications) : [];
+    });
+    const [hasNewNotifications, setHasNewNotifications] = useState(() => {
+        const savedNotifications = localStorage.getItem('notifications');
+        if (savedNotifications) {
+            const parsed = JSON.parse(savedNotifications);
+            return parsed.some(n => n.isNew);
+        }
+        return false;
+    });
     const [cartItemsCount, setCartItemsCount] = useState(0);
     const location = useLocation();
     const navigate = useNavigate();
@@ -41,14 +55,14 @@ export default function Navbar() {
     // Add notification when user logs in
     useEffect(() => {
         if (auth?.isLoggedIn) {
-            addNotification('Successfully logged in', 'now');
+            addNotification('Successfully logged in', 'now', 'success');
         }
     }, [auth?.isLoggedIn]);
 
     // Add notification when verification code is sent
     useEffect(() => {
         if (location.pathname === '/forgot-password' && location.state?.codeSent) {
-            addNotification('Verification code has been sent to your email', 'now');
+            addNotification('Verification code has been sent to your email', 'now', 'success');
         }
     }, [location]);
 
@@ -58,10 +72,17 @@ export default function Navbar() {
             setCartItemsCount(event.detail.count);
         };
 
+        const handlePaymentNotification = (event) => {
+            console.log('Payment notification received:', event.detail);
+            addNotification(event.detail.message, event.detail.time, event.detail.type);
+        };
+
         window.addEventListener('cartUpdate', handleCartUpdate);
+        window.addEventListener('paymentNotification', handlePaymentNotification);
 
         return () => {
             window.removeEventListener('cartUpdate', handleCartUpdate);
+            window.removeEventListener('paymentNotification', handlePaymentNotification);
         };
     }, []);
 
@@ -102,12 +123,43 @@ export default function Navbar() {
         updateCartCount();
     }, [auth?.isLoggedIn, location.pathname]);
 
-    const addNotification = (message, time) => {
-        setNotifications(prev => [{
+    const addNotification = (message, time, type = 'payment') => {
+        const newNotification = {
             id: Date.now(),
             message,
-            time
-        }, ...prev]);
+            time,
+            isNew: true,
+            type
+        };
+        setNotifications(prev => {
+            const updated = [newNotification, ...prev];
+            localStorage.setItem('notifications', JSON.stringify(updated));
+            return updated;
+        });
+        setHasNewNotifications(true);
+    };
+
+    const deleteNotification = (id) => {
+        setNotifications(prev => {
+            const updated = prev.filter(notification => notification.id !== id);
+            localStorage.setItem('notifications', JSON.stringify(updated));
+            return updated;
+        });
+    };
+
+    const toggleNotification = () => {
+        setIsNotificationOpen(!isNotificationOpen);
+        if (hasNewNotifications) {
+            setHasNewNotifications(false);
+            setNotifications(prev => {
+                const updated = prev.map(notification => ({
+                    ...notification,
+                    isNew: false
+                }));
+                localStorage.setItem('notifications', JSON.stringify(updated));
+                return updated;
+            });
+        }
     };
     
     if (!auth) return null;
@@ -116,7 +168,6 @@ export default function Navbar() {
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const toggleProfile = () => setIsProfileOpen(!isProfileOpen);
-    const toggleNotification = () => setIsNotificationOpen(!isNotificationOpen);
     const isActive = (path) => location.pathname === path;
     const handleLogout = () => {
         if (logout) {
@@ -179,17 +230,43 @@ export default function Navbar() {
                                         alt="notification"
                                         onClick={toggleNotification}
                                     />
+                                    {hasNewNotifications && (
+                                        <div className="absolute -top-1 right-[6px] w-2 h-2 bg-red-500 rounded-full"></div>
+                                    )}
                                     {isNotificationOpen && (
-                                        <div className="absolute right-0 mt-5 w-60 bg-white rounded-md shadow-lg py-1 z-50">
+                                        <div className="absolute right-0 mt-5 w-80 bg-white rounded-md shadow-lg py-1 z-50">
                                             <div className="px-4 py-2 border-b border-gray-100">
                                                 <h3 className="text-sm font-semibold">Notifications</h3>
                                             </div>
                                             {notifications.length > 0 ? (
-                                                <div className="max-h-60 overflow-y-auto">
+                                                <div className="max-h-60 overflow-y-auto scrollbar-hide">
                                                     {notifications.map(notification => (
-                                                        <div key={notification.id} className="px-4 py-3 hover:bg-gray-50">
-                                                            <p className="text-sm">{notification.message}</p>
-                                                            <p className="text-xs mt-1">{notification.time}</p>
+                                                        <div key={notification.id} className="px-4 py-3 hover:bg-gray-50 relative group">
+                                                            <div className="flex items-start gap-3">
+                                                                <img 
+                                                                    src={
+                                                                        notification.type === 'payment' ? paymentIcon :
+                                                                        notification.type === 'booking' ? bookingIcon :
+                                                                        notification.type === 'success' ? successIcon :
+                                                                        bookingIcon
+                                                                    } 
+                                                                    alt={notification.type === 'payment' ? 'Payment' : 
+                                                                         notification.type === 'booking' ? 'Booking' :
+                                                                         notification.type === 'success' ? 'Success' :
+                                                                         'Notification'}
+                                                                    className="w-6 h-6 mt-1"
+                                                                />
+                                                                <div className="flex-1">
+                                                                    <p className="text-sm">{notification.message}</p>
+                                                                    <p className="text-xs mt-1 text-gray-500">{notification.time}</p>
+                                                                </div>
+                                                                <button
+                                                                    onClick={() => deleteNotification(notification.id)}
+                                                                    className="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                                >
+                                                                    ×
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     ))}
                                                 </div>

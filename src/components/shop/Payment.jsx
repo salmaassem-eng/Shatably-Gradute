@@ -417,6 +417,17 @@ export default function Payment() {
                     // Update cart count
                     window.dispatchEvent(new CustomEvent('cartUpdate', { detail: { count: 0 } }));
 
+                    console.log('Dispatching payment notification...');
+                    // Dispatch payment notification
+                    window.dispatchEvent(new CustomEvent('paymentNotification', { 
+                        detail: { 
+                            message: `Payment successful! Your order has been processed.`,
+                            time: 'now',
+                            type: 'payment'
+                        } 
+                    }));
+                    console.log('Payment notification dispatched');
+
                     // Show success message
                     toast.success(`Thank you ${paymentData.cardholderName} for your payment!`, {
                         position: "top-right",
@@ -430,7 +441,9 @@ export default function Payment() {
                     });
 
                     // Navigate to Review page after successful payment
-                    navigate('/Review');
+                    setTimeout(() => {
+                        navigate('/Review');
+                    }, 200);
                 } catch (error) {
                     console.error('Error processing payment:', error);
                     toast.error('Failed to process payment: ' + error.message, {
