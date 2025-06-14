@@ -5,10 +5,14 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import { useParams } from 'react-router-dom'; // Added for dynamic routing
+import { useParams , useNavigate} from 'react-router-dom'; 
+import { getUserLocation } from '../../src/geolocationHelper';
+
 
 export default function BookingCheckout() {
-    const { type, id } = useParams(); // Get type and id from URL
+    const { type, id } = useParams(); 
+    const navigate = useNavigate();
+
 
     // State for booking details
     const [bookingDetails, setBookingDetails] = useState(null);
@@ -197,6 +201,22 @@ export default function BookingCheckout() {
             return;
         }
 
+        try {
+            await getUserLocation(); // Check for location before showing modal
+        } catch (error) {
+            toast.error(error, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return; // Stop payment if location access is denied
+        }
+
         showModal(
             "Confirm Booking Payment",
             `Are you sure you want to confirm your booking for ${bookingDetails?.name} for $${bookingDetails?.price?.toFixed(2)}?`,
@@ -249,8 +269,8 @@ export default function BookingCheckout() {
                         progress: undefined,
                         theme: "light",
                     });
-                    // Optionally redirect to a success page or booking confirmation
-                    // navigate('/booking-confirmation'); // You'd need to import useNavigate from 'react-router-dom'
+                    navigate('/ReviewBooking');
+
                 } catch (error) {
                     ;
                     toast.error('Failed to process booking payment: ' + error.message, {

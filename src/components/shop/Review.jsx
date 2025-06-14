@@ -33,7 +33,7 @@ export default function Review() {
         <div className="min-h-screen flex items-center justify-center bg-white">
             <div className="flex flex-col items-center justify-center max-w-2xl mx-auto px-4">
                 <div className="flex justify-center w-full mt-[7rem] ml-[7rem]">
-                            {/* Shipping */}
+                            {/* Shopping */}
                             <div className="relative w-[12rem]">
                                 <div className="flex items-center">
                                     <div className="w-7 h-7 rounded-[50%] bg-[#16404D] flex items-center justify-center"></div>

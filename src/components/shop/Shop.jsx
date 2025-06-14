@@ -7,6 +7,7 @@ import carpentary from '../../assets/carpentary.svg';
 import painter from '../../assets/painter.svg';
 import plumber from '../../assets/plumber.svg';
 import HammerLoading from '../Shared/HammerLoading';
+import { useSearch } from '../../context/SearchContext';
 
 
 export default function Shop() {
@@ -16,6 +17,38 @@ export default function Shop() {
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 9; // Number of items per page
+    const { searchTerm } = useSearch();
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+
+    // Debounce searchTerm
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            setDebouncedSearchTerm(searchTerm);
+        }, 500); // 500ms debounce time
+
+        return () => {
+            clearTimeout(timerId);
+        };
+    }, [searchTerm]);
+
+    // Helper function to highlight text
+    const highlightText = (text, highlight) => {
+        if (!highlight) return text;
+        const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+        return (
+            <span>
+                {parts.map((part, i) =>
+                    part.toLowerCase() === highlight.toLowerCase() ? (
+                        <mark key={i} className="bg-yellow-200">
+                            {part}
+                        </mark>
+                    ) : (
+                        part
+                    )
+                )}
+            </span>
+        );
+    };
 
     const addToCart = async (product) => {
         try {
@@ -136,7 +169,7 @@ export default function Shop() {
                 const queryParams = new URLSearchParams({
                     pageIndex: currentPage,
                     PageSize: pageSize,
-                    category: activeCategory !== 'all' ? activeCategory : ''
+                    category: activeCategory !== 'all' ? activeCategory : '',
                 });
 
                 const response = await fetch(`https://shatably.runasp.net/api/Products?${queryParams}`, {
@@ -185,7 +218,7 @@ export default function Shop() {
         }
 
         fetchProducts();
-    }, [currentPage, activeCategory]); // Dependencies for re-fetching
+    }, [currentPage, activeCategory]); // Dependencies for re-fetching: removed debouncedSearchTerm
 
     const categories = [
         { name: 'All Products', value: 'all' },
@@ -200,6 +233,28 @@ export default function Shop() {
         setActiveCategory(category);
         setCurrentPage(1); // Reset to first page when changing category
     };
+
+    const getFilteredProducts = () => {
+        let itemsToFilter = products;
+
+        if (activeCategory !== 'all') {
+            itemsToFilter = itemsToFilter.filter(
+                item => item.category.toLowerCase() === activeCategory.toLowerCase()
+            );
+        }
+
+        if (debouncedSearchTerm) {
+            const lowerCaseSearchTerm = debouncedSearchTerm.toLowerCase();
+            itemsToFilter = itemsToFilter.filter(
+                item =>
+                    item.name.toLowerCase().includes(lowerCaseSearchTerm) ||
+                    item.details.toLowerCase().includes(lowerCaseSearchTerm)
+            );
+        }
+        return itemsToFilter;
+    };
+
+    const displayProducts = getFilteredProducts();
 
     if (loading) {
         return <HammerLoading />;
@@ -258,26 +313,21 @@ export default function Shop() {
 
                 {/* Products Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-[3rem] gap-x-[2rem] ">
-                    {products.length > 0 ? (
-                        products.map(product => (
+                    {displayProducts.length > 0 ? (
+                        displayProducts.map(product => (
                             <div key={product.productId} className="bg-white rounded-[25px] m-auto shadow-md w-[23rem] overflow-hidden transform transition-transform duration-300 hover:scale-105">
                                 <div className="relative w-full h-48">
                                     <img
                                         src={product.imageUrl}
                                         alt={product.name}
-                                        className="w-full h-full object-cover"
-                                        onError={(e) => {
-                                            e.target.src = 'https://via.placeholder.com/300x200';
-                                        }}
+                                        className="w-full h-full object-cover rounded-t-lg"
                                     />
                                 </div>
-                                <div className="p-6 pt-10 flex flex-col h-[200px]">
-                                    <div className="flex-grow">
-                                        <h3 className="text-[24px] font-semibold text-center text-[#16404d] mb-2">{product.name}</h3>
-                                        <p className="text-gray-600 text-center text-sm mb-4">{product.details}</p>
-                                    </div>
-                                    <div className="flex justify-between items-center px-1">
-                                        <p className="text-[#866734] mb-2 text-[20px]">${product.price}</p>
+                                <div className="p-4">
+                                    <h3 className="text-lg font-semibold text-[#16404D] mb-2">{highlightText(product.name, searchTerm)}</h3>
+                                    <p className="text-gray-600 text-sm mb-4 line-clamp-3">{highlightText(product.details, searchTerm)}</p>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-xl font-bold text-[#16404D]">${product.price.toFixed(2)}</span>
                                         <button 
                                             onClick={() => addToCart(product)}
                                             className="p-2 border-2 border-[#9C722C] rounded-full hover:bg-[#DDA853] hover:border-[#DDA853] group transition-colors cursor-pointer cart-container"

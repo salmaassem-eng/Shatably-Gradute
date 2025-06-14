@@ -38,7 +38,7 @@ export default function ContactUs() {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-[80vh] bg-[#F0F0F0] mb-[100px] mt-[5rem]">
+        <div className="flex justify-center items-center min-h-[80vh] bg-[#F0F0F0] mb-[100px] mt-[6rem]">
             <div className="bg-white rounded-[25px] shadow-lg p-6 w-full max-w-[900px] relative sm:p-8 md:p-10">
                 <Link
                     to="/"

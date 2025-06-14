@@ -150,10 +150,6 @@
     transition: 0.3s;
 }
 
-.loginBtn{
-    color: 333 !important;
-    background-color: #DADADA;
-}
 
 @media (max-width: 992px) {
     .nav {
