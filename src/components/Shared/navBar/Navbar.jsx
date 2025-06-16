@@ -180,6 +180,10 @@ export default function Navbar() {
         setIsProfileOpen(false);
     };
 
+    const handleMouseLeave = () => {
+        setIsMenuOpen(false);
+    };
+
     return (
         <nav className="nav">
             <div className="side-nav" onClick={toggleMenu}>
@@ -188,7 +192,10 @@ export default function Navbar() {
                 <span className="bar"></span>
             </div>
 
-            <div className={`sections-pages ${isMenuOpen ? 'active' : ''}`}>
+            <div 
+                className={`sections-pages ${isMenuOpen ? 'active' : ''}`}
+                onMouseLeave={handleMouseLeave}
+            >
                 <Link to="/" className={`pages ${isActive('/') ? 'active' : ''}`}>Home</Link>
                 <Link to="/services" className={`pages ${isActive('/services') ? 'active' : ''}`}>Services</Link>
                 <Link to="/Shop" className={`pages ${isActive('/Shop') ? 'active' : ''}`}>Shop</Link>

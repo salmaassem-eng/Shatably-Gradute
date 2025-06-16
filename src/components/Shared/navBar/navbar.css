@@ -268,21 +268,11 @@
         margin: 0;
         gap: 0.5rem;
     }
-    .cart-section{
-        top:-6px;
-        left: 17px;
-        width: 15px;
-        height: 15px;
-        
-    }
-    .loginn{
-        gap:7px;
-    }
 
-    .login{
-        font-size: 10px;
-    }
-    .signup{
-        font-size: 10px;
+
+    .sections-pages {
+        top: 26px;
+        width: 200px;
+
     }
 }
