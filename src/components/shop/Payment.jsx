@@ -515,12 +515,13 @@ export default function Payment() {
             {/* Progress Steps */}
             <div className="max-w-4xl mx-0 ml-[10rem] mb-[5rem]">
                 <div className="flex justify-center items-center">
-                    <div className="flex items-center">
+                    <div className="flex justify-center w-full mb-[5rem] ml-[4rem]">
                         {/* Shopping */}
                         <div className="relative w-[12rem] ">
                             <div className="flex items-center">
                                 <div className="w-7 h-7 rounded-[50%] bg-[#16404D] flex items-center justify-center"></div>
-                                <div className="h-[2px] bg-[#16404D] w-[12rem] absolute left-6"></div>
+                                <div className="h-[2px] bg-[#16404D] w-[12rem] absolute lenter justify-center"></div>
+                                <div className="h-[2px] bg-[#16404D] w-[12rem] absolute left-7 Line"></div>
                             </div>
                             <span className="absolute text-sm text-[#16404D] left-[-0.8rem] top-10">Shopping</span>
                         </div>
@@ -529,7 +530,7 @@ export default function Payment() {
                         <div className="relative w-[12rem]">
                             <div className="flex items-center">
                                 <div className="w-7 h-7 rounded-[50%] bg-[#16404D] flex items-center justify-center"></div>
-                                <div className="h-[2px] bg-gray-200 w-[12rem] absolute left-7"></div>
+                                <div className="h-[2px] bg-gray-200 w-[12rem] absolute left-7 Line"></div>
                             </div>
                             <span className="absolute text-sm text-[#16404D] left-[-0.8rem] top-10">Payment</span>
                         </div>

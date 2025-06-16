@@ -24,3 +24,37 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none;    /* Firefox */
 }
+
+@media (max-width: 480px){
+    .carttext{
+        font-size: 25px;
+    }
+    .Line{
+        width: 9rem;
+    }
+    .cartheader{
+        display: none;
+    }
+    .removeimage{
+        gap: 5px;
+    }
+    .proname{
+        font-size: 12px;
+    }
+    .quantitybtn{
+        width: 10px;
+        height: 10px;
+        font-size: 12px;
+    }
+    .clearbtn{
+        width: 10rem;
+        font-size: 12px;
+    }
+
+    .subtotal{
+        font-size: 12px;
+    }
+    .bordertotal{
+        border: 0px;
+    }
+}
