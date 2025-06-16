@@ -35,7 +35,7 @@ export default function Navbar() {
     const { searchTerm, setSearchTerm } = useSearch();
     const profileRef = useRef(null);
     const notificationRef = useRef(null);
-    
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (profileRef.current && !profileRef.current.contains(event.target)) {
@@ -90,7 +90,7 @@ export default function Navbar() {
     useEffect(() => {
         async function updateCartCount() {
             if (!auth?.isLoggedIn) return;
-            
+
             try {
                 const token = localStorage.getItem('token');
                 if (!token) return;
@@ -161,9 +161,9 @@ export default function Navbar() {
             });
         }
     };
-    
+
     if (!auth) return null;
-    
+
     const { isLoggedIn, logout } = auth;
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -208,9 +208,9 @@ export default function Navbar() {
             </div>
             <div className="sections-icons">
                 <div className="search-container">
-                    <input 
-                        type="search" 
-                        className="search-bar" 
+                    <input
+                        type="search"
+                        className="search-bar"
                         placeholder='Search'
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -221,18 +221,20 @@ export default function Navbar() {
                 <div className="icon-section">
                     {isLoggedIn ? (
                         <div className="relative ml-3">
-                            <div className="flex items-center">
+                            <div className="flex gap-3 items-center">
                                 <Link to="/Cart" className="relative">
-                                    <img src={cart} className={`icon ${isActive('/Cart') ? 'active' : ''} cursor-pointer`} alt="cart"/>
-                                    {cartItemsCount > 0 && (
-                                        <div className="absolute -top-2 -right-[1px] bg-[#dda853cc] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                                            {cartItemsCount}
-                                        </div>
-                                    )}
+                                    <div className='icon'>
+                                        <img src={cart} className={`icon ${isActive('/Cart') ? 'active' : ''} cursor-pointer`} alt="cart" />
+                                        {cartItemsCount > 0 && (
+                                            <div className="cart-section absolute -top-2 -right-[10px] bg-[#dda853cc] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                                                {cartItemsCount}
+                                            </div>
+                                        )}
+                                    </div>
                                 </Link>
-                                <div className="relative" ref={notificationRef}>
-                                    <img 
-                                        src={vector} 
+                                <div className="relative icon" ref={notificationRef}>
+                                    <img
+                                        src={vector}
                                         className={`icon cursor-pointer`}
                                         alt="notification"
                                         onClick={toggleNotification}
@@ -250,17 +252,17 @@ export default function Navbar() {
                                                     {notifications.map(notification => (
                                                         <div key={notification.id} className="px-4 py-3 hover:bg-gray-50 relative group">
                                                             <div className="flex items-start gap-3">
-                                                                <img 
+                                                                <img
                                                                     src={
                                                                         notification.type === 'payment' ? paymentIcon :
-                                                                        notification.type === 'booking' ? bookingIcon :
-                                                                        notification.type === 'success' ? successIcon :
-                                                                        bookingIcon
-                                                                    } 
-                                                                    alt={notification.type === 'payment' ? 'Payment' : 
-                                                                         notification.type === 'booking' ? 'Booking' :
-                                                                         notification.type === 'success' ? 'Success' :
-                                                                         'Notification'}
+                                                                            notification.type === 'booking' ? bookingIcon :
+                                                                                notification.type === 'success' ? successIcon :
+                                                                                    bookingIcon
+                                                                    }
+                                                                    alt={notification.type === 'payment' ? 'Payment' :
+                                                                        notification.type === 'booking' ? 'Booking' :
+                                                                            notification.type === 'success' ? 'Success' :
+                                                                                'Notification'}
                                                                     className="w-6 h-6 mt-1"
                                                                 />
                                                                 <div className="flex-1">
@@ -285,13 +287,15 @@ export default function Navbar() {
                                         </div>
                                     )}
                                 </div>
-                                <div className="relative" ref={profileRef}>
-                                    <img 
-                                        src={user} 
-                                        className={`icon ${isActive('/User') ? 'active' : ''} cursor-pointer`} 
+                                <div className="relative mr-[0.5rem]" ref={profileRef}>
+                                    <div className='icon'>
+                                        <img
+                                        src={user}
+                                        className={`icon ${isActive('/User') ? 'active' : ''} cursor-pointer`}
                                         alt="user"
                                         onClick={toggleProfile}
                                     />
+                                    </div>
                                     {isProfileOpen && (
                                         <div className="absolute right-0 mt-5 w-32 bg-white rounded-md shadow-lg py-1 z-50">
                                             <button
@@ -312,16 +316,11 @@ export default function Navbar() {
                             </div>
                         </div>
                     ) : (
-                        <div className="flex items-center gap-4 ml-[1rem]">
-                            <button className="bg-[#16404D] text-white rounded-[10px]" onClick={() => navigate('/login')}>
-                                <p>Login</p>
+                        <div className="loginn flex flex-row items-center gap-4 ml-[1rem]">
+                            <button className="bg-[#16404D] text-white rounded-[10px] login" onClick={() => navigate('/login')}>
+                                Login
                             </button>
-                            <Link
-                                to="/RegisterationPage"
-                                className="text-[#16404D] hover:opacity-80 text-sm font-medium"
-                            >
-                                Sign up
-                            </Link>
+                            <button className="text-[#16404D] hover:opacity-80 text-sm font-medium whitespace-nowrap signup" onClick={() => navigate('/RegisterationPage')}>Sign-up</button>
                         </div>
                     )}
                 </div>

@@ -513,14 +513,17 @@ export default function Payment() {
         <>
         <div className="min-h-screen py-2 sm:py-4 px-2 sm:px-4 lg:px-6 mt-[5rem] mx-auto">
             {/* Progress Steps */}
+
             <div className="max-w-4xl mx-auto mb-4 sm:mb-6">
                 <div className="flex justify-center items-center overflow-x-auto">
                     <div className="flex items-center min-w-max">
+
                         {/* Shopping */}
                         <div className="relative w-[8rem] sm:w-[12rem]">
                             <div className="flex items-center">
                                 <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-[50%] bg-[#16404D] flex items-center justify-center"></div>
                                 <div className="h-[2px] bg-[#16404D] w-[8rem] sm:w-[12rem] absolute left-4 sm:left-6"></div>
+
                             </div>
                             <span className="absolute text-xs sm:text-sm text-[#16404D] left-[-0.8rem] top-8 sm:top-10">Shopping</span>
                         </div>
@@ -530,6 +533,7 @@ export default function Payment() {
                             <div className="flex items-center">
                                 <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-[50%] bg-[#16404D] flex items-center justify-center"></div>
                                 <div className="h-[2px] bg-gray-200 w-[8rem] sm:w-[12rem] absolute left-4 sm:left-7"></div>
+
                             </div>
                             <span className="absolute text-xs sm:text-sm text-[#16404D] left-[-0.8rem] top-8 sm:top-10">Payment</span>
                         </div>

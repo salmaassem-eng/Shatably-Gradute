@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import photo from '../../assets/photochat.svg'
 import userProfilePlaceholder from '../../assets/user.svg';
 import chatProfile from '../../assets/chatProfile.svg'
@@ -6,12 +6,30 @@ import { Link } from 'react-router-dom';
 
 
 const ShatablyAssistantChat = () => {
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState(() => {
+        const savedMessages = localStorage.getItem('chatMessages');
+        return savedMessages ? JSON.parse(savedMessages) : [];
+    });
     const [inputMessage, setInputMessage] = useState('');
     const [selectedImage, setSelectedImage] = useState(null);
     const [loading, setLoading] = useState(false);
     const fileInputRef = useRef(null);
 
+    useEffect(() => {
+        // Save messages to localStorage whenever they change
+        localStorage.setItem('chatMessages', JSON.stringify(messages));
+    }, [messages]);
+
+    useEffect(() => {
+        // Cleanup function to revoke object URLs
+        return () => {
+            messages.forEach(msg => {
+                if (msg.image) {
+                    URL.revokeObjectURL(msg.image);
+                }
+            });
+        };
+    }, [messages]);
 
     const handleSendMessage = async (regeneratePrompt = null) => {
         const messageToSend = regeneratePrompt !== null ? regeneratePrompt : inputMessage;
@@ -23,7 +41,7 @@ const ShatablyAssistantChat = () => {
 
         setLoading(true);
         const newMessage = { sender: 'user', text: messageToSend, image: selectedImage ? URL.createObjectURL(selectedImage) : null };
-        if (!regeneratePrompt) { // Only add to messages if not a regeneration trigger
+        if (!regeneratePrompt) {
             setMessages((prevMessages) => [...prevMessages, newMessage]);
         }
 
@@ -32,11 +50,9 @@ const ShatablyAssistantChat = () => {
         if (selectedImage) {
             formData.append('image', selectedImage);
         }
-        // Assuming user_id is optional or managed globally
-        // formData.append('user_id', 'some_user_id');
 
         try {
-            const response = await fetch('https://shatablyai.up.railway.app/chat', {
+            const response = await fetch('https://shatablyai.up.railway.app/chat/', {
                 method: 'POST',
                 body: formData,
             });
@@ -50,12 +66,15 @@ const ShatablyAssistantChat = () => {
             setMessages((prevMessages) => [...prevMessages, { sender: 'assistant', text: data.response, promptUsed: messageToSend }]);
         } catch (error) {
             console.error("Error sending message to AI:", error);
-            setMessages((prevMessages) => [...prevMessages, { sender: 'assistant', text: `Error: ${error.message}` }]);
+            setMessages((prevMessages) => [...prevMessages, { 
+                sender: 'assistant', 
+                text: 'Sorry, I encountered an error while processing your request. Please try again later.' 
+            }]);
         } finally {
             setInputMessage('');
             setSelectedImage(null);
             if (fileInputRef.current) {
-                fileInputRef.current.value = ''; // Clear file input
+                fileInputRef.current.value = '';
             }
             setLoading(false);
         }
@@ -182,8 +201,12 @@ const ShatablyAssistantChat = () => {
                 )}
                 {loading && (
                     <div className="flex justify-start">
-                        <div className="p-3 rounded-lg max-w-xs">
-                            <p>Assistant is typing...</p>
+                        <div className="p-3 rounded-lg max-w-xs bg-[#124353]">
+                            <div className="flex items-center space-x-2">
+                                <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+                                <div className="w-2 h-2 bg-white rounded-full animate-bounce delay-100"></div>
+                                <div className="w-2 h-2 bg-white rounded-full animate-bounce delay-200"></div>
+                            </div>
                         </div>
                     </div>
                 )}

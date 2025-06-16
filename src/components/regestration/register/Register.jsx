@@ -68,7 +68,7 @@ export default function Register() {
 
     return (
         <div className="w-full h-full flex items-center justify-center">
-            <div className="w-full max-w-md p-8 space-y-8">
+            <div className="w-full max-w-md p-8 space-y-8 sm:p-4">
                 <ToastContainer position="top-right" autoClose={3000} />
                 <div className="text-center">
                     <h1 className="mt-6 font-bold">
@@ -90,28 +90,28 @@ export default function Register() {
                     validateOnBlur={true}
                 >
                     {({ errors, touched, isSubmitting, values }) => (
-                        <Form className="mt-[2rem] flex flex-col gap-4 justify-center items-center">
-                            <div className="space-y-4">
-                                <div className="flex gap-6">
-                                    <div className="flex flex-col w-full max-w-xs">
+                        <Form className="mt-[2rem] flex flex-col gap-4 justify-center items-center w-full">
+                            <div className="space-y-4 w-full px-2">
+                                <div className="flex gap-6  md:flex-row lg:flex-row sm:flex-col sm:gap-4">
+                                    <div className="flex flex-col w-full max-w-xs sm:max-w-full">
                                         <UserInput
                                             labelName="First Name"
                                             name="firstName"
                                             type="text"
                                             placeholder="John"
                                             error={touched.firstName && errors.firstName && !values.firstName ? errors.firstName : null}
-                                            className="w-[200px]"
+                                            className="w-full"
                                         />
                                     </div>
 
-                                    <div className="flex flex-col w-full max-w-xs">
+                                    <div className="flex flex-col w-full max-w-xs sm:max-w-full">
                                         <UserInput
                                             labelName="Last Name"
                                             name="lastName"
                                             type="text"
                                             placeholder="Doe"
                                             error={touched.lastName && errors.lastName && !values.lastName ? errors.lastName : null}
-                                            className="w-[200px]"
+                                            className="w-full"
                                         />
                                     </div>
                                 </div>
