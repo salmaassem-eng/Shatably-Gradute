@@ -52,7 +52,7 @@ const ShatablyAssistantChat = () => {
         }
 
         try {
-            const response = await fetch('https://shatablyai.up.railway.app/chat', {
+            const response = await fetch('https://shatablyai.up.railway.app/chat/', {
                 method: 'POST',
                 body: formData,
             });
