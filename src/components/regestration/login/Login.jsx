@@ -67,7 +67,7 @@ const RightSide = () => {
 
     return (
         <div className="w-full h-full flex items-center justify-center">
-            <div className="w-full max-w-md p-8 space-y-8">
+            <div className="w-full max-w-md p-8 space-y-8 sm:p-4">
                 <ToastContainer position="top-right" autoClose={3000} />
                 <div className="text-center">
                     <h1 className="mt-6 font-bold">
@@ -109,7 +109,7 @@ const RightSide = () => {
                                     error={touched.password && errors.password ? errors.password : null}
                                 />
                             </div>
-                            <div className="flex items-center justify-between w-[400px]">
+                            <div className="flex md:flex-row lg:flex-row items-center justify-between w-full px-2 sm:flex-col sm:items-start sm:gap-2">
                                 <div className="flex gap-[3px] items-center">
                                     <input
                                         id="remember-me"
@@ -129,7 +129,7 @@ const RightSide = () => {
                                 </div>
                             </div>
 
-                            <div className="mt-[1.5rem]">
+                            <div className="mt-[1.5rem] w-full px-2">
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}

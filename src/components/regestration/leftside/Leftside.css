@@ -20,3 +20,9 @@
     margin: 0;
     padding: 0;
 }
+
+@media (max-width: 480px){
+    video{
+     display: none;
+    }
+}
