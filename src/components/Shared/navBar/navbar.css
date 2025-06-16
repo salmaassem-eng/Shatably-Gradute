@@ -267,4 +267,9 @@
         margin: 0;
         gap: 0.5rem;
     }
+
+    .sections-pages {
+        top: 26px;
+        width: 200px;
+    }
 }

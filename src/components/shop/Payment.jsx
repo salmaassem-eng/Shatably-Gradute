@@ -511,71 +511,71 @@ export default function Payment() {
 
     return (
         <>
-        <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8 mt-[5rem] mx-auto">
+        <div className="min-h-screen py-2 sm:py-4 px-2 sm:px-4 lg:px-6 mt-[5rem] mx-auto">
             {/* Progress Steps */}
-            <div className="max-w-4xl mx-0 ml-[10rem] mb-[5rem]">
-                <div className="flex justify-center items-center">
-                    <div className="flex items-center">
+            <div className="max-w-4xl mx-auto mb-4 sm:mb-6">
+                <div className="flex justify-center items-center overflow-x-auto">
+                    <div className="flex items-center min-w-max">
                         {/* Shopping */}
-                        <div className="relative w-[12rem] ">
+                        <div className="relative w-[8rem] sm:w-[12rem]">
                             <div className="flex items-center">
-                                <div className="w-7 h-7 rounded-[50%] bg-[#16404D] flex items-center justify-center"></div>
-                                <div className="h-[2px] bg-[#16404D] w-[12rem] absolute left-6"></div>
+                                <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-[50%] bg-[#16404D] flex items-center justify-center"></div>
+                                <div className="h-[2px] bg-[#16404D] w-[8rem] sm:w-[12rem] absolute left-4 sm:left-6"></div>
                             </div>
-                            <span className="absolute text-sm text-[#16404D] left-[-0.8rem] top-10">Shopping</span>
+                            <span className="absolute text-xs sm:text-sm text-[#16404D] left-[-0.8rem] top-8 sm:top-10">Shopping</span>
                         </div>
 
                         {/* Payment */}
-                        <div className="relative w-[12rem]">
+                        <div className="relative w-[8rem] sm:w-[12rem]">
                             <div className="flex items-center">
-                                <div className="w-7 h-7 rounded-[50%] bg-[#16404D] flex items-center justify-center"></div>
-                                <div className="h-[2px] bg-gray-200 w-[12rem] absolute left-7"></div>
+                                <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-[50%] bg-[#16404D] flex items-center justify-center"></div>
+                                <div className="h-[2px] bg-gray-200 w-[8rem] sm:w-[12rem] absolute left-4 sm:left-7"></div>
                             </div>
-                            <span className="absolute text-sm text-[#16404D] left-[-0.8rem] top-10">Payment</span>
+                            <span className="absolute text-xs sm:text-sm text-[#16404D] left-[-0.8rem] top-8 sm:top-10">Payment</span>
                         </div>
 
                         {/* Shipping */}
-                        <div className="relative w-[12rem]">
+                        <div className="relative w-[8rem] sm:w-[12rem]">
                             <div className="flex items-center">
-                                <div className="w-7 h-7 rounded-[50%] bg-gray-200 flex items-center justify-center"></div>
+                                <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-[50%] bg-gray-200 flex items-center justify-center"></div>
                             </div>
-                            <span className="absolute text-sm text-gray-500 left-[-0.8rem] top-10">Shipping</span>
+                            <span className="absolute text-xs sm:text-sm text-gray-500 left-[-0.8rem] top-8 sm:top-10">Shipping</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="max-w-4xl mx-auto mt-3">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-[10rem]">
+            <div className="max-w-4xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
                     {/* Left Column - Items List */}
-                    <div>
-                        <div className="p-[2rem] mb-6 bg-white rounded-[25px] w-[30rem]">
-                            <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-[#16404D] font-bold text-xl">
+                    <div className="w-full max-w-[30rem] mx-auto">
+                        <div className="p-3 sm:p-6 mb-4 bg-white rounded-[25px] w-full">
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-[#16404D] font-bold text-lg sm:text-xl">
                                     Items <span className="text-gray-500 font-normal">({cartItemsCount} items)</span>
                                 </h2>
                                 <button
                                     onClick={clearCart}
-                                    className="text-[white] bg-[#16404D] rounded-[25px] hover:opacity-90 text-center py-auto my-auto text-[16px]"
+                                    className="text-[white] bg-[#16404D] rounded-[25px] hover:opacity-90 text-center py-2 px-4 text-sm sm:text-[16px]"
                                 >
                                     Remove All
                                 </button>
                             </div>
 
-                                {/* Items List - Added max-height and overflow-y-auto */}
-                                <div className="space-y-4 max-h-[20rem] overflow-y-auto pr-2  [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-[#16404D] [&::-webkit-scrollbar-thumb]:rounded-full" >
+                            {/* Items List */}
+                            <div className="space-y-4 max-h-[20rem] overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-[#16404D] [&::-webkit-scrollbar-thumb]:rounded-full">
                                 {cartData.items.map((item) => (
-                                    <div key={item.productId} className="bg-white p-4 rounded-lg shadow-sm">
-                                        <div className="flex gap-4">
+                                    <div key={item.productId} className="bg-white p-3 sm:p-4 rounded-lg shadow-sm">
+                                        <div className="flex gap-3 sm:gap-4">
                                             <img
                                                 src={item.imageUrl || 'https://via.placeholder.com/300x200'} 
                                                 alt={item.productName} 
-                                                className="w-24 h-24 object-cover rounded-lg"
+                                                className="w-16 h-16 sm:w-24 sm:h-24 object-cover rounded-lg"
                                             />
                                             <div className="flex-1">
                                                 <div className="flex justify-between items-start">
                                                     <div>
-                                                        <h3 className="text-[#16404D] text-lg font-medium">{item.productName}</h3>
+                                                        <h3 className="text-[#16404D] text-base sm:text-lg font-medium">{item.productName}</h3>
                                                     </div>
                                                     <button
                                                         className="text-gray-400 hover:text-gray-600"
@@ -585,22 +585,22 @@ export default function Payment() {
                                                     </button>
                                                 </div>
                                                 <div className="flex justify-between items-center mt-2">
-                                                    <div className="col-span-2 flex justify-center items-center gap-3">
+                                                    <div className="col-span-2 flex justify-center items-center gap-2 sm:gap-3">
                                                         <button
-                                                            className="w-6 h-6 flex items-center justify-center border border-gray-300 rounded-full hover:bg-[#16404D] hover:text-white hover:border-[#16404D]"
+                                                            className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center border border-gray-300 rounded-full hover:bg-[#16404D] hover:text-white hover:border-[#16404D]"
                                                             onClick={() => updateQuantity(item.productId, Math.max(1, item.quantity - 1))}
                                                         >
                                                             -
                                                         </button>
-                                                        <span>{item.quantity}</span>
+                                                        <span className="text-sm sm:text-base">{item.quantity}</span>
                                                         <button
-                                                            className="w-6 h-6 flex items-center justify-center border border-gray-300 rounded-full hover:bg-[#16404D] hover:text-white hover:border-[#16404D]"
+                                                            className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center border border-gray-300 rounded-full hover:bg-[#16404D] hover:text-white hover:border-[#16404D]"
                                                             onClick={() => updateQuantity(item.productId, item.quantity + 1)}
                                                         >
                                                             +
                                                         </button>
                                                     </div>
-                                                    <span className="text-[#16404D] font-medium">${item.price * item.quantity}</span>
+                                                    <span className="text-[#16404D] font-medium text-sm sm:text-base">${item.price * item.quantity}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -609,19 +609,19 @@ export default function Payment() {
                             </div>
                         </div>
 
-                        {/* Order Summary - Separated */}
-                        <div className="bg-white rounded-[25px] p-6 w-[30rem] shadow-sm">
-                            <h3 className="text-[#16404D] text-xl font-bold mb-4">Order summary</h3>
+                        {/* Order Summary */}
+                        <div className="bg-white rounded-[25px] p-3 sm:p-6 w-full shadow-sm">
+                            <h3 className="text-[#16404D] text-lg sm:text-xl font-bold mb-4">Order summary</h3>
                             <div className="space-y-3">
-                                <div className="flex justify-between text-gray-600">
+                                <div className="flex justify-between text-gray-600 text-sm sm:text-base">
                                     <span>Subtotal</span>
                                     <span className="text-[#16404D]">${subtotal.toFixed(2)}</span>
                                 </div>
-                                <div className="flex justify-between text-gray-600">
+                                <div className="flex justify-between text-gray-600 text-sm sm:text-base">
                                     <span>Shipping</span>
                                     <span className="text-[#16404D]">${cartData.shippingPrice.toFixed(2)}</span>
                                 </div>
-                                <div className="flex justify-between  text-[#16404D] font-bold pt-3 border-t">
+                                <div className="flex justify-between text-[#16404D] font-bold pt-3 border-t text-sm sm:text-base">
                                     <span>Total Price</span>
                                     <span className='font-bold'>${total.toFixed(2)}</span>
                                 </div>
@@ -630,119 +630,119 @@ export default function Payment() {
                     </div>
 
                     {/* Right Column - Payment Form */}
-                    <div>
-                            <div className="rounded-[25px] p-6 bg-white w-[30rem] h-[38rem]">
-                            <h2 className="text-xl text-[#16404D] pt-[0.8rem] font-semibold mb-6 text-center">Checkout</h2>
+                    <div className="w-full max-w-[30rem] mx-auto">
+                        <div className="rounded-[25px] p-3 sm:p-6 bg-white w-full h-auto sm:h-[38rem]">
+                            <h2 className="text-lg sm:text-xl text-[#16404D] pt-[0.8rem] font-semibold mb-6 text-center">Checkout</h2>
 
                             {/* Payment Methods */}
-                            <div className="flex gap-4 mb-8 justify-center">
-                                    <button
-                                        type="button"
-                                        onClick={() => handleCardSelect('mastercard')}
-                                        className={`h-[3rem] w-[6rem]  p-3 rounded-[25px] transition-all duration-200 flex items-center justify-center
-                                            ${paymentData.selectedCard === 'mastercard' ? 'bg-[#16404D]' : 'border-[#16404D] hover:bg-gray-300'}
-                                        `}
-                                    >
-                                        <img 
-                                            src={masterCard} 
-                                            alt="Mastercard" 
-                                            className="h-[2.5rem] w-[4rem] hover:opacity-90 rounded-[25px]"
-                                        />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleCardSelect('visa')}
-                                        className={`h-[3rem] w-[6rem] rounded-[25px] transition-all duration-200 flex items-center justify-center
-                                            ${paymentData.selectedCard === 'visa' ? 'bg-[#16404D]' : 'border-[#16404D]  hover:bg-gray-300'}
-                                        `}
-                                    >
-                                        <img 
-                                            src={visa} 
-                                            alt="Visa" 
-                                            className={`h-[3rem] p-1 w-[6rem] hover:opacity-90 rounded-[25px] ${paymentData.selectedCard === 'visa' ? 'brightness-0 invert' : ''}`}
-                                        />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleCardSelect('applepay')}
-                                        className={`h-[3rem] w-[6rem] rounded-[25px] transition-all duration-200 flex items-center justify-center
-                                            ${paymentData.selectedCard === 'applepay' ? 'bg-[#16404D]' : 'border-[#16404D] hover:bg-gray-300'}
-                                        `}
-                                    >
-                                        <img 
-                                            src={applePay} 
-                                            alt="Apple Pay" 
-                                            className={`h-[3rem] p-1 w-[6rem] hover:opacity-90 rounded-[25px] ${paymentData.selectedCard === 'applepay' ? 'brightness-0 invert' : ''}`}
-                                        />
-                                    </button>
+                            <div className="flex gap-2 sm:gap-4 mb-6 sm:mb-8 justify-center">
+                                <button
+                                    type="button"
+                                    onClick={() => handleCardSelect('mastercard')}
+                                    className={`h-[2.5rem] sm:h-[3rem] w-[4rem] sm:w-[6rem] p-2 sm:p-3 rounded-[25px] transition-all duration-200 flex items-center justify-center
+                                        ${paymentData.selectedCard === 'mastercard' ? 'bg-[#16404D]' : 'border-[#16404D] hover:bg-gray-300'}
+                                    `}
+                                >
+                                    <img 
+                                        src={masterCard} 
+                                        alt="Mastercard" 
+                                        className="h-[2rem] sm:h-[2.5rem] w-[3rem] sm:w-[4rem] hover:opacity-90 rounded-[25px]"
+                                    />
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => handleCardSelect('visa')}
+                                    className={`h-[2.5rem] sm:h-[3rem] w-[4rem] sm:w-[6rem] rounded-[25px] transition-all duration-200 flex items-center justify-center
+                                        ${paymentData.selectedCard === 'visa' ? 'bg-[#16404D]' : 'border-[#16404D] hover:bg-gray-300'}
+                                    `}
+                                >
+                                    <img 
+                                        src={visa} 
+                                        alt="Visa" 
+                                        className={`h-[2.5rem] sm:h-[3rem] p-1 w-[4rem] sm:w-[6rem] hover:opacity-90 rounded-[25px] ${paymentData.selectedCard === 'visa' ? 'brightness-0 invert' : ''}`}
+                                    />
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => handleCardSelect('applepay')}
+                                    className={`h-[2.5rem] sm:h-[3rem] w-[4rem] sm:w-[6rem] rounded-[25px] transition-all duration-200 flex items-center justify-center
+                                        ${paymentData.selectedCard === 'applepay' ? 'bg-[#16404D]' : 'border-[#16404D] hover:bg-gray-300'}
+                                    `}
+                                >
+                                    <img 
+                                        src={applePay} 
+                                        alt="Apple Pay" 
+                                        className={`h-[2.5rem] sm:h-[3rem] p-1 w-[4rem] sm:w-[6rem] hover:opacity-90 rounded-[25px] ${paymentData.selectedCard === 'applepay' ? 'brightness-0 invert' : ''}`}
+                                    />
+                                </button>
                             </div>
 
                             {/* Payment Form */}
-                            <form className="space-y-8" onSubmit={handlePaymentSubmit}>
+                            <form className="space-y-6 sm:space-y-8" onSubmit={handlePaymentSubmit}>
                                 <div>
-                                    <label className="block text-[#16404D] mb-2">Cardholder Name</label>
+                                    <label className="block text-[#16404D] mb-2 text-sm sm:text-base">Cardholder Name</label>
                                     <input
                                         type="text"
                                         name="cardholderName"
                                         value={paymentData.cardholderName}
                                         onChange={handleInputChange}
-                                            className={`w-full p-3 bg-[#f4f4f4] rounded-[25px] text-[#16404D] ${formErrors.cardholderName ? 'border-2 border-red-500' : ''}`}
-                                            placeholder="John Doe"
+                                        className={`w-full p-2 sm:p-3 bg-[#f4f4f4] rounded-[25px] text-[#16404D] text-sm sm:text-base ${formErrors.cardholderName ? 'border-2 border-red-500' : ''}`}
+                                        placeholder="John Doe"
                                     />
-                                        {formErrors.cardholderName && (
-                                            <p className="text-red-500 text-sm mt-1">{formErrors.cardholderName}</p>
-                                        )}
+                                    {formErrors.cardholderName && (
+                                        <p className="text-red-500 text-xs sm:text-sm mt-1">{formErrors.cardholderName}</p>
+                                    )}
                                 </div>
                                 <div>
-                                    <label className="block text-[#16404D] mb-2">Card Number</label>
+                                    <label className="block text-[#16404D] mb-2 text-sm sm:text-base">Card Number</label>
                                     <input
                                         type="text"
                                         name="cardNumber"
                                         value={paymentData.cardNumber}
                                         onChange={handleInputChange}
-                                            className={`w-full p-3 bg-[#f4f4f4] rounded-[25px] text-[#16404D] ${formErrors.cardNumber ? 'border-2 border-red-500' : ''}`}
-                                            placeholder="1234 5678 9012 3456"
-                                            maxLength="19"
+                                        className={`w-full p-2 sm:p-3 bg-[#f4f4f4] rounded-[25px] text-[#16404D] text-sm sm:text-base ${formErrors.cardNumber ? 'border-2 border-red-500' : ''}`}
+                                        placeholder="1234 5678 9012 3456"
+                                        maxLength="19"
                                     />
-                                        {formErrors.cardNumber && (
-                                            <p className="text-red-500 text-sm mt-1">{formErrors.cardNumber}</p>
-                                        )}
+                                    {formErrors.cardNumber && (
+                                        <p className="text-red-500 text-xs sm:text-sm mt-1">{formErrors.cardNumber}</p>
+                                    )}
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-[#16404D] mb-2">Expiration Date</label>
+                                        <label className="block text-[#16404D] mb-2 text-sm sm:text-base">Expiration Date</label>
                                         <input
                                             type="text"
                                             name="expirationDate"
                                             value={paymentData.expirationDate}
                                             onChange={handleInputChange}
-                                                className={`w-full p-3 bg-[#f4f4f4] rounded-[25px] text-[#16404D] ${formErrors.expirationDate ? 'border-2 border-red-500' : ''}`}
-                                                placeholder="MM/YY"
-                                                maxLength="5"
+                                            className={`w-full p-2 sm:p-3 bg-[#f4f4f4] rounded-[25px] text-[#16404D] text-sm sm:text-base ${formErrors.expirationDate ? 'border-2 border-red-500' : ''}`}
+                                            placeholder="MM/YY"
+                                            maxLength="5"
                                         />
-                                            {formErrors.expirationDate && (
-                                                <p className="text-red-500 text-sm mt-1">{formErrors.expirationDate}</p>
-                                            )}
+                                        {formErrors.expirationDate && (
+                                            <p className="text-red-500 text-xs sm:text-sm mt-1">{formErrors.expirationDate}</p>
+                                        )}
                                     </div>
                                     <div>
-                                        <label className="block text-[#16404D] mb-2">CVV</label>
+                                        <label className="block text-[#16404D] mb-2 text-sm sm:text-base">CVV</label>
                                         <input
                                             type="password"
                                             name="cvv"
                                             value={paymentData.cvv}
                                             onChange={handleInputChange}
-                                                className={`w-full p-3 bg-[#f4f4f4] rounded-[25px] text-[#16404D] ${formErrors.cvv ? 'border-2 border-red-500' : ''}`}
-                                                placeholder="123"
-                                                maxLength="4"
+                                            className={`w-full p-2 sm:p-3 bg-[#f4f4f4] rounded-[25px] text-[#16404D] text-sm sm:text-base ${formErrors.cvv ? 'border-2 border-red-500' : ''}`}
+                                            placeholder="123"
+                                            maxLength="4"
                                         />
-                                            {formErrors.cvv && (
-                                                <p className="text-red-500 text-sm mt-1">{formErrors.cvv}</p>
-                                            )}
+                                        {formErrors.cvv && (
+                                            <p className="text-red-500 text-xs sm:text-sm mt-1">{formErrors.cvv}</p>
+                                        )}
                                     </div>
                                 </div>
                                 <button
                                     type="submit"
-                                    className="w-full bg-[#16404D] text-[18px] text-white py-3 rounded-[25px] hover:bg-opacity-90 transition-colors"
+                                    className="w-full bg-[#16404D] text-base sm:text-[18px] text-white py-2 sm:py-3 rounded-[25px] hover:bg-opacity-90 transition-colors"
                                 >
                                     Pay now
                                 </button>
@@ -755,21 +755,21 @@ export default function Payment() {
 
             {/* Custom Confirmation Modal */}
             {showConfirmModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-[25px] p-8 max-w-md w-full mx-4 transform transition-all">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-[25px] p-4 sm:p-8 max-w-md w-full mx-4 transform transition-all">
                         <div className="text-center">
-                            <h3 className="text-2xl font-bold text-[#16404D] mb-4">{modalConfig.title}</h3>
-                            <p className="text-gray-600 mb-8">{modalConfig.message}</p>
-                            <div className="flex justify-center gap-4">
+                            <h3 className="text-xl sm:text-2xl font-bold text-[#16404D] mb-4">{modalConfig.title}</h3>
+                            <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">{modalConfig.message}</p>
+                            <div className="flex justify-center gap-3 sm:gap-4">
                                 <button
                                     onClick={modalConfig.onCancel}
-                                    className="px-6 py-3 border-2 border-[#16404D] text-[#16404D] rounded-[25px] hover:bg-gray-100 transition-colors"
+                                    className="px-4 sm:px-6 py-2 sm:py-3 border-2 border-[#16404D] text-[#16404D] rounded-[25px] hover:bg-gray-100 transition-colors text-sm sm:text-base"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     onClick={modalConfig.onConfirm}
-                                    className="px-6 py-3 bg-[#16404D] text-white rounded-[25px] hover:bg-opacity-90 transition-colors"
+                                    className="px-4 sm:px-6 py-2 sm:py-3 bg-[#16404D] text-white rounded-[25px] hover:bg-opacity-90 transition-colors text-sm sm:text-base"
                                 >
                                     Confirm
                                 </button>

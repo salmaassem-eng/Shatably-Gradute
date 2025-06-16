@@ -66,14 +66,14 @@ const RightSide = () => {
     };
 
     return (
-        <div className="w-full h-full flex items-center justify-center">
-            <div className="w-full max-w-md p-8 space-y-8">
+        <div className="w-full min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+            <div className="w-full max-w-md p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8">
                 <ToastContainer position="top-right" autoClose={3000} />
                 <div className="text-center">
-                    <h1 className="mt-6 font-bold">
+                    <h1 className="mt-4 sm:mt-6 text-xl sm:text-2xl font-bold">
                         Welcome to our platform
                     </h1>
-                    <p className="mt-2 text-[20px] opacity-60">
+                    <p className="mt-2 text-base sm:text-[20px] opacity-60">
                         Please sign in to your account
                     </p>
                 </div>
@@ -89,7 +89,7 @@ const RightSide = () => {
                     validateOnBlur={true}
                 >
                     {({ errors, touched, isSubmitting }) => (
-                        <Form className="mt-[2rem] flex flex-col gap-4 justify-center items-center">
+                        <Form className="mt-4 sm:mt-[2rem] flex flex-col gap-4 justify-center items-center">
                             <div className="w-full space-y-4">
                                 <UserInput 
                                     labelName='Email address'
@@ -109,7 +109,7 @@ const RightSide = () => {
                                     error={touched.password && errors.password ? errors.password : null}
                                 />
                             </div>
-                            <div className="flex items-center justify-between w-[400px]">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full max-w-[400px] gap-4 sm:gap-0">
                                 <div className="flex gap-[3px] items-center">
                                     <input
                                         id="remember-me"
@@ -129,11 +129,11 @@ const RightSide = () => {
                                 </div>
                             </div>
 
-                            <div className="mt-[1.5rem]">
+                            <div className="mt-4 sm:mt-[1.5rem] w-full">
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="w-full flex justify-center py-3 px-4 bg-[#16404D] text-[#fff] border border-transparent rounded shadow-sm text-sm font-medium hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#16404D] transition duration-150 ease-in-out disabled:opacity-50"
+                                    className="w-full flex justify-center py-2 sm:py-3 px-4 bg-[#16404D] text-[#fff] border border-transparent rounded shadow-sm text-sm font-medium hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#16404D] transition duration-150 ease-in-out disabled:opacity-50"
                                 >
                                     {isSubmitting ? 'Signing in...' : 'Sign in'}
                                 </button>
@@ -142,7 +142,7 @@ const RightSide = () => {
                     )}
                 </Formik>
 
-                <div className="text-center flex items-center gap-[10px] justify-center mt-[0.5rem]">
+                <div className="text-center flex items-center gap-[10px] justify-center mt-2 sm:mt-[0.5rem]">
                     <p className="text-sm">
                         Don't have an account?{" "}
                         <Link to='/RegisterationPage' className="font-medium text-[#16404D] hover:opacity-80">
