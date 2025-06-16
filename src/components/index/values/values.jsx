@@ -1,7 +1,7 @@
 import React from "react";
 import "./values.css";
 import professional from "../../../assets/Manager.svg";
-import trust from "../../../assets/Trust.svg";
+import trust from "../../../assets/trust.svg";
 import integrity from "../../../assets/Integrity.svg";
 import service from "../../../assets/Service.svg";
 import useIntersectionObserver from "../../../hooks/useIntersectionObserver";
