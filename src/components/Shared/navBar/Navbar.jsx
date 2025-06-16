@@ -207,9 +207,9 @@ export default function Navbar() {
                         placeholder='Search'
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        disabled={!(location.pathname === '/services' || location.pathname === '/Shop')}
+                        hidden={!(location.pathname === '/services' || location.pathname === '/Shop')}
                     />
-                    <img src={searchicon} className="search-icon" alt="search" />
+                    <img src={searchicon} hidden={!(location.pathname === '/services' || location.pathname === '/Shop')} className="search-icon" alt="search" />
                 </div>
                 <div className="icon-section">
                     {isLoggedIn ? (
