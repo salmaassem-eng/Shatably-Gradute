@@ -20,7 +20,7 @@ import Shop from './components/shop/Shop';
 import ProjectDetails from './components/Services/projects/ProjectDetails';
 import ContactUs from './components/ContactUs/ContactUs';
 import Cart from './components/shop/Cart';
-import Booking from './Booking/Bookgit Service';
+import Booking from './Booking/BookService.jsx';
 import Payment from './components/shop/Payment';
 import BookingCheckout from './Booking/BookingCheckout';
 import Review from './components/shop/Review';
