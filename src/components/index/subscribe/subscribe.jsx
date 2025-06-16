@@ -23,6 +23,7 @@ function Subscribe() {
             });
             setEmail('');
         }
+        
     };
 
     const sectionRef = useIntersectionObserver(); // for animation
