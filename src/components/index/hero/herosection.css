@@ -100,35 +100,6 @@
     transform: translateY(-8%);
 }
 
-/* .hero-image[data-direction="prev"] {
-    animation: slideFromLeft 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-} */
-
-/* .hero-image[data-direction="next"] {
-    animation: slideFromRight 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-} */
-
-/* @keyframes slideFromLeft {
-    0% {
-        opacity: 0;
-        transform: translateX(-150%) scale(0.95);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(-50%) scale(1);
-    }
-} */
-
-/* @keyframes slideFromRight {
-    0% {
-        opacity: 0;
-        transform: translateX(50%) scale(0.95);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(-50%) scale(1);
-    }
-} */
 
 .display {
     display: grid;
@@ -252,4 +223,37 @@
         width: 26rem;
         top: 25%;
     }
+
+    .card-wrapper {
+        max-width: 350px;
+    }
+
+    .hero-text {
+        height: 300px;
+    }
+
+    .hero-text h1 {
+        font-size: 1rem;
+    }
+
+    .hero-text p {
+        font-size: 0.8rem;
+    }
+
+    .hero-btn {
+        gap: 2px;
+    }
+
+    .hero-btn button {
+        width: 45px;
+        padding: 1px 13px;
+    }
+
+    .hero-btn button:hover {
+        width: 50px;
+    }
+
+    .image-container {
+    top: 6rem;
+}
 }
