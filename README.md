@@ -1,12 +1,62 @@
-# React + Vite
+Overview
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Shatably is a React-based web application that provides a structured and interactive product browsing experience.
+The project focuses on clean component architecture, state management, API integration, and responsive UI design.
 
-Currently, two official plugins are available:
+Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Product Listing
+Fetch and display products from an external API
+Display product information:
+Image
+Name
+Price
+Category
 
-## Expanding the ESLint configuration
+Sorting options:
+By category
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Product Details
+Dedicated product details page
+Displays:
+Image
+Title
+Description
+Category
+Price
+Navigation back to the product listing page
+
+Cart Functionality
+Add products to the cart
+Update product quantities
+Remove products from the cart
+Automatic total price calculation
+
+Authentication
+User login and signup
+Protected routes for authenticated users
+Authentication state persisted using local storage
+
+Tech Stack
+Frontend: React
+State Management: React Context / React State
+Routing: React Router
+API Integration: Axios / Fetch
+Styling: CSS / TailwindCSS
+Authentication: Token-based authentication
+
+UI & UX
+Fully responsive layout
+Reusable and modular components
+Loading and error handling states
+Clean and user-friendly interface
+
+Getting Started
+git clone https://github.com/salmaassem-eng/Shatably-Gradute.git
+cd Shatably-Gradute
+npm install
+npm start
+
+Notes
+This project was built with a focus on scalability, maintainability, and clean code practices.
+Additional features can be added easily due to the modular structure of the application.
